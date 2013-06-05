@@ -1,0 +1,14 @@
+[DEFAULT]
+default_host_main = test
+
+[test]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/test
+
+[stable]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/stable

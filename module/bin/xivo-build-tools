@@ -1,0 +1,222 @@
+#!/bin/bash
+
+CONF_DIR="/etc/xivo-build-tools"
+CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
+
+[ -r $CONF_FILE ] && . $CONF_FILE
+
+usage() {
+    cat << EOF 
+You have to provide some informations to allow building:
+
+    Usage: $(basename $0) [OPTION]...
+
+    Options
+    -i: Package initialization for the first time, can be used later 
+        to refresh the package and put them all to date.
+    -d: distribution_name (default: squeeze-xivo-skaro-dev)
+    -a: Processing all package
+    -p: Processing only one specified package name
+    -f: Force rebuild package
+    -v: Set xivo version (Default is in $CONF_FILE)
+    -h: show this help
+
+    example : $(basename $0) -d squeeze-xivo-skaro-dev -p xivo-web-interface
+
+EOF
+    exit 0
+}
+
+function valid_package() {
+    local package="$1"
+    if [[ $PACKAGES =~ $package ]]; then
+        return 0
+    else
+        cat << EOF
+    Package: $package does not exist
+    See $CONF_FILE for more informations
+EOF
+        exit -1
+    fi
+}
+
+function init_packages() {
+    init_package $PACKAGE_DEBIAN
+    
+    for package in $PACKAGES; do
+        init_package $package
+    done
+}
+
+function package_is_up_to_date() {
+    local package="$1"
+    valid_package $package
+    
+    init_package $PACKAGE_DEBIAN
+    
+    cd $PACKAGES_DIR/$package
+    if git pull | grep -q 'Already up-to-date.' ; then
+        echo "Package $package already up-to-date."
+        return 0
+    fi
+    return 1
+}
+
+function init_package() {
+    local package="$1"
+    cd $PACKAGES_DIR
+    if [ ! -d $package/.git ]; then
+        git clone $GIT_URL/$package
+    else
+        cd $package
+        git pull > /dev/null
+    fi
+}
+
+function sync_debian_into_repo() {
+    local package="$1"
+    local debian_package_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
+    cd $PACKAGES_DIR/$package
+    rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_package_dir $package
+}
+
+function get_source_version_of_package() {
+    local package="$1"
+    cd $PACKAGES_DIR/$package
+    local git_timestamp=$(git log -1 --pretty='%ct')
+    local git_timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${git_timestamp}'))')
+    local git_hash=$(git log -1 --pretty='%h')
+    local computed="~${git_timestamp}.${git_hash}"
+    echo ${XIVO_VERSION}${computed}
+}
+
+function increment_version() {
+    cd $PACKAGES_DIR/$package
+    local distribution="$1"
+    local package="$2"
+    local dir=$PACKAGES_DIR/$package/$package/debian
+    local changelog=$(head -1 $dir/changelog)
+    local source_version=$(get_source_version_of_package $package)
+    
+    # look for a package version
+    local existing_version
+    if [[ "$changelog" =~ \((.*)\) ]] ; then
+        existing_version=${BASH_REMATCH[1]}
+    else
+        echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
+        return 1
+    fi
+    
+    # sanity check on the package name
+    if ! [[ "$changelog" =~ ^$package ]] ; then
+        echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
+        return 2
+    fi
+    
+    # extract the epoch, if any
+    local epoch
+    if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
+        epoch=${BASH_REMATCH[1]}
+    fi
+    
+    local debian
+    if echo "$existing_version" | grep $source_version > /dev/null
+    then
+        if [[ "$existing_version" =~ .*-(.*) ]] ; then
+            debian="-$(expr ${BASH_REMATCH[1]} + 1)"
+        else
+            echo "The first line of $dir/changelog is '$changelog' and the package version $existing_version does not contain a debian version (i.e. something after a - as specified in man deb-version)" >&2
+            return 3
+        fi
+    else
+        debian=-1
+    fi
+    
+    local version=${epoch}${source_version}${debian}
+
+    if ! dpkg --compare-versions $existing_version le $version ; then
+        echo "The first line of $dir/changelog is '$changelog' and contains a version ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
+        return 4
+    fi
+    
+    echo $version
+    return 0
+}
+
+function genreate_changelog() {
+    local distribution="$1"
+    local package="$2"
+    local version="$3"
+    cd $PACKAGES_DIR/$package/$package
+    dch -v $version --distribution $distribution --force-distribution "$(git log -1 HEAD --pretty=format:%s)"
+}
+
+function build_package() {
+    local package="$1"
+    cd $PACKAGES_DIR/$package/$package
+    dpkg-buildpackage
+}
+
+function upload_to_mirror() {
+    local distribution="$1"
+    local package="$2"
+    local version="$3"
+    cd $PACKAGES_DIR/$package/
+    dput -c ${CONF_DIR}/dput.cf $distribution "${package}_${version}_${architecture}.changes"
+}
+
+function process_packages() {
+    local distribution="$1"
+    init_package $PACKAGE_DEBIAN
+    
+    for package in $PACKAGES; do
+        process_package $distribution $package
+    done
+}
+
+function process_package() {
+    local distribution="$1"
+    local package="$2"
+    init_package $package
+    if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
+        return 0
+    fi
+    
+    local version=$(increment_version $distribution $package)
+    
+    sync_debian_into_repo $package
+    genreate_changelog $distribution $package $version
+    build_package $package
+    upload_to_mirror $distribution $package $version
+}
+
+if [ -z $1 ]; then
+    usage
+fi
+
+while getopts :d:p:v:afiuh opt
+do
+  case $opt in
+    d) distribution=$OPTARG;;
+    p) package=$OPTARG;;
+    v) XIVO_VERSION=$OPTARG;;
+    a) all=1;;
+    f) force_rebuild=1;;
+    i) init_packages;;
+    h) usage;;
+    '?')  echo "$0 : option $OPTARG is not valid" >&2
+          usage
+    ;;
+  esac
+done
+
+distribution="${distribution:-"squeeze-xivo-skaro-dev"}"
+all="${all:-"0"}"
+force_rebuild="${force_rebuild:-"0"}"
+architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
+
+if [ $all -eq 1 ]; then
+    process_packages $distribution
+else
+    process_package $distribution $package
+fi
