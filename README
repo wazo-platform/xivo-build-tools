@@ -43,6 +43,7 @@ You have to provide some informations to allow building:
     -i: Package initialization for the first time, can be used later 
         to refresh the package and put them all to date.
     -d: distribution_name (default: squeeze-xivo-skaro-dev)
+    -b: branch_test_number auto-[1-5] (default: master)
     -a: Processing all package
     -p: Processing only one specified package name
     -f: Force rebuild package

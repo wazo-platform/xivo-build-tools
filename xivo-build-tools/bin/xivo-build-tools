@@ -15,6 +15,7 @@ You have to provide some informations to allow building:
     -i: Package initialization for the first time, can be used later 
         to refresh the package and put them all to date.
     -d: distribution_name (default: squeeze-xivo-skaro-dev)
+    -b: branch_test_number auto-[1-5] (default: master)
     -a: Processing all package
     -p: Processing only one specified package name
     -f: Force rebuild package
@@ -69,7 +70,9 @@ function init_package() {
         git clone $GIT_URL/$package
     else
         cd $package
-        git pull > /dev/null
+        git pull >/dev/null
+        git checkout $branch_name_builded >/dev/null
+        git pull >/dev/null
     fi
 }
 
@@ -194,12 +197,13 @@ if [ -z $1 ]; then
     usage
 fi
 
-while getopts :d:p:v:afiuh opt
+while getopts :d:p:v:b:afiuh opt
 do
   case $opt in
     d) distribution=$OPTARG;;
     p) package=$OPTARG;;
     v) XIVO_VERSION=$OPTARG;;
+    b) branch_test_number=$OPTARG;;
     a) all=1;;
     f) force_rebuild=1;;
     i) init_packages;;
@@ -214,6 +218,14 @@ distribution="${distribution:-"squeeze-xivo-skaro-dev"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
+branch_name_builded=$(git branch -a | grep -E "auto\-${branch_test_number}-.*")
+
+if [ -z "$branch_name_builded" ]; then
+    echo "branch not not found in repo: $branch_name_builded"
+    exit 1
+fi
+
+branch_name_builded="${branch_name_builded:-"master"}"
 
 if [ $all -eq 1 ]; then
     process_packages $distribution
