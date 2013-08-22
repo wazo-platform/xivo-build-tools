@@ -1,11 +1,35 @@
 [DEFAULT]
-default_host_main = test
+default_host_main = xivo-test-1
 
-[test]
+[xivo-test-1]
 method = rsync
 fqdn = mirror.lan-quebec.avencall.com
 login = root
-incoming = /srv/reprepro/incoming/test
+incoming = /srv/reprepro/incoming/xivo-test-1
+
+[xivo-test-2]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/xivo-test-2
+
+[xivo-test-3]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/xivo-test-3
+
+[xivo-test-4]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/xivo-test-4
+
+[xivo-test-5]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/xivo-test-5
 
 [stable]
 method = rsync
