@@ -25,6 +25,8 @@ $ apt-get install xivo-build-tools
 Initialisation
 --------------
 
+$ ssh builder-squeeze
+
 $ su -l builder
 
 $ xivo-build-tools -i -a
@@ -51,8 +53,24 @@ You have to provide some informations to allow building:
     -h: show this help
 
 
+Specifications
+==============
+
+Nom des branches pour un test automatique:
+
+auto-[1-5]-<branch_name>
+
+Les paquets se trouvent sur "mirror.lan-quebec.avencall.com"
+dans le repertoire /home/builder/packages
+Attention a bien etre avec l'utilisateur <builder> avant de 
+lancer une commande dans ce repertoire.
+
+
 Example
 =======
+
+Various
+-------
 
 Initialize all package
 
@@ -77,5 +95,41 @@ Build xivo-agent package for test distribution, force rebuild and force xivo-ver
 Build all packages for test distribution, force rebuild and force xivo-version
 
  $ xivo-build-tools -d test -a -f -v 13.11
- 
- 
+
+
+Use xivo-test-X
+---------------
+
+Je veux construire le paquet "xivo-web-interface" sur la machine xivo-test-1
+
+
+ $ cd xivo-web-interface
+
+ $ git checkout -b auto-1-test_autobuildtools
+
+ $ touch lol
+
+ $ git add lol
+
+ $ git commit -m'test_autobuildtools'
+
+ $ git push --set-upstream origin auto-1-test_autobuildtools
+
+
+ $ ssh builder-squeeze
+
+ $ su builder
+
+ $ xivo-build-tools -p xivo-web-interface -d xivo-test-1
+
+ $ xivo-build-tools -p xivo-config -d xivo-test-1
+
+
+ $ ssh mirror.lan-quebec.avencall.com
+
+ $ reprepro -Vb /srv/reprepro processincoming xivo-test-1
+
+
+ $ ssh xivo-test-1.lan-quebec.avencall.com
+
+ $ xivo-upgrade
