@@ -15,7 +15,7 @@ You have to provide some informations to allow building:
     -i: Package initialization for the first time, can be used later 
         to refresh the package and put them all to date.
     -d: distribution_name (default: squeeze-xivo-skaro-dev)
-    -b: branch_test_number auto-[1-5] (default: master)
+    -b: branch_name (default: master)
     -a: Processing all package
     -p: Processing only one specified package name
     -f: Force rebuild package
@@ -193,6 +193,27 @@ function process_package() {
     upload_to_mirror $distribution $package $version
 }
 
+function extract_branch_infos() {
+    local distribution="$1"
+    local branch_test_number=$(echo '$distribution' |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
+    
+    if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then 
+        branch_name_builded=$(git branch -a | grep -E "auto\-${branch_test_number}-.*")
+    
+        if [ -z "$branch_name_builded" ]; then
+           echo "branch not found in repo: $branch_name_builded"
+            exit 1
+        fi
+    else
+        if [ -z $branch_name ]; then
+            branch_name_builded=$branch_name
+        fi
+        branch_name_builded="${branch_name_builded:-"master"}"
+    fi
+    
+    echo "Processing branch: ${branch_name_builded}"
+}
+
 if [ -z $1 ]; then
     usage
 fi
@@ -203,7 +224,7 @@ do
     d) distribution=$OPTARG;;
     p) package=$OPTARG;;
     v) XIVO_VERSION=$OPTARG;;
-    b) branch_test_number=$OPTARG;;
+    b) branch_name=$OPTARG;;
     a) all=1;;
     f) force_rebuild=1;;
     i) init_packages;;
@@ -218,14 +239,8 @@ distribution="${distribution:-"squeeze-xivo-skaro-dev"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
-branch_name_builded=$(git branch -a | grep -E "auto\-${branch_test_number}-.*")
 
-if [ -z "$branch_name_builded" ]; then
-    echo "branch not not found in repo: $branch_name_builded"
-    exit 1
-fi
-
-branch_name_builded="${branch_name_builded:-"master"}"
+extract_branch_infos $distribution
 
 if [ $all -eq 1 ]; then
     process_packages $distribution
