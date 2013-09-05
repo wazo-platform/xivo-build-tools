@@ -195,7 +195,7 @@ function process_package() {
 
 function extract_branch_infos() {
     local distribution="$1"
-    local branch_test_number=$(echo '$distribution' |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
+    local branch_test_number=$(echo $distribution |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
     
     if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then 
         branch_name_builded=$(git branch -a | grep -E "auto\-${branch_test_number}-.*")
