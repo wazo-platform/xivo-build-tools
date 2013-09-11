@@ -181,6 +181,8 @@ function process_package() {
     local distribution="$1"
     local package="$2"
     init_package $package
+    extract_branch_infos $distribution $package
+
     if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
         return 0
     fi
@@ -195,7 +197,10 @@ function process_package() {
 
 function extract_branch_infos() {
     local distribution="$1"
+    local package="$2"
     local branch_test_number=$(echo $distribution |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
+    
+    cd $PACKAGES_DIR/$package
     
     if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then 
         branch_name_builded=$(git branch -a | grep -E "auto\-${branch_test_number}-.*")
@@ -239,8 +244,6 @@ distribution="${distribution:-"squeeze-xivo-skaro-dev"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
-
-extract_branch_infos $distribution
 
 if [ $all -eq 1 ]; then
     process_packages $distribution
