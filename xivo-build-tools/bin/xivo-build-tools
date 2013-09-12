@@ -180,8 +180,8 @@ function process_packages() {
 function process_package() {
     local distribution="$1"
     local package="$2"
-    init_package $package
     extract_branch_infos $distribution $package
+    init_package $package
 
     if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
         return 0
@@ -203,7 +203,7 @@ function extract_branch_infos() {
     cd $PACKAGES_DIR/$package
     
     if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then 
-        branch_name_builded=$(git branch -a | grep -E "auto\-${branch_test_number}-.*")
+        branch_name_builded=$(git branch -r | grep -E "auto\-${branch_test_number}-.*" | awk -F '/' '{print $NF}')
     
         if [ -z "$branch_name_builded" ]; then
            echo "branch not found in repo: $branch_name_builded"
@@ -216,7 +216,7 @@ function extract_branch_infos() {
         branch_name_builded="${branch_name_builded:-"master"}"
     fi
     
-    echo "Processing branch: ${branch_name_builded}"
+    echo "Processing branch: <${branch_name_builded}>"
 }
 
 if [ -z $1 ]; then
