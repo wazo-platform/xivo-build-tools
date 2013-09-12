@@ -165,6 +165,7 @@ function upload_to_mirror() {
     local package="$2"
     local version="$3"
     cd $PACKAGES_DIR/$package/
+    local version=$(echo "$version" | awk -F ':' '{print $NF}')
     dput -c ${CONF_DIR}/dput.cf $distribution "${package}_${version}_${architecture}.changes"
 }
 
