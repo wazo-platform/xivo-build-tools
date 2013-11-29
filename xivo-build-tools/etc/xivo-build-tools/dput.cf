@@ -1,6 +1,30 @@
 [DEFAULT]
 default_host_main = xivo-test-1
 
+[squeeze]
+method = rsync
+fqdn = mirror.xivo.fr
+login = root
+incoming = /data/reprepro/xivo/incoming/squeeze
+
+[squeeze-dev]
+method = rsync
+fqdn = mirror.xivo.fr
+login = root
+incoming = /data/reprepro/xivo/incoming/squeeze-dev
+
+[wheezy]
+method = rsync
+fqdn = mirror.xivo.fr
+login = root
+incoming = /data/reprepro/xivo/incoming/wheezy
+
+[wheezy-xivo-skaro-dev]
+method = rsync
+fqdn = mirror.xivo.fr
+login = root
+incoming = /data/reprepro/xivo/incoming/wheezy-xivo-skaro-dev
+
 [xivo-test-1]
 method = rsync
 fqdn = mirror.lan-quebec.avencall.com
