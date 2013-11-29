@@ -204,24 +204,25 @@ function extract_branch_infos() {
     local distribution="$1"
     local package="$2"
     local branch_test_number=$(echo $distribution |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
+    local branch_name_builded='master'
     
     cd $PACKAGES_DIR/$package
     
-    if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then 
+    if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then
         branch_name_builded=$(git branch -r | grep -E "auto\-${branch_test_number}-.*" | awk -F '/' '{print $NF}')
     
         if [ -z "$branch_name_builded" ]; then
             echo "$package : branch not found in repo"
             return 1
         fi
-    else
-        if [ -z $branch_name ]; then
-            branch_name_builded=$branch_name
+    elif [ ! -z "$branch_name" ]; then
+        git show-branch $branch_name
+        if [ $? == 0 ]; then
+            branch_name_builded="$branch_name"
         fi
-        branch_name_builded="${branch_name_builded:-"master"}"
     fi
     
-    echo "$package : Processing branch: <${branch_name_builded}>"
+    echo "$package fetch branch: <${branch_name_builded}>"
     return 0
 }
 
