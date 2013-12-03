@@ -14,7 +14,7 @@ You have to provide some informations to allow building:
     Options
     -i: Package initialization for the first time, can be used later 
         to refresh the package and put them all to date.
-    -d: distribution_name (default: squeeze-xivo-skaro-dev)
+    -d: distribution_name (default: wheezy-xivo-skaro-dev)
     -b: branch_name (default: master)
     -a: Processing all package
     -p: Processing only one specified package name
@@ -248,7 +248,7 @@ do
   esac
 done
 
-distribution="${distribution:-"squeeze-xivo-skaro-dev"}"
+distribution="${distribution:-"wheezy-xivo-skaro-dev"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
