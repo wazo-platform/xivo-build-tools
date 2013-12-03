@@ -65,6 +65,7 @@ function package_is_up_to_date() {
 
 function init_package() {
     local package="$1"
+    echo "Processing $package..."
     cd $PACKAGES_DIR
     if [ ! -d $package/.git ]; then
         git clone $GIT_URL/$package
