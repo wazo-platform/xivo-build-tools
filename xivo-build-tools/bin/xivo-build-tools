@@ -254,6 +254,6 @@ architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
 
 if [ $all -eq 1 ]; then
     process_packages $distribution
-else
+elif [ ! -z "$package" ]; then
     process_package $distribution $package
 fi
