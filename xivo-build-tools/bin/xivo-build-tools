@@ -76,8 +76,8 @@ init_package() {
         git clone $GIT_URL/$package
     else
         cd $package
-        git pull >/dev/null
-        git checkout $branch_name_builded >/dev/null
+        git clean -fxd
+        git checkout $branch_name_builded
         git pull >/dev/null
     fi
 }
@@ -212,7 +212,7 @@ extract_branch_infos() {
     local distribution="$1"
     local package="$2"
     local branch_test_number=$(echo $distribution |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
-    local branch_name_builded='master'
+    branch_name_builded='master'
     
     cd $PACKAGES_DIR/$package
     
@@ -224,7 +224,7 @@ extract_branch_infos() {
             return 1
         fi
     elif [ ! -z "$branch_name" ]; then
-        git show-branch $branch_name
+        git show-branch origin/$branch_name >/dev/null
         if [ $? == 0 ]; then
             branch_name_builded="$branch_name"
         fi
