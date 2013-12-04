@@ -20,6 +20,7 @@ You have to provide some informations to allow building:
     -p: Processing only one specified package name
     -f: Force rebuild package
     -v: Set xivo version (Default is in $CONF_FILE)
+    -s: Sync debian package
     -h: show this help
 
     example : $(basename $0) -d squeeze-xivo-skaro-dev -p xivo-web-interface
@@ -42,7 +43,9 @@ EOF
 }
 
 init_packages() {
-    init_package $PACKAGE_DEBIAN
+    if [ $sync_package -eq 1 ]; then
+        init_package $PACKAGE_DEBIAN
+    fi
     
     for package in $PACKAGES; do
         init_package $package
@@ -53,7 +56,9 @@ package_is_up_to_date() {
     local package="$1"
     valid_package $package
     
-    init_package $PACKAGE_DEBIAN
+    if [ $sync_package -eq 1 ]; then
+        init_package $PACKAGE_DEBIAN
+    fi
     
     cd $PACKAGES_DIR/$package
     if git pull | grep -q 'Already up-to-date.' ; then
@@ -195,7 +200,9 @@ process_package() {
     
     local version=$(increment_version $distribution $package)
     
-    sync_debian_into_repo $package
+    if [ $sync_package -eq 1 ]; then
+        sync_debian_into_repo $package
+    fi
     genreate_changelog $distribution $package $version
     build_package $package
     upload_to_mirror $distribution $package $version
@@ -231,7 +238,7 @@ if [ -z $1 ]; then
     usage
 fi
 
-while getopts :d:p:v:b:afiuh opt
+while getopts :d:p:v:b:afiush opt
 do
   case $opt in
     d) distribution=$OPTARG;;
@@ -240,6 +247,7 @@ do
     b) branch_name=$OPTARG;;
     a) all=1;;
     f) force_rebuild=1;;
+    s) sync_package=1;;
     i) init_packages;;
     h) usage;;
     '?')  echo "$0 : option $OPTARG is not valid" >&2
@@ -251,6 +259,7 @@ done
 distribution="${distribution:-"wheezy-xivo-skaro-dev"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
+sync_package="${sync_package:-"0"}"
 architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
 
 if [ $all -eq 1 ]; then
