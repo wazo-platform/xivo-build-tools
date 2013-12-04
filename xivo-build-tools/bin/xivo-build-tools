@@ -28,7 +28,7 @@ EOF
     exit 0
 }
 
-function valid_package() {
+valid_package() {
     local package="$1"
     if [[ $PACKAGES =~ $package ]]; then
         return 0
@@ -41,7 +41,7 @@ EOF
     fi
 }
 
-function init_packages() {
+init_packages() {
     init_package $PACKAGE_DEBIAN
     
     for package in $PACKAGES; do
@@ -49,7 +49,7 @@ function init_packages() {
     done
 }
 
-function package_is_up_to_date() {
+package_is_up_to_date() {
     local package="$1"
     valid_package $package
     
@@ -63,7 +63,7 @@ function package_is_up_to_date() {
     return 1
 }
 
-function init_package() {
+init_package() {
     local package="$1"
     echo "Processing $package..."
     cd $PACKAGES_DIR
@@ -77,14 +77,14 @@ function init_package() {
     fi
 }
 
-function sync_debian_into_repo() {
+sync_debian_into_repo() {
     local package="$1"
     local debian_package_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
     cd $PACKAGES_DIR/$package
     rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_package_dir $package
 }
 
-function get_source_version_of_package() {
+get_source_version_of_package() {
     local package="$1"
     cd $PACKAGES_DIR/$package
     local git_timestamp=$(git log -1 --pretty='%ct')
@@ -94,7 +94,7 @@ function get_source_version_of_package() {
     echo ${XIVO_VERSION}${computed}
 }
 
-function increment_version() {
+increment_version() {
     cd $PACKAGES_DIR/$package
     local distribution="$1"
     local package="$2"
@@ -147,7 +147,7 @@ function increment_version() {
     return 0
 }
 
-function genreate_changelog() {
+genreate_changelog() {
     local distribution="$1"
     local package="$2"
     local version="$3"
@@ -155,13 +155,13 @@ function genreate_changelog() {
     dch -v $version --distribution $distribution --force-distribution "$(git log -1 HEAD --pretty=format:%s)"
 }
 
-function build_package() {
+build_package() {
     local package="$1"
     cd $PACKAGES_DIR/$package/$package
     dpkg-buildpackage
 }
 
-function upload_to_mirror() {
+upload_to_mirror() {
     local distribution="$1"
     local package="$2"
     local version="$3"
@@ -170,7 +170,7 @@ function upload_to_mirror() {
     dput -c ${CONF_DIR}/dput.cf $distribution "${package}_${version}_${architecture}.changes"
 }
 
-function process_packages() {
+process_packages() {
     local distribution="$1"
     init_package $PACKAGE_DEBIAN
     
@@ -179,7 +179,7 @@ function process_packages() {
     done
 }
 
-function process_package() {
+process_package() {
     local distribution="$1"
     local package="$2"
     
@@ -201,7 +201,7 @@ function process_package() {
     upload_to_mirror $distribution $package $version
 }
 
-function extract_branch_infos() {
+extract_branch_infos() {
     local distribution="$1"
     local package="$2"
     local branch_test_number=$(echo $distribution |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
