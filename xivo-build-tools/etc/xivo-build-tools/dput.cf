@@ -25,6 +25,12 @@ fqdn = mirror.xivo.fr
 login = root
 incoming = /data/reprepro/xivo/incoming/wheezy-xivo-skaro-dev
 
+[wheezy-test]
+method = rsync
+fqdn = mirror.lan-quebec.avencall.com
+login = root
+incoming = /srv/reprepro/incoming/wheezy
+
 [xivo-test-1]
 method = rsync
 fqdn = mirror.lan-quebec.avencall.com
