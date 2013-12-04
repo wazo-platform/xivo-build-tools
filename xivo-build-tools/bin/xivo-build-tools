@@ -46,7 +46,7 @@ init_packages() {
     if [ $sync_package -eq 1 ]; then
         init_package $PACKAGE_DEBIAN
     fi
-    
+
     for package in $PACKAGES; do
         init_package $package
     done
@@ -55,11 +55,11 @@ init_packages() {
 package_is_up_to_date() {
     local package="$1"
     valid_package $package
-    
+
     if [ $sync_package -eq 1 ]; then
         init_package $PACKAGE_DEBIAN
     fi
-    
+
     cd $PACKAGES_DIR/$package
     if git pull | grep -q 'Already up-to-date.' ; then
         echo "Package $package already up-to-date."
@@ -178,7 +178,7 @@ upload_to_mirror() {
 process_packages() {
     local distribution="$1"
     init_package $PACKAGE_DEBIAN
-    
+
     for package in $PACKAGES; do
         process_package $distribution $package
     done
@@ -187,22 +187,28 @@ process_packages() {
 process_package() {
     local distribution="$1"
     local package="$2"
-    
+
+    if [ ! -d "$PACKAGES_DIR/$package" ]; then
+        echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
+        return 1
+    fi
+
     if ! extract_branch_infos $distribution $package; then
         return 1
     fi
-    
+
     init_package $package
 
     if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
         return 0
     fi
-    
+
     local version=$(increment_version $distribution $package)
-    
+
     if [ $sync_package -eq 1 ]; then
         sync_debian_into_repo $package
     fi
+
     genreate_changelog $distribution $package $version
     build_package $package
     upload_to_mirror $distribution $package $version
@@ -213,12 +219,14 @@ extract_branch_infos() {
     local package="$2"
     local branch_test_number=$(echo $distribution |grep -o "xivo-test-[0-9]" |grep -o "[0-9]")
     branch_name_builded='master'
-    
+
     cd $PACKAGES_DIR/$package
+
+    git pull >/dev/null
     
     if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then
         branch_name_builded=$(git branch -r | grep -E "auto\-${branch_test_number}-.*" | awk -F '/' '{print $NF}')
-    
+
         if [ -z "$branch_name_builded" ]; then
             echo "$package : branch not found in repo"
             return 1
@@ -229,7 +237,7 @@ extract_branch_infos() {
             branch_name_builded="$branch_name"
         fi
     fi
-    
+
     echo "$package fetch branch: <${branch_name_builded}>"
     return 0
 }
