@@ -259,7 +259,7 @@ do
     a) all=1;;
     f) force_rebuild=1;;
     s) sync_package=1;;
-    i) init_packages;;
+    i) init=1;;
     h) usage;;
     '?')  echo "$0 : option $OPTARG is not valid" >&2
           usage
@@ -267,14 +267,19 @@ do
   esac
 done
 
+init="${init:-"0"}"
 distribution="${distribution:-"wheezy-xivo-skaro-dev"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 sync_package="${sync_package:-"0"}"
 architecture="${architecture:-"$(dpkg-architecture -qDEB_BUILD_ARCH)"}"
 
-if [ $all -eq 1 ]; then
-    process_packages $distribution
-elif [ ! -z "$package" ]; then
-    process_package $distribution $package
+if [ $init == 1 ]; then
+    init_packages
+else
+    if [ $all -eq 1 ]; then
+        process_packages $distribution
+    elif [ ! -z "$package" ]; then
+        process_package $distribution $package
+    fi
 fi
