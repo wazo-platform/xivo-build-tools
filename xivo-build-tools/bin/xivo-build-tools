@@ -157,7 +157,9 @@ genreate_changelog() {
     local package="$2"
     local version="$3"
     cd $PACKAGES_DIR/$package/$package
-    dch -v $version --distribution $distribution --force-distribution "$(git log -1 HEAD --pretty=format:%s)"
+    local message="$(git log -1 HEAD --pretty=format:%s)"
+    dch -v $version --distribution $distribution --force-distribution "$message"
+    git commit -a -m "$message"
 }
 
 build_package() {
@@ -212,6 +214,8 @@ process_package() {
     genreate_changelog $distribution $package $version
     build_package $package
     upload_to_mirror $distribution $package $version
+    cd $PACKAGES_DIR/$package
+    git push
 }
 
 extract_branch_infos() {
@@ -221,9 +225,8 @@ extract_branch_infos() {
     branch_name_builded='master'
 
     cd $PACKAGES_DIR/$package
-
     git pull >/dev/null
-    
+
     if [ "$(echo $branch_test_number | grep "^[ [:digit:] ]$")" ]; then
         branch_name_builded=$(git branch -r | grep -E "auto\-${branch_test_number}-.*" | awk -F '/' '{print $NF}')
 
