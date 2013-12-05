@@ -179,7 +179,6 @@ upload_to_mirror() {
 
 process_packages() {
     local distribution="$1"
-    init_package $PACKAGE_DEBIAN
 
     for package in $PACKAGES; do
         process_package $distribution $package
