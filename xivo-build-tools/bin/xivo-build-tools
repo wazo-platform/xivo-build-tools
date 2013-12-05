@@ -201,6 +201,7 @@ process_package() {
     init_package $package
 
     if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
+        echo
         return 0
     fi
 
