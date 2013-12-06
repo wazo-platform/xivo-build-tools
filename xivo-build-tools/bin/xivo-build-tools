@@ -64,8 +64,10 @@ package_is_up_to_date() {
     if git pull | grep -q 'Already up-to-date.' ; then
         echo "Package $package already up-to-date."
         return 0
+    else
+        echo "Package $package need update."
+        return 1
     fi
-    return 1
 }
 
 init_package() {
