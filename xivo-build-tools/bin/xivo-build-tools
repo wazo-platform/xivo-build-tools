@@ -2,6 +2,8 @@
 
 CONF_DIR="/etc/xivo-build-tools"
 CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
+PACKAGES_FILE="${CONF_DIR}/xivo-packages"
+PACKAGES="$(cat ${PACKAGES_FILE})"
 
 [ -r $CONF_FILE ] && . $CONF_FILE
 
