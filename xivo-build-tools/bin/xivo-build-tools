@@ -214,9 +214,14 @@ process_package() {
 
     genreate_changelog $distribution $package $version
     build_package $package
-    upload_to_mirror $distribution $package $version
-    cd $PACKAGES_DIR/$package
-    git push
+    if [ $? == 0 ]; then
+        upload_to_mirror $distribution $package $version
+        cd $PACKAGES_DIR/$package
+        git push
+    else
+        cd $PACKAGES_DIR/$package
+        git reset --hard HEAD^
+    fi
 }
 
 extract_branch_infos() {
