@@ -80,7 +80,6 @@ init_package() {
         cd $package
         git clean -fxd
         git checkout $branch_name_builded
-        git pull >/dev/null
     fi
 }
 
