@@ -1,17 +1,3 @@
-[DEFAULT]
-default_host_main = xivo-test-1
-
-[squeeze]
-method = rsync
-fqdn = mirror.xivo.fr
-login = root
-incoming = /data/reprepro/xivo/incoming/squeeze
-
-[squeeze-dev]
-method = rsync
-fqdn = mirror.xivo.fr
-login = root
-incoming = /data/reprepro/xivo/incoming/squeeze-dev
 
 [wheezy]
 method = rsync
@@ -30,39 +16,3 @@ method = rsync
 fqdn = mirror.lan-quebec.avencall.com
 login = root
 incoming = /srv/reprepro/incoming/wheezy
-
-[xivo-test-1]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/xivo-test-1
-
-[xivo-test-2]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/xivo-test-2
-
-[xivo-test-3]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/xivo-test-3
-
-[xivo-test-4]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/xivo-test-4
-
-[xivo-test-5]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/xivo-test-5
-
-[stable]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/stable

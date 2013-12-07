@@ -13,9 +13,7 @@ deb http://mirror.lan-quebec.avencall.com/ <dist_name> main
 deb-src http://mirror.lan-quebec.avencall.com/ <dist_name> main
 EOL
 
-$ wget http://mirror.lan-quebec.avencall.com/key.asc
-
-$ apt-key add key.asc
+$ wget http://mirror.lan-quebec.avencall.com/key.asc -O - | apt-key add -
 
 $ apt-get update
 
@@ -25,11 +23,11 @@ $ apt-get install xivo-build-tools
 Initialisation
 --------------
 
-$ ssh builder-squeeze
+$ ssh builder-xxx
 
 $ su -l builder
 
-$ xivo-build-tools -i -a
+$ xivo-build-tools -i
 
 $ ll ~/packages
 
@@ -53,33 +51,44 @@ You have to provide some informations to allow building:
     -h: show this help
 
 
-Specifications
-==============
 
-Nom des branches pour un test automatique:
+Examples
+========
 
-auto-[1-5]-<branch_name>
+Package initialization for the first time, can be used later 
+to refresh the package and put them all to date.
 
-Les paquets se trouvent sur "mirror.lan-quebec.avencall.com"
-dans le repertoire /home/builder/packages
-Attention a bien etre avec l'utilisateur <builder> avant de 
-lancer une commande dans ce repertoire.
-
-
-Example
-=======
-
-Various
--------
-
-Initialize all package
-
- $ xivo-build-tools -i -a
+ $ xivo-build-tools -i
 
 
 Initialize or update only xivo-agid package
 
  $ xivo-build-tools -i -p xivo-agid
+ 
+
+Build all packages
+
+ $ xivo-build-tools -a
+ 
+
+Build all packages with force rebuild (add -f)
+
+ $ xivo-build-tools -a -f
+ 
+
+Build all xivo packages for distribution <wheezy-xivo-skaro-dev>
+
+ $ xivo-build-tools -a -d wheezy-xivo-skaro-dev
+ 
+
+Build <xivo-agent> for distribution <wheezy-xivo-skaro-dev> with branch <wheezy>
+
+ $ xivo-build-tools -d wheezy-xivo-skaro-dev -b wheezy -p xivo-agent
+ 
+
+Same command with force rebuild (add -f)
+
+ $ xivo-build-tools -d wheezy-xivo-skaro-dev -b wheezy -p xivo-agent -f
 
 
 Build xivo-web-interface package for squeeze-xivo-skaro-dev distribution
@@ -95,41 +104,3 @@ Build xivo-agent package for test distribution, force rebuild and force xivo-ver
 Build all packages for test distribution, force rebuild and force xivo-version
 
  $ xivo-build-tools -d test -a -f -v 13.11
-
-
-Use xivo-test-X
----------------
-
-Je veux construire le paquet "xivo-web-interface" sur la machine xivo-test-1
-
-
- $ cd xivo-web-interface
-
- $ git checkout -b auto-1-test_autobuildtools
-
- $ touch lol
-
- $ git add lol
-
- $ git commit -m'test_autobuildtools'
-
- $ git push --set-upstream origin auto-1-test_autobuildtools
-
-
- $ ssh builder-squeeze
-
- $ su builder
-
- $ xivo-build-tools -p xivo-web-interface -d xivo-test-1
-
- $ xivo-build-tools -p xivo-config -d xivo-test-1
-
-
- $ ssh mirror.lan-quebec.avencall.com
-
- $ reprepro -Vb /srv/reprepro processincoming xivo-test-1
-
-
- $ ssh xivo-test-1.lan-quebec.avencall.com
-
- $ xivo-upgrade
