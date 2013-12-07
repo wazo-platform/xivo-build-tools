@@ -7,7 +7,7 @@ Update sources files for APT
 
    In your /etc/apt/source.list.d/xivo-dev-tools.list:
 
-$ cat >/etc/apt/source.list.d/xivo-dev-tools.list <<EOL
+$ cat >/etc/apt/sources.list.d/xivo-dev-tools.list <<EOL
 deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main
 deb-src http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main
 EOL
