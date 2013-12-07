@@ -2,15 +2,14 @@
 Installation
 ============
 
-
 Update sources files for APT
 ----------------------------
 
-   In your /etc/apt/source.list.d/<dist_name>.list:
+   In your /etc/apt/source.list.d/xivo-dev-tools.list:
 
-$ cat >/etc/apt/source.list.d/<dist_name>.list <<EOL
-deb http://mirror.lan-quebec.avencall.com/ <dist_name> main
-deb-src http://mirror.lan-quebec.avencall.com/ <dist_name> main
+$ cat >/etc/apt/source.list.d/xivo-dev-tools.list <<EOL
+deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main
+deb-src http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main
 EOL
 
 $ wget http://mirror.lan-quebec.avencall.com/key.asc -O - | apt-key add -
@@ -23,33 +22,11 @@ $ apt-get install xivo-build-tools
 Initialisation
 --------------
 
-$ ssh builder-xxx
-
 $ su -l builder
 
 $ xivo-build-tools -i
 
 $ ll ~/packages
-
-
-Documentation
-=============
-
-You have to provide some informations to allow building:
-
-    Usage: xivo-build-tools [OPTION]...
-
-    Options
-    -i: Package initialization for the first time, can be used later 
-        to refresh the package and put them all to date.
-    -d: distribution_name (default: squeeze-xivo-skaro-dev)
-    -b: branch_name (default: master)
-    -a: Processing all package
-    -p: Processing only one specified package name
-    -f: Force rebuild package
-    -v: Set xivo version (Default is in /etc/xivo-build-tools/xivo-build-tools.conf)
-    -h: show this help
-
 
 
 Examples
