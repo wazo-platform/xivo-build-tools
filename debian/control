@@ -7,7 +7,6 @@ Build-Depends: debhelper (>= 5)
 Standards-Version: 3.9.4
 
 Package: xivo-build-tools
-Pre-depends: 
 Architecture: all
 Pre-Depends: xivo-dev-setuptools
 Depends: ${misc:Depends},
