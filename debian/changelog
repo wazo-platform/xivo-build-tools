@@ -1,3 +1,9 @@
+xivo-build-tools (0.2) xivo-dev-tools; urgency=low
+
+  * test rebuild
+
+ -- XiVO Builder Team <release@xivo.fr>  Sun, 08 Dec 2013 18:54:21 -0500
+ 
 xivo-build-tools (0.1) xivo-dev-tools; urgency=low
 
   * Initial release.
