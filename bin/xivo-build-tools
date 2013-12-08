@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CONF_DIR="/etc/xivo-build-tools"
+DPUT_CONF_DIR="/etc/xivo-server-config"
 CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
 PACKAGES="$(cat ${/etc/xivo-dev-setuptools/xivo-packages})"
 
@@ -176,7 +177,7 @@ upload_to_mirror() {
     local version="$3"
     cd $PACKAGES_DIR/$package/
     local version=$(echo "$version" | awk -F ':' '{print $NF}')
-    dput -c ${CONF_DIR}/dput.cf $distribution "${package}_${version}_${architecture}.changes"
+    dput -c ${DPUT_CONF_DIR}/dput.cf $distribution "${package}_${version}_${architecture}.changes"
 }
 
 process_packages() {

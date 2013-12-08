@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: XiVO DEV Team <dev@avencall.com>
 Uploaders: XiVO Builder Team <release@xivo.fr>
-Build-Depends: debhelper (>= 5)
+Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.4
 
 Package: xivo-build-tools
@@ -12,6 +12,7 @@ Pre-Depends: xivo-dev-setuptools
 Depends: ${misc:Depends},
          devscripts,
          cdbs,
-         dput
+         dput,
+         xivo-server-config
 Description: XIVO Build Tools
  build packages
