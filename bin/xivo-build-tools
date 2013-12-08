@@ -3,7 +3,7 @@
 CONF_DIR="/etc/xivo-build-tools"
 DPUT_CONF_DIR="/etc/xivo-server-config"
 CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
-PACKAGES="$(cat ${/etc/xivo-dev-setuptools/xivo-packages})"
+PACKAGES="$(cat /etc/xivo-dev-setuptools/xivo-packages)"
 
 [ -r $CONF_FILE ] && . $CONF_FILE
 
