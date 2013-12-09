@@ -19,7 +19,7 @@ You have to provide some informations to allow building:
     Options
     -i: Package initialization for the first time, can be used later 
         to refresh the package and put them all to date.
-    -d: distribution_name (default: xivo-five)
+    -d: distribution (default: xivo-five)
     -b: branch_name (default: master)
     -a: Processing all package
     -p: Processing only one specified package name
@@ -158,9 +158,8 @@ increment_version() {
 }
 
 genreate_changelog() {
-    local distribution="$1"
-    local package="$2"
-    local version="$3"
+    local package="$1"
+    local version="$2"
     cd $PACKAGES_DIR/$package/$package
     local message="$(git log -1 HEAD --pretty=format:%s)"
     dch -v $version --distribution $distribution --force-distribution "$message"
@@ -175,14 +174,13 @@ build_package() {
 
 build_dput_conf() {
 	local package="$1"
-	local content="$(sed "s/{{ repository_name }}/${branch_name_builded}/g" ${DPUT_TPL_FILE})"
+	local content="$(sed "s/{{ distribution }}/${distribution}/g" ${DPUT_TPL_FILE})"
 	echo "$content" >> "${PACKAGES_DIR}/${package}/dput.cf"
 }
 
 upload_to_mirror() {
-    local distribution="$1"
-    local package="$2"
-    local version="$3"
+    local package="$1"
+    local version="$2"
     cd $PACKAGES_DIR/$package
     build_dput_conf $package
     local version=$(echo "$version" | awk -F ':' '{print $NF}')
@@ -190,16 +188,13 @@ upload_to_mirror() {
 }
 
 process_packages() {
-    local distribution="$1"
-
     for package in $PACKAGES; do
-        process_package $distribution $package
+        process_package $package
     done
 }
 
 process_package() {
-    local distribution="$1"
-    local package="$2"
+    local package="$1"
 
     if [ ! -d "$PACKAGES_DIR/$package" ]; then
         echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
@@ -223,10 +218,10 @@ process_package() {
         sync_debian_into_repo $package
     fi
 
-    genreate_changelog $distribution $package $version
+    genreate_changelog $package $version
     build_package $package
     if [ $? == 0 ]; then
-        upload_to_mirror $distribution $package $version
+        upload_to_mirror $package $version
         cd $PACKAGES_DIR/$package
         git push
     else
@@ -288,8 +283,8 @@ if [ $init == 1 ]; then
     init_packages
 else
     if [ $all -eq 1 ]; then
-        process_packages $distribution
+        process_packages
     elif [ ! -z "$package" ]; then
-        process_package $distribution $package
+        process_package $package
     fi
 fi
