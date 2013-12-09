@@ -10,11 +10,13 @@ Package: xivo-build-tools
 Architecture: all
 Pre-Depends: xivo-dev-setuptools
 Depends: ${misc:Depends},
+         xivo-server-config,
          devscripts,
          cdbs,
          dput,
-         xivo-server-config,
          lintian,
-         libdistro-info-perl
+         libdistro-info-perl,
+         libparse-debcontrol-perl,
+         fakeroot
 Description: XIVO Build Tools
  build packages
