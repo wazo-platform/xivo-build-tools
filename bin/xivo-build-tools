@@ -1,8 +1,9 @@
 #!/bin/bash
 
 CONF_DIR="/etc/xivo-build-tools"
-DPUT_CONF_DIR="/etc/xivo-server-config"
+TPL_DIR="/etc/xivo-server-mirror/templates"
 CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
+DPUT_TPL_FILE="${TPL_DIR}/conf-dput.tpl"
 PACKAGES="$(cat /etc/xivo-dev-setuptools/xivo-packages)"
 
 [ -r $CONF_FILE ] && . $CONF_FILE
@@ -171,13 +172,20 @@ build_package() {
     dpkg-buildpackage
 }
 
+build_dput_conf() {
+	local package="$1"
+	local content="$(sed "s/{{ repository_name }}/${branch_name_builded}/g" ${DPUT_TPL_FILE})"
+	echo "$content" >> "${PACKAGES_DIR}/${package}/dput.cf"
+}
+
 upload_to_mirror() {
     local distribution="$1"
     local package="$2"
     local version="$3"
-    cd $PACKAGES_DIR/$package/
+    cd $PACKAGES_DIR/$package
+    build_dput_conf $package
     local version=$(echo "$version" | awk -F ':' '{print $NF}')
-    dput -c ${DPUT_CONF_DIR}/dput.cf $distribution "${package}_${version}_${architecture}.changes"
+    dput -c "${PACKAGES_DIR}/${package}/dput.cf" $distribution "${package}_${version}_${architecture}.changes"
 }
 
 process_packages() {
