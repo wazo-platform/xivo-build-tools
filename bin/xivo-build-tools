@@ -19,7 +19,7 @@ You have to provide some informations to allow building:
     Options
     -i: Package initialization for the first time, can be used later 
         to refresh the package and put them all to date.
-    -d: distribution_name (default: wheezy-xivo-skaro-dev)
+    -d: distribution_name (default: xivo-five)
     -b: branch_name (default: master)
     -a: Processing all package
     -p: Processing only one specified package name
@@ -28,7 +28,7 @@ You have to provide some informations to allow building:
     -s: Sync debian package
     -h: show this help
 
-    example : $(basename $0) -d squeeze-xivo-skaro-dev -p xivo-web-interface
+    example : $(basename $0) -d xivo-five -p xivo-web-interface
 
 EOF
     exit 0
@@ -278,7 +278,7 @@ do
 done
 
 init="${init:-"0"}"
-distribution="${distribution:-"wheezy-xivo-skaro-dev"}"
+distribution="${distribution:-"xivo-five"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 sync_package="${sync_package:-"0"}"
