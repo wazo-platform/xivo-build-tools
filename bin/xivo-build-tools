@@ -212,11 +212,11 @@ process_package() {
         return 0
     fi
 
-    local version=$(increment_version $package)
-
     if [ $sync_package -eq 1 ]; then
         sync_debian_into_repo $package
     fi
+
+    local version=$(increment_version $package)
 
     genreate_changelog $package $version
     build_package $package
