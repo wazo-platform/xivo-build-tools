@@ -8,6 +8,8 @@ PACKAGES="$(cat /etc/xivo-dev-setuptools/xivo-packages)"
 
 [ -r $CONF_FILE ] && . $CONF_FILE
 
+. /usr/share/xivo-dev-setuptools/functions
+
 usage() {
     cat << EOF 
 You have to provide some informations to allow building:
@@ -248,6 +250,8 @@ extract_branch_infos() {
             branch_name_builded="$branch_name"
         fi
     fi
+
+	validate_repo_name $branch_name_builded
 
     echo "$package fetch branch: <${branch_name_builded}>"
     return 0
