@@ -107,8 +107,7 @@ get_source_version_of_package() {
 
 increment_version() {
     cd $PACKAGES_DIR/$package
-    local distribution="$1"
-    local package="$2"
+    local package="$1"
     local dir=$PACKAGES_DIR/$package/$package/debian
     local changelog=$(head -1 $dir/changelog)
     local source_version=$(get_source_version_of_package $package)
@@ -207,7 +206,7 @@ process_package() {
         return 1
     fi
 
-    if ! extract_branch_infos $distribution $package; then
+    if ! extract_branch_infos $package; then
         return 1
     fi
 
@@ -218,7 +217,7 @@ process_package() {
         return 0
     fi
 
-    local version=$(increment_version $distribution $package)
+    local version=$(increment_version $package)
 
     if [ $sync_package -eq 1 ]; then
         sync_debian_into_repo $package
@@ -237,8 +236,7 @@ process_package() {
 }
 
 extract_branch_infos() {
-    local distribution="$1"
-    local package="$2"
+    local package="$1"
     branch_name_builded='master'
 
     cd $PACKAGES_DIR/$package
