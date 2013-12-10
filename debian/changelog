@@ -1,10 +1,16 @@
+xivo-build-tools (0.5-1) xivo-dev-tools; urgency=low
+
+  * fix packaging
+
+ -- Cedric Abunar <cabunar@avencall.com>  Mon, 09 Dec 2013 22:39:14 -0500
+ 
 xivo-build-tools (0.5) xivo-dev-tools; urgency=low
 
   * refactor and clean...
 
  -- Cedric Abunar <cabunar@avencall.com>  Mon, 09 Dec 2013 22:22:22 -0500
  
- xivo-build-tools (0.4-2) xivo-dev-tools; urgency=low
+xivo-build-tools (0.4-2) xivo-dev-tools; urgency=low
 
   * sync debian_package before increment_version
 
