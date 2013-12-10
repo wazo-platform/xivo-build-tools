@@ -1,32 +1,34 @@
 #!/bin/bash
 
 CONF_DIR="/etc/xivo-build-tools"
-TPL_DIR="/etc/xivo-server-mirror/templates"
-CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
+TPL_DIR="${CONF_DIR}/templates"
+CONF_FILE="${CONF_DIR}/config"
 DPUT_TPL_FILE="${TPL_DIR}/conf-dput.tpl"
-PACKAGES="$(cat /etc/xivo-dev-setuptools/xivo-packages)"
 
-[ -r $CONF_FILE ] && . $CONF_FILE
+. /usr/share/xivo-dev-config/functions
+. /etc/xivo-dev-config/config
+. $CONF_FILE
 
-. /usr/share/xivo-dev-setuptools/functions
+export NAME="$DEBFULLNAME"
+export EMAIL="$DEBEMAIL"
 
 usage() {
-    cat << EOF 
+    cat << EOF
 You have to provide some informations to allow building:
 
-    Usage: $(basename $0) [OPTION]...
+    Usage: $(basename $0) [OPTION]
 
-    Options
-    -i: Package initialization for the first time, can be used later 
-        to refresh the package and put them all to date.
-    -d: distribution (default: xivo-five)
-    -b: branch_name (default: master)
-    -a: Processing all package
-    -p: Processing only one specified package name
-    -f: Force rebuild package
-    -v: Set xivo version (Default is in $CONF_FILE)
-    -s: Sync debian package
-    -h: show this help
+    Options:
+        -i: Package initialization for the first time, can be used later 
+            to refresh the packages and put them all to date.
+        -d: distribution (default: xivo-five)
+        -b: branch (default: master)
+        -a: Processing all packages
+        -p: Processing only one specified package
+        -f: Force rebuild without check repository is up-to-date
+        -v: Set xivo version (Default is in $CONF_FILE)
+        -s: Sync debian directory from $PACKAGE_DEBIAN package
+        -h: show this help
 
     example : $(basename $0) -d xivo-five -p xivo-web-interface
 
@@ -36,14 +38,15 @@ EOF
 
 valid_package() {
     local package="$1"
-    if [[ $PACKAGES =~ $package ]]; then
+
+    if [[ $XIVO_PACKAGES =~ $package ]]; then
         return 0
     else
         cat << EOF
     Package: $package does not exist
     See $CONF_FILE for more informations
 EOF
-        exit -1
+	exit -1
     fi
 }
 
@@ -52,13 +55,14 @@ init_packages() {
         init_package $PACKAGE_DEBIAN
     fi
 
-    for package in $PACKAGES; do
-        init_package $package
+    for xivo_package in $XIVO_PACKAGES; do
+        init_package $xivo_package
     done
 }
 
 package_is_up_to_date() {
     local package="$1"
+
     valid_package $package
 
     if [ $sync_package -eq 1 ]; then
@@ -77,7 +81,7 @@ package_is_up_to_date() {
 
 init_package() {
     local package="$1"
-    echo "Processing $package..."
+
     cd $PACKAGES_DIR
     if [ ! -d $package/.git ]; then
         git clone $GIT_URL/$package
@@ -91,12 +95,14 @@ init_package() {
 sync_debian_into_repo() {
     local package="$1"
     local debian_package_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
+
     cd $PACKAGES_DIR/$package
     rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_package_dir $package
 }
 
 get_source_version_of_package() {
     local package="$1"
+
     cd $PACKAGES_DIR/$package
     local git_timestamp=$(git log -1 --pretty='%ct')
     local git_timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${git_timestamp}'))')
@@ -106,12 +112,13 @@ get_source_version_of_package() {
 }
 
 increment_version() {
-    cd $PACKAGES_DIR/$package
     local package="$1"
+
+    cd $PACKAGES_DIR/$package
     local dir=$PACKAGES_DIR/$package/$package/debian
     local changelog=$(head -1 $dir/changelog)
     local source_version=$(get_source_version_of_package $package)
-    
+
     # look for a package version
     local existing_version
     if [[ "$changelog" =~ \((.*)\) ]] ; then
@@ -120,19 +127,19 @@ increment_version() {
         echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
         return 1
     fi
-    
+
     # sanity check on the package name
     if ! [[ "$changelog" =~ ^$package ]] ; then
         echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
         return 2
     fi
-    
+
     # extract the epoch, if any
     local epoch
     if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
         epoch=${BASH_REMATCH[1]}
     fi
-    
+
     local debian
     if echo "$existing_version" | grep $source_version > /dev/null
     then
@@ -145,14 +152,14 @@ increment_version() {
     else
         debian=-1
     fi
-    
+
     local version=${epoch}${source_version}${debian}
 
     if ! dpkg --compare-versions $existing_version le $version ; then
         echo "The first line of $dir/changelog is '$changelog' and contains a version ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
         return 4
     fi
-    
+
     echo $version
     return 0
 }
@@ -160,6 +167,7 @@ increment_version() {
 genreate_changelog() {
     local package="$1"
     local version="$2"
+
     cd $PACKAGES_DIR/$package/$package
     local message="$(git log -1 HEAD --pretty=format:%s)"
     dch -v $version --distribution $distribution --force-distribution "$message"
@@ -168,6 +176,7 @@ genreate_changelog() {
 
 build_package() {
     local package="$1"
+
     cd $PACKAGES_DIR/$package/$package
     dpkg-buildpackage
 }
@@ -175,12 +184,14 @@ build_package() {
 build_dput_conf() {
 	local package="$1"
 	local content="$(sed "s/{{ distribution }}/${distribution}/g" ${DPUT_TPL_FILE})"
+
 	echo "$content" >> "${PACKAGES_DIR}/${package}/dput.cf"
 }
 
 upload_to_mirror() {
     local package="$1"
     local version="$2"
+
     cd $PACKAGES_DIR/$package
     build_dput_conf $package
     local version=$(echo "$version" | awk -F ':' '{print $NF}')
@@ -188,13 +199,15 @@ upload_to_mirror() {
 }
 
 process_packages() {
-    for package in $PACKAGES; do
-        process_package $package
+    for xivo_package in $XIVO_PACKAGES; do
+        process_package $xivo_package
     done
 }
 
 process_package() {
     local package="$1"
+
+    echo "Processing $package..."
 
     if [ ! -d "$PACKAGES_DIR/$package" ]; then
         echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
@@ -220,6 +233,7 @@ process_package() {
 
     genreate_changelog $package $version
     build_package $package
+
     if [ $? == 0 ]; then
         upload_to_mirror $package $version
         cd $PACKAGES_DIR/$package
@@ -232,6 +246,7 @@ process_package() {
 
 extract_branch_infos() {
     local package="$1"
+
     branch_name_builded='master'
 
     cd $PACKAGES_DIR/$package
@@ -250,7 +265,7 @@ extract_branch_infos() {
     return 0
 }
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     usage
 fi
 
@@ -258,7 +273,7 @@ while getopts :d:p:v:b:afiush opt
 do
   case $opt in
     d) distribution=$OPTARG;;
-    p) package=$OPTARG;;
+    p) force_package=$OPTARG;;
     v) XIVO_VERSION=$OPTARG;;
     b) branch_name=$OPTARG;;
     a) all=1;;
@@ -284,7 +299,7 @@ if [ $init == 1 ]; then
 else
     if [ $all -eq 1 ]; then
         process_packages
-    elif [ ! -z "$package" ]; then
-        process_package $package
+    elif [ ! -z "$force_package" ]; then
+        process_package $force_package
     fi
 fi

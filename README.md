@@ -5,28 +5,23 @@ Installation
 Update sources files for APT
 ----------------------------
 
-   In your /etc/apt/source.list.d/xivo-dev-tools.list:
+ $ wget http://mirror.lan-quebec.avencall.com/key.asc -O - | apt-key add -
 
-$ cat >/etc/apt/sources.list.d/xivo-dev-tools.list <<EOL
-deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main
-deb-src http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main
-EOL
+ $ echo 'deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
 
-$ wget http://mirror.lan-quebec.avencall.com/key.asc -O - | apt-key add -
+ $ apt-get update
 
-$ apt-get update
-
-$ apt-get install xivo-build-tools
+ $ apt-get install xivo-build-tools
 
 
 Initialisation
 --------------
 
-$ su -l builder
+ $ su - builder
 
-$ xivo-build-tools -i
+ $ xivo-build-tools -i
 
-$ ll ~/packages
+ $ ll ~/packages
 
 
 Examples
@@ -53,24 +48,24 @@ Build all packages with force rebuild (add -f)
  $ xivo-build-tools -a -f
  
 
-Build all xivo packages for distribution <wheezy-xivo-skaro-dev>
+Build all xivo packages for distribution <xivo-five>
 
- $ xivo-build-tools -a -d wheezy-xivo-skaro-dev
+ $ xivo-build-tools -a -d xivo-five
  
 
-Build <xivo-agent> for distribution <wheezy-xivo-skaro-dev> with branch <wheezy>
+Build <xivo-agent> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
 
- $ xivo-build-tools -d wheezy-xivo-skaro-dev -b wheezy -p xivo-agent
+ $ xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p xivo-agent
  
 
 Same command with force rebuild (add -f)
 
- $ xivo-build-tools -d wheezy-xivo-skaro-dev -b wheezy -p xivo-agent -f
+ $ xivo-build-tools -d my-distribution-to-test -b wheezy -p xivo-agent -f
 
 
-Build xivo-web-interface package for squeeze-xivo-skaro-dev distribution
+Build xivo-web-interface package for xivo-five distribution
 
- $ xivo-build-tools -d squeeze-xivo-skaro-dev -p xivo-web-interface
+ $ xivo-build-tools -d xivo-five -p xivo-web-interface
 
 
 Build xivo-agent package for test distribution, force rebuild and force xivo-version

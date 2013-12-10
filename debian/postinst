@@ -3,29 +3,21 @@
 set -e
 
 CONF_DIR="/etc/xivo-build-tools"
-CONF_FILE="${CONF_DIR}/xivo-build-tools.conf"
+CONF_FILE="${CONF_DIR}/config"
 
 case "$1" in
-    configure)
-        [ -r $CONF_FILE ] && . $CONF_FILE || echo "Error: Can't read $CONF_FILE" exit 1
-        ! id $DEBUSER >/dev/null && useradd -U -m -d /home/${DEBUSER} -s /bin/bash $DEBUSER
-        [ ! -d $PACKAGES_DIR ] && mkdir $PACKAGES_DIR
-        
-        chown ${DEBUSER}:${DEBUSER} $PACKAGES_DIR
-        
-        bashrc="/home/${DEBUSER}/.bashrc"
-        name="export NAME=\"$DEBFULLNAME\""
-        email="export EMAIL=\"$DEBEMAIL\""
-        
-        ! grep -q "$name" $bashrc && echo $name >> $bashrc
-        ! grep -q "$email" $bashrc && echo $email >> $bashrc
-    ;;
-    abort-upgrade|abort-remove|abort-deconfigure)
-    ;;
-    *)
-        echo "postinst called with unknown argument \`$1'" >&2
-        exit 1
-    ;;
+	configure)
+		. "$CONF_FILE"
+		! id builder >/dev/null && useradd -U -m -d /home/builder -s /bin/bash builder
+		[ ! -d "$PACKAGES_DIR" ] && mkdir "$PACKAGES_DIR"
+		chown builder:builder "$PACKAGES_DIR"
+	;;
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+	*)
+		echo "postinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
 esac
 
 exit 0
