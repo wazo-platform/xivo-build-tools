@@ -171,7 +171,7 @@ genreate_changelog() {
     cd $PACKAGES_DIR/$package/$package
     local message="$(git log -1 HEAD --pretty=format:%s)"
     dch -v $version --distribution $distribution --force-distribution "$message"
-    git commit -a -m "$message"
+    #git commit -a -m "$message"
 }
 
 build_package() {
@@ -232,7 +232,7 @@ process_package() {
 
     local version=$(increment_version $package)
 
-    #genreate_changelog $package $version
+    genreate_changelog $package $version
     build_package $package
 
     if [ $? == 0 ]; then
@@ -241,7 +241,7 @@ process_package() {
         #git push
     else
         cd $PACKAGES_DIR/$package
-        #git reset --hard HEAD^
+        git reset --hard HEAD
     fi
 }
 
