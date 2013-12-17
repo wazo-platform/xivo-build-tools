@@ -96,7 +96,9 @@ sync_debian_into_repo() {
     local package="$1"
     local debian_package_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
 
-    cd $PACKAGES_DIR/$package
+	cd $PACKAGES_DIR/$package
+	git clean -fxd
+	git checkout $branch_name_builded
     rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_package_dir $package
 }
 

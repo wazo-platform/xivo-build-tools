@@ -1,3 +1,9 @@
+xivo-build-tools (0.5-4) xivo-dev-tools; urgency=low
+
+  * fix debian package switch to branch
+
+ -- Cedric Abunar <cabunar@avencall.com>  Tue, 17 Dec 2013 13:16:17 -0500
+
 xivo-build-tools (0.5-3) xivo-dev-tools; urgency=low
 
   * disable commit update changelog
