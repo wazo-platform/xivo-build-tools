@@ -232,16 +232,16 @@ process_package() {
 
     local version=$(increment_version $package)
 
-    genreate_changelog $package $version
+    #genreate_changelog $package $version
     build_package $package
 
     if [ $? == 0 ]; then
         upload_to_mirror $package $version
         cd $PACKAGES_DIR/$package
-        git push
+        #git push
     else
         cd $PACKAGES_DIR/$package
-        git reset --hard HEAD^
+        #git reset --hard HEAD^
     fi
 }
 
