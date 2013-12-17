@@ -51,10 +51,6 @@ EOF
 }
 
 init_packages() {
-    if [ $sync_package -eq 1 ]; then
-        init_package $PACKAGE_DEBIAN
-    fi
-
     for xivo_package in $XIVO_PACKAGES; do
         init_package $xivo_package
     done
@@ -64,10 +60,6 @@ package_is_up_to_date() {
     local package="$1"
 
     valid_package $package
-
-    if [ $sync_package -eq 1 ]; then
-        init_package $PACKAGE_DEBIAN
-    fi
 
     cd $PACKAGES_DIR/$package
     if git pull | grep -q 'Already up-to-date.' ; then
@@ -96,9 +88,12 @@ sync_debian_into_repo() {
     local package="$1"
     local debian_package_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
 
-	cd $PACKAGES_DIR/$package
+	cd $PACKAGES_DIR/$PACKAGE_DEBIAN
 	git clean -fxd
-	git checkout $branch_name_builded
+	git pull
+	git checkout $branch_name
+
+	cd $PACKAGES_DIR/$package
     rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_package_dir $package
 }
 
@@ -173,7 +168,6 @@ genreate_changelog() {
     cd $PACKAGES_DIR/$package/$package
     local message="$(git log -1 HEAD --pretty=format:%s)"
     dch -v $version --distribution $distribution --force-distribution "$message"
-    #git commit -a -m "$message"
 }
 
 build_package() {
@@ -192,13 +186,10 @@ build_dput_conf() {
 
 upload_to_mirror() {
     local package="$1"
-    local version="$2"
-    local architecture="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
     cd $PACKAGES_DIR/$package
     build_dput_conf $package
-    local version=$(echo "$version" | awk -F ':' '{print $NF}')
-    dput -c "${PACKAGES_DIR}/${package}/dput.cf" $distribution "${package}_${version}_${architecture}.changes"
+    dput -c "${PACKAGES_DIR}/${package}/dput.cf" $distribution "${package}_*.changes"
 }
 
 process_packages() {
@@ -238,9 +229,7 @@ process_package() {
     build_package $package
 
     if [ $? == 0 ]; then
-        upload_to_mirror $package $version
-        cd $PACKAGES_DIR/$package
-        #git push
+        upload_to_mirror $package
     else
         cd $PACKAGES_DIR/$package
         git reset --hard HEAD
