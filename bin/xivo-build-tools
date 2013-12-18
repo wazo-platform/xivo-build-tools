@@ -13,7 +13,7 @@ export NAME="$DEBFULLNAME"
 export EMAIL="$DEBEMAIL"
 
 usage() {
-    cat << EOF
+	cat << EOF
 You have to provide some informations to allow building:
 
     Usage: $(basename $0) [OPTION]
@@ -36,32 +36,51 @@ EOF
     exit 0
 }
 
-valid_package() {
-    local package="$1"
-
-    if [[ $XIVO_PACKAGES =~ $package ]]; then
-        return 0
-    else
-        cat << EOF
-    Package: $package does not exist
-    See $CONF_FILE for more informations
-EOF
-	exit -1
-    fi
-}
-
 init_packages() {
     for xivo_package in $XIVO_PACKAGES; do
         init_package $xivo_package
     done
 }
 
+init_package() {
+    local package="$1"
+    
+	echo "Initializing package: $package"
+
+    cd $PACKAGES_DIR
+    if [ ! -d $package/.git ]; then
+        git clone $GIT_URL/$package
+    else
+        cd $package
+        git fetch -a
+    fi
+}
+
+valid_package() {
+    local package="$1"
+
+    if [[ $XIVO_PACKAGES =~ $package ]]; then
+        return 0
+    else
+		echo "Package: $package does not exist, see $CONF_FILE for more informations" >&2
+		exit -1
+    fi
+}
+
+cd_to_git_dir_package() {
+	cd $PACKAGES_DIR/$package
+}
+
 package_is_up_to_date() {
     local package="$1"
+    
+	echo "Checking updated package: $package"
 
     valid_package $package
 
-    cd $PACKAGES_DIR/$package
+    cd_to_git_dir_package $package
+	git checkout $branch_name_builded
+	
     if git pull | grep -q 'Already up-to-date.' ; then
         echo "Package $package already up-to-date."
         return 0
@@ -71,36 +90,10 @@ package_is_up_to_date() {
     fi
 }
 
-init_package() {
-    local package="$1"
-
-    cd $PACKAGES_DIR
-    if [ ! -d $package/.git ]; then
-        git clone $GIT_URL/$package
-    else
-        cd $package
-        git clean -fxd
-        git checkout $branch_name_builded
-    fi
-}
-
-sync_debian_into_repo() {
-    local package="$1"
-    local debian_package_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
-
-	cd $PACKAGES_DIR/$PACKAGE_DEBIAN
-	git clean -fxd
-	git pull
-	git checkout $branch_name
-
-	cd $PACKAGES_DIR/$package
-    rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_package_dir $package
-}
-
 get_source_version_of_package() {
     local package="$1"
 
-    cd $PACKAGES_DIR/$package
+    cd_to_git_dir_package $package
     local git_timestamp=$(git log -1 --pretty='%ct')
     local git_timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${git_timestamp}'))')
     local git_hash=$(git log -1 --pretty='%h')
@@ -111,7 +104,7 @@ get_source_version_of_package() {
 increment_version() {
     local package="$1"
 
-    cd $PACKAGES_DIR/$package
+    cd_to_git_dir_package $package
     local dir=$PACKAGES_DIR/$package/$package/debian
     local changelog=$(head -1 $dir/changelog)
     local source_version=$(get_source_version_of_package $package)
@@ -165,7 +158,10 @@ genreate_changelog() {
     local package="$1"
     local version="$2"
 
-    cd $PACKAGES_DIR/$package/$package
+	echo "Generating changelog for package $package with version $version"
+
+    cd_to_git_dir_package $package
+    cd $package
     local message="$(git log -1 HEAD --pretty=format:%s)"
     dch -v $version --distribution $distribution --force-distribution "$message"
 }
@@ -173,23 +169,37 @@ genreate_changelog() {
 build_package() {
     local package="$1"
 
-    cd $PACKAGES_DIR/$package/$package
+    cd_to_git_dir_package 
+    cd $package
     dpkg-buildpackage
+    return 0
+}
+
+clean_package() {
+	local package="$1"
+
+	cd_to_git_dir_package 
+	cd $package
+	dh_clean
+	return 0
 }
 
 build_dput_conf() {
-	local package="$1"
 	local content="$(sed "s/{{ distribution }}/${distribution}/g" ${DPUT_TPL_FILE})"
 
-	echo "$content" >> "${PACKAGES_DIR}/${package}/dput.cf"
+	echo "$content" >> dput.cf
 }
 
 upload_to_mirror() {
-    local package="$1"
+	local package="$1"
+	local version="$2"
+	local architecture="$(dpkg-architecture -qDEB_BUILD_ARCH)"
+	local version=$(echo "$version" | awk -F ':' '{print $NF}')
+	local changes_file="${package}_${version}_${architecture}.changes"
 
-    cd $PACKAGES_DIR/$package
-    build_dput_conf $package
-    dput -c "${PACKAGES_DIR}/${package}/dput.cf" $distribution "${package}_*.changes"
+	cd_to_git_dir_package $package
+	build_dput_conf
+	dput -c dput.cf $distribution $changes_file
 }
 
 process_packages() {
@@ -198,10 +208,48 @@ process_packages() {
     done
 }
 
+sync_debian_into_repo() {
+	local package="$1"
+	local debian_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
+	
+	echo "Syncronizing debian dir to $package"
+
+	cd $PACKAGES_DIR/$PACKAGE_DEBIAN
+	echo "$PACKAGE_DEBIAN fetch branch: <${branch_name}>"
+	git fetch -a
+	git checkout $branch_name
+	git pull
+
+	cd_to_git_dir_package $package
+	rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_dir $package >/dev/null
+	[ $? -ne 0 ] && echo "Error during sync debian dir" >&2 && exit 1
+}
+
+extract_branch_infos() {
+    local package="$1"
+
+	echo "Extracting branch infos for package: $package"
+
+    branch_name_builded='master'
+
+    cd_to_git_dir_package $package
+    git pull >/dev/null
+
+    if [ ! -z "$branch_name" ]; then
+        git show-branch origin/$branch_name >/dev/null
+        if [ $? == 0 ]; then
+            branch_name_builded="$branch_name"
+        fi
+    fi
+
+    echo "$package fetch branch: <${branch_name_builded}>"
+    return 0
+}
+
 process_package() {
     local package="$1"
 
-    echo "Processing $package..."
+    echo "Processing $package"
 
     if [ ! -d "$PACKAGES_DIR/$package" ]; then
         echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
@@ -214,7 +262,8 @@ process_package() {
 
     init_package $package
 
-    if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
+	package_is_up_to_date $package
+    if [ $force_rebuild -eq 0 ] && [ $? == 0 ]; then
         echo
         return 0
     fi
@@ -224,35 +273,12 @@ process_package() {
     fi
 
     local version=$(increment_version $package)
+    [ $? -ne 0 ] && exit 1
 
     genreate_changelog $package $version
     build_package $package
-
-    if [ $? == 0 ]; then
-        upload_to_mirror $package
-    else
-        cd $PACKAGES_DIR/$package
-        git reset --hard HEAD
-    fi
-}
-
-extract_branch_infos() {
-    local package="$1"
-
-    branch_name_builded='master'
-
-    cd $PACKAGES_DIR/$package
-    git pull >/dev/null
-
-    if [ ! -z "$branch_name" ]; then
-        git show-branch origin/$branch_name >/dev/null
-        if [ $? == 0 ]; then
-            branch_name_builded="$branch_name"
-        fi
-    fi
-
-    echo "$package fetch branch: <${branch_name_builded}>"
-    return 0
+    clean_package $package
+    [ $? == 0 ] && upload_to_mirror $package $version
 }
 
 if [ -z "$1" ]; then

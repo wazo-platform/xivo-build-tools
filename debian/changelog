@@ -1,3 +1,9 @@
+xivo-build-tools (0.5-6) xivo-dev-tools; urgency=low
+
+  * refactor script xivo-build-tools
+
+ -- Cedric Abunar <cabunar@avencall.com>  Tue, 17 Dec 2013 19:14:45 -0500
+
 xivo-build-tools (0.5-5) xivo-dev-tools; urgency=low
 
   * fix sync debian package
