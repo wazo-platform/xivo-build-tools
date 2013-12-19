@@ -177,9 +177,9 @@ install_build_depends() {
 build_package() {
     local package="$1"
 
+    install_build_depends $package
     cd_to_git_dir_package
     cd $package
-    install_build_depends
     dpkg-buildpackage
     return 0
 }

@@ -1,3 +1,9 @@
+xivo-build-tools (0.5-9) xivo-dev-tools; urgency=low
+
+  * fix build_package
+
+ -- Cedric Abunar <cabunar@avencall.com>  Thu, 19 Dec 2013 14:24:47 -0500
+
 xivo-build-tools (0.5-8) xivo-dev-tools; urgency=low
 
   * install build d epends before build
