@@ -166,11 +166,20 @@ genreate_changelog() {
     dch -v $version --distribution $distribution --force-distribution "$message"
 }
 
+install_build_depends() {
+    local package="$1"
+
+    cd_to_git_dir_package
+    cd $package
+	dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
+}
+
 build_package() {
     local package="$1"
 
-    cd_to_git_dir_package 
+    cd_to_git_dir_package
     cd $package
+    install_build_depends
     dpkg-buildpackage
     return 0
 }
