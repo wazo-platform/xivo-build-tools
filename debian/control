@@ -10,7 +10,6 @@ Package: xivo-build-tools
 Architecture: all
 Pre-Depends: xivo-dev-config
 Depends: ${misc:Depends},
-         xivo-server-config,
          devscripts,
          cdbs,
          dput,
