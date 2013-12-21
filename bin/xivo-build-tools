@@ -330,7 +330,7 @@ distribution="${distribution:-"master"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 sync_package="${sync_package:-"0"}"
-$branch_name"${branch_name:-"master"}"
+branch_name="${branch_name:-"master"}"
 
 validate_repo_name $distribution
 
