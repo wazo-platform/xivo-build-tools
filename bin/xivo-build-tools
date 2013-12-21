@@ -71,6 +71,13 @@ cd_to_git_dir_package() {
     return 0
 }
 
+git_remote_branch_exist() {
+	local remote_branch="$1"
+
+	git branch -r | grep -q "origin/$remote_branch"
+	return $?
+}
+
 package_is_up_to_date() {
     local package="$1"
 
@@ -83,7 +90,7 @@ package_is_up_to_date() {
 	git fetch origin
     local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
 
-    if [ -n "$need_update" ]; then
+    if [ "$need_update" == "" ]; then
         echo "Package $package already up-to-date."
         return 0
     else
@@ -230,12 +237,17 @@ sync_debian_into_repo() {
 	local package="$1"
 	local debian_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
 	
-	echo "Syncronizing debian dir to $package"
+	echo "Synchronizing debian dir to $package"
 
+	package_branch_name="$branch_name"
 	cd $PACKAGES_DIR/$PACKAGE_DEBIAN
-	echo "$PACKAGE_DEBIAN fetch branch: <${branch_name}>"
+	if ! git_remote_branch_exist $branch_name ; then
+		echo "Remote branch $branch_name not exist, switch to default branch master"
+		package_branch_name="master"
+	fi
+	echo "$PACKAGE_DEBIAN fetch branch: <${package_branch_name}>"
 	git fetch -a
-	git checkout $branch_name
+	git checkout $package_branch_name
 	git pull
 
 	cd_to_git_dir_package $package
@@ -245,24 +257,21 @@ sync_debian_into_repo() {
 }
 
 extract_branch_infos() {
-    local package="$1"
+	local package="$1"
 
 	echo "Extracting branch infos for package: $package"
 
-    branch_name_builded="$branch_name"
+	branch_name_builded="$branch_name"
 
-    cd_to_git_dir_package $package
-    git pull >/dev/null
+	cd_to_git_dir_package $package
 
-    if [ ! -z "$branch_name" ]; then
-        git show-branch origin/$branch_name >/dev/null
-        if [ $? == 0 ]; then
-            branch_name_builded="$branch_name"
-        fi
-    fi
+	if ! git_remote_branch_exist $branch_name ; then
+		echo "Remote branch $branch_name not exist, switch to default branch master"
+		branch_name_builded="master"
+	fi
 
-    echo "$package fetch branch: <${branch_name_builded}>"
-    return 0
+	echo "$package fetch branch: <${branch_name_builded}>"
+	return 0
 }
 
 process_package() {
