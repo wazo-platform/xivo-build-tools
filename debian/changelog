@@ -1,3 +1,9 @@
+xivo-build-tools (0.5-10) xivo-dev-tools; urgency=low
+
+  * fix dependencies
+
+ -- Cedric Abunar <cabunar@avencall.com>  Fri, 19 Dec 2013 21:06:23 -0500
+
 xivo-build-tools (0.5-9) xivo-dev-tools; urgency=low
 
   * fix build_package
