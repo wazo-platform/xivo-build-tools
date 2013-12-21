@@ -51,9 +51,6 @@ init_package() {
     cd $PACKAGES_DIR
     if [ ! -d $package/.git ]; then
         git clone $GIT_URL/$package
-    else
-        cd $package
-        git fetch -a
     fi
     return 0
 }
@@ -82,13 +79,17 @@ package_is_up_to_date() {
     valid_package $package
 
     cd_to_git_dir_package $package
-	git checkout $branch_name_builded
 	
-    if git pull | grep -q 'Already up-to-date.' ; then
+	git fetch origin
+    local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
+
+    if [ -n $need_update ]; then
         echo "Package $package already up-to-date."
         return 0
     else
         echo "Package $package need update."
+        git checkout $branch_name_builded
+        git pull
         return 1
     fi
 }
@@ -280,8 +281,7 @@ process_package() {
 
     init_package $package
 
-	package_is_up_to_date $package
-    if [ $force_rebuild -eq 0 ] && [ $? == 0 ]; then
+    if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
         echo
         return 0
     fi
