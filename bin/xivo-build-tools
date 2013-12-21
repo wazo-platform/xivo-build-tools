@@ -21,7 +21,7 @@ You have to provide some informations to allow building:
     Options:
         -i: Package initialization for the first time, can be used later 
             to refresh the packages and put them all to date.
-        -d: distribution (default: xivo-five)
+        -d: distribution (default: master)
         -b: branch (default: master)
         -a: Processing all packages
         -p: Processing only one specified package
@@ -249,7 +249,7 @@ extract_branch_infos() {
 
 	echo "Extracting branch infos for package: $package"
 
-    branch_name_builded='master'
+    branch_name_builded="$branch_name"
 
     cd_to_git_dir_package $package
     git pull >/dev/null
@@ -326,10 +326,11 @@ do
 done
 
 init="${init:-"0"}"
-distribution="${distribution:-"xivo-five"}"
+distribution="${distribution:-"master"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 sync_package="${sync_package:-"0"}"
+$branch_name"${branch_name:-"master"}"
 
 validate_repo_name $distribution
 
