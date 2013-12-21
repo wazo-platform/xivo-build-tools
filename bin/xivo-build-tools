@@ -83,7 +83,7 @@ package_is_up_to_date() {
 	git fetch origin
     local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
 
-    if [ -n $need_update ]; then
+    if [ -n "$need_update" ]; then
         echo "Package $package already up-to-date."
         return 0
     else
