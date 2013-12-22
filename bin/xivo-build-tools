@@ -52,6 +52,7 @@ init_package() {
     if [ ! -d $package/.git ]; then
         git clone $GIT_URL/$package
     fi
+    cd $package
 	git clean -fxd
     return 0
 }
