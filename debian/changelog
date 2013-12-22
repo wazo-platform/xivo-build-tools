@@ -1,3 +1,9 @@
+xivo-build-tools (0.5-14) xivo-dev-tools; urgency=low
+
+  * fix xivo-build-tools script
+
+ -- Cedric Abunar <cabunar@avencall.com>  Sun, 21 Dec 2013 11:15:51 -0500
+
 xivo-build-tools (0.5-13) xivo-dev-tools; urgency=low
 
   * fix xivo-build-tools script
