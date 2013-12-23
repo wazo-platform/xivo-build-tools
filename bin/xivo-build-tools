@@ -4,6 +4,7 @@ CONF_DIR="/etc/xivo-build-tools"
 TPL_DIR="${CONF_DIR}/templates"
 CONF_FILE="${CONF_DIR}/config"
 DPUT_TPL_FILE="${TPL_DIR}/conf-dput.tpl"
+ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
 . /usr/share/xivo-dev-config/functions
 . /etc/xivo-dev-config/config
@@ -106,8 +107,7 @@ package_is_up_to_date() {
 get_mirror_package_version() {
 	local package="$1"
 	local mirror_url="http://mirror.lan-quebec.avencall.com"
-	local architecture="$(dpkg-architecture -qDEB_BUILD_ARCH)"
-	local mirror_uri="dists/${distribution}/main/binary-${architecture}/Packages"
+	local mirror_uri="dists/${distribution}/main/binary-${ARCH}/Packages"
 
 	case $package in
 		"xivo-provisioning") local package="xivo-provd";;
@@ -236,9 +236,8 @@ build_dput_conf() {
 upload_to_mirror() {
 	local package="$1"
 	local version="$2"
-	local architecture="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 	local version=$(echo "$version" | awk -F ':' '{print $NF}')
-	local changes_file="${package}_${version}_${architecture}.changes"
+	local changes_file="${package}_${version}_${ARCH}.changes"
 
 	cd_to_git_dir_package $package
 	build_dput_conf
