@@ -103,6 +103,20 @@ package_is_up_to_date() {
     fi
 }
 
+get_mirror_package_version() {
+	local package="$1"
+	local mirror_url="http://mirror.lan-quebec.avencall.com"
+	local architecture="$(dpkg-architecture -qDEB_BUILD_ARCH)"
+	local mirror_uri="dists/${distribution}/main/binary-${architecture}/Packages"
+
+	case $package in
+		"xivo-provisioning") local package="xivo-provd";;
+	esac
+
+	wget -qO- ${mirror_url}/${mirror_uri} | grep -A 2 "^Package: $package" | grep '^Version:' | head -n1 | awk '{print $2}'
+	return 0
+}
+
 get_source_version() {
     local package="$1"
 
@@ -111,6 +125,7 @@ get_source_version() {
     local git_timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${git_timestamp}'))')
     local git_hash=$(git log -1 --pretty='%h')
     local computed="~${git_timestamp}.${git_hash}"
+
     echo ${XIVO_VERSION}${computed}
     return 0
 }
@@ -132,6 +147,8 @@ get_debian_version() {
         return 1
     fi
 
+    local existing_version=$(get_mirror_package_version $package) || return 1
+
     # sanity check on the package name
     if ! [[ "$changelog" =~ ^$package ]] ; then
         echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
@@ -145,13 +162,11 @@ get_debian_version() {
     fi
 
     local debian
-    if echo "$existing_version" | grep $source_version > /dev/null
-    then
+    if echo "$existing_version" | grep -q $source_version ; then
         if [[ "$existing_version" =~ .*-(.*) ]] ; then
             debian="-$(expr ${BASH_REMATCH[1]} + 1)"
         else
-            echo "The first line of $dir/changelog is '$changelog' and the package version $existing_version does not contain a debian version (i.e. something after a - as specified in man deb-version)" >&2
-            return 3
+        debian=-1
         fi
     else
         debian=-1
@@ -303,7 +318,7 @@ process_package() {
 
     local source_version=$(get_source_version $package) || return 1
     local debian_version=$(get_debian_version $package $source_version) || return 1
-    if [ -z $debian_version ]; then
+    if [ -z "$debian_version" ]; then
         exit 1
     fi
 
