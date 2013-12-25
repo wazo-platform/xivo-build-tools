@@ -1,7 +1,7 @@
 
 DEBFULLNAME="XiVO Builder Team"
 DEBEMAIL="release@xivo.fr"
-XIVO_VERSION="13.24"
+XIVO_VERSION="99.01"
 PACKAGE_DEBIAN="squeeze-xivo-skaro"
 PACKAGES_DIR="/home/builder/packages"
 GIT_URL="git@github.com:xivo-pbx"
