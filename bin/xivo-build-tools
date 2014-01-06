@@ -123,10 +123,12 @@ get_source_version() {
     local package="$1"
 
     cd_to_git_dir_package $package
-    local git_timestamp=$(git log -1 --pretty='%ct')
-    local git_timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${git_timestamp}'))')
+    # using date now instead of commit date
+    #local git_timestamp=$(git log -1 --pretty='%ct')
+    local now_timestamp=$(date +%s)
+    local timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${now_timestamp}'))')
     local git_hash=$(git log -1 --pretty='%h')
-    local computed="~${git_timestamp}.${git_hash}"
+    local computed="~${timestamp}.${git_hash}"
 
     echo ${XIVO_VERSION}${computed}
     return 0
