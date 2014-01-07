@@ -1,3 +1,9 @@
+xivo-build-tools (0.5-17) xivo-dev-tools; urgency=low
+
+  * using date now instead of commit date
+
+ -- Cedric Abunar <cabunar@avencall.com>  Thu, 07 Jan 2014 12:09:34 -0500
+
 xivo-build-tools (0.5-16) xivo-dev-tools; urgency=low
 
   * fix xivo version in conffile
