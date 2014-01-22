@@ -142,16 +142,17 @@ get_debian_version() {
 	local dir=$PACKAGES_DIR/$package/$package/debian
 	local changelog=$(head -1 $dir/changelog)
 
-	# look for a package version
-	local existing_version
-	if [[ "$changelog" =~ \((.*)\) ]] ; then
-		existing_version=${BASH_REMATCH[1]}
-	else
-		echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
-		return 1
-	fi
-
 	local existing_version=$(get_mirror_package_version $package) || return 1
+
+	if [ -z "$existing_version" ]; then
+		# look for a package version
+		if [[ "$changelog" =~ \((.*)\) ]] ; then
+			existing_version=${BASH_REMATCH[1]}
+		else
+			echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
+			return 1
+		fi
+	fi
 
 	# sanity check on the package name
 	if ! [[ "$changelog" =~ ^$package ]] ; then
