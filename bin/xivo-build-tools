@@ -339,22 +339,28 @@ if [ -z "$1" ]; then
 	usage
 fi
 
+id | grep uid=0 >/dev/null
+if [ $? == 0 ]; then
+	echo "You can't run this script in root" >&2
+	exit 1
+fi
+
 while getopts :d:p:v:b:afiush opt
 do
-  case $opt in
-	d) distribution=$OPTARG;;
-	p) force_package=$OPTARG;;
-	v) XIVO_VERSION=$OPTARG;;
-	b) branch_name=$OPTARG;;
-	a) all=1;;
-	f) force_rebuild=1;;
-	s) sync_package=1;;
-	i) init=1;;
-	h) usage;;
-	'?')  echo "$0 : option $OPTARG is not valid" >&2
-		  usage
-	;;
-  esac
+	case $opt in
+		d) distribution=$OPTARG;;
+		p) force_package=$OPTARG;;
+		v) XIVO_VERSION=$OPTARG;;
+		b) branch_name=$OPTARG;;
+		a) all=1;;
+		f) force_rebuild=1;;
+		s) sync_package=1;;
+		i) init=1;;
+		h) usage;;
+		'?') echo "$0 : option $OPTARG is not valid" >&2
+			usage
+		;;
+	esac
 done
 
 init="${init:-"0"}"
