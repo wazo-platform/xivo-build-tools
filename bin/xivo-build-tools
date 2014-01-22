@@ -257,7 +257,12 @@ process_packages() {
 sync_debian_into_repo() {
 	local package="$1"
 	local debian_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
-	
+
+	if [ ! -d $debian_dir ] ; then
+		echo "$debian_dir is not a directory" >&2
+		return 1
+	fi
+
 	echo "Synchronizing debian dir to $package"
 
 	package_branch_name="$branch_name"
@@ -272,10 +277,8 @@ sync_debian_into_repo() {
 	git pull
 
 	cd_to_git_dir_package $package
-	if [ ! -d "${package}/debian" ]; then
-		rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_dir $package >/dev/null
-		[ $? -ne 0 ] && echo "Error during sync debian dir" >&2 && exit 1
-	fi
+	rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_dir $package >/dev/null
+	[ $? -ne 0 ] && echo "Error during sync debian dir" >&2 && exit 1
 	return 0
 }
 
