@@ -271,8 +271,10 @@ sync_debian_into_repo() {
 	git pull
 
 	cd_to_git_dir_package $package
-	rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_dir $package >/dev/null
-	[ $? -ne 0 ] && echo "Error during sync debian dir" >&2 && exit 1
+	if [ ! -d "${package}/debian" ]; then
+		rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_dir $package >/dev/null
+		[ $? -ne 0 ] && echo "Error during sync debian dir" >&2 && exit 1
+	fi
 	return 0
 }
 
