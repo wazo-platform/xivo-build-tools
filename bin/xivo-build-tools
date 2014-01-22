@@ -98,6 +98,7 @@ package_is_up_to_date() {
 		return 0
 	else
 		echo "Package $package need update."
+		git reset --hard
 		git checkout $branch_name_builded
 		git pull
 		return 1
