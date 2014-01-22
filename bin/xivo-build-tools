@@ -17,61 +17,61 @@ usage() {
 	cat << EOF
 You have to provide some informations to allow building:
 
-    Usage: $(basename $0) [OPTION]
+	Usage: $(basename $0) [OPTION]
 
-    Options:
-        -i: Package initialization for the first time, can be used later 
-            to refresh the packages and put them all to date.
-        -d: distribution (default: master)
-        -b: branch (default: master)
-        -a: Processing all packages
-        -p: Processing only one specified package
-        -f: Force rebuild without check repository is up-to-date
-        -v: Set xivo version (Default is in $CONF_FILE)
-        -s: Sync debian directory from $PACKAGE_DEBIAN package
-        -h: show this help
+	Options:
+		-i: Package initialization for the first time, can be used later 
+			to refresh the packages and put them all to date.
+		-d: distribution (default: master)
+		-b: branch (default: master)
+		-a: Processing all packages
+		-p: Processing only one specified package
+		-f: Force rebuild without check repository is up-to-date
+		-v: Set xivo version (Default is in $CONF_FILE)
+		-s: Sync debian directory from $PACKAGE_DEBIAN package
+		-h: show this help
 
-    example : $(basename $0) -d xivo-five -p xivo-web-interface
+	example : $(basename $0) -d xivo-five -p xivo-web-interface
 
 EOF
-    exit 0
+	exit 0
 }
 
 init_packages() {
-    for xivo_package in $XIVO_PACKAGES; do
-        init_package $xivo_package
-    done
-    return 0
+	for xivo_package in $XIVO_PACKAGES; do
+		init_package $xivo_package
+	done
+	return 0
 }
 
 init_package() {
-    local package="$1"
-    
+	local package="$1"
+	
 	echo "Initializing package: $package"
 
-    cd $PACKAGES_DIR
-    if [ ! -d $package/.git ]; then
-        git clone $GIT_URL/$package
-    fi
-    cd $package
+	cd $PACKAGES_DIR
+	if [ ! -d $package/.git ]; then
+		git clone $GIT_URL/$package
+	fi
+	cd $package
 	git clean -fxd
-    return 0
+	return 0
 }
 
 valid_package() {
-    local package="$1"
+	local package="$1"
 
-    if [[ $XIVO_PACKAGES =~ $package ]]; then
-        return 0
-    else
+	if [[ $XIVO_PACKAGES =~ $package ]]; then
+		return 0
+	else
 		echo "Package: $package does not exist, see $CONF_FILE for more informations" >&2
 		exit -1
-    fi
+	fi
 }
 
 cd_to_git_dir_package() {
 	cd $PACKAGES_DIR/$package
-    return 0
+	return 0
 }
 
 git_remote_branch_exist() {
@@ -82,26 +82,26 @@ git_remote_branch_exist() {
 }
 
 package_is_up_to_date() {
-    local package="$1"
+	local package="$1"
 
 	echo "Checking updated package: $package"
 
-    valid_package $package
+	valid_package $package
 
-    cd_to_git_dir_package $package
+	cd_to_git_dir_package $package
 	
 	git fetch origin
-    local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
+	local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
 
-    if [ "$need_update" == "" ]; then
-        echo "Package $package already up-to-date."
-        return 0
-    else
-        echo "Package $package need update."
-        git checkout $branch_name_builded
-        git pull
-        return 1
-    fi
+	if [ "$need_update" == "" ]; then
+		echo "Package $package already up-to-date."
+		return 0
+	else
+		echo "Package $package need update."
+		git checkout $branch_name_builded
+		git pull
+		return 1
+	fi
 }
 
 get_mirror_package_version() {
@@ -120,103 +120,103 @@ get_mirror_package_version() {
 }
 
 get_source_version() {
-    local package="$1"
+	local package="$1"
 
-    cd_to_git_dir_package $package
-    # using date now instead of commit date
-    #local git_timestamp=$(git log -1 --pretty='%ct')
-    local now_timestamp=$(date +%s)
-    local timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${now_timestamp}'))')
-    local git_hash=$(git log -1 --pretty='%h')
-    local computed="~${timestamp}.${git_hash}"
+	cd_to_git_dir_package $package
+	# using date now instead of commit date
+	#local git_timestamp=$(git log -1 --pretty='%ct')
+	local now_timestamp=$(date +%s)
+	local timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${now_timestamp}'))')
+	local git_hash=$(git log -1 --pretty='%h')
+	local computed="~${timestamp}.${git_hash}"
 
-    echo ${XIVO_VERSION}${computed}
-    return 0
+	echo ${XIVO_VERSION}${computed}
+	return 0
 }
 
 get_debian_version() {
-    local package="$1"
-    local source_version="$2"
+	local package="$1"
+	local source_version="$2"
 
-    cd_to_git_dir_package $package
-    local dir=$PACKAGES_DIR/$package/$package/debian
-    local changelog=$(head -1 $dir/changelog)
+	cd_to_git_dir_package $package
+	local dir=$PACKAGES_DIR/$package/$package/debian
+	local changelog=$(head -1 $dir/changelog)
 
-    # look for a package version
-    local existing_version
-    if [[ "$changelog" =~ \((.*)\) ]] ; then
-        existing_version=${BASH_REMATCH[1]}
-    else
-        echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
-        return 1
-    fi
+	# look for a package version
+	local existing_version
+	if [[ "$changelog" =~ \((.*)\) ]] ; then
+		existing_version=${BASH_REMATCH[1]}
+	else
+		echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
+		return 1
+	fi
 
-    local existing_version=$(get_mirror_package_version $package) || return 1
+	local existing_version=$(get_mirror_package_version $package) || return 1
 
-    # sanity check on the package name
-    if ! [[ "$changelog" =~ ^$package ]] ; then
-        echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
-        return 2
-    fi
+	# sanity check on the package name
+	if ! [[ "$changelog" =~ ^$package ]] ; then
+		echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
+		return 2
+	fi
 
-    # extract the epoch, if any
-    local epoch
-    if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
-        epoch=${BASH_REMATCH[1]}
-    fi
+	# extract the epoch, if any
+	local epoch
+	if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
+		epoch=${BASH_REMATCH[1]}
+	fi
 
-    local debian
-    if echo "$existing_version" | grep -q $source_version ; then
-        if [[ "$existing_version" =~ .*-(.*) ]] ; then
-            debian="-$(expr ${BASH_REMATCH[1]} + 1)"
-        else
-        debian=-1
-        fi
-    else
-        debian=-1
-    fi
+	local debian
+	if echo "$existing_version" | grep -q $source_version ; then
+		if [[ "$existing_version" =~ .*-(.*) ]] ; then
+			debian="-$(expr ${BASH_REMATCH[1]} + 1)"
+		else
+			debian=-1
+		fi
+	else
+		debian=-1
+	fi
 
-    local version=${epoch}${source_version}${debian}
+	local version=${epoch}${source_version}${debian}
 
-    if ! dpkg --compare-versions $existing_version le $version ; then
-        echo "The first line of $dir/changelog is '$changelog' and contains a version ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
-        return 4
-    fi
+	if ! dpkg --compare-versions $existing_version le $version ; then
+		echo "The first line of $dir/changelog is '$changelog' and contains a version ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
+		return 4
+	fi
 
-    echo $version
-    return 0
+	echo $version
+	return 0
 }
 
 genreate_changelog() {
-    local package="$1"
-    local version="$2"
+	local package="$1"
+	local version="$2"
 
 	echo "Generating changelog for package $package with version $version"
 
-    cd_to_git_dir_package $package
-    cd $package
-    local message="$(git log -1 HEAD --pretty=format:%s)"
-    dch -v $version --distribution $distribution --force-distribution "$message"
-    return 0
+	cd_to_git_dir_package $package
+	cd $package
+	local message="$(git log -1 HEAD --pretty=format:%s)"
+	dch -v $version --distribution $distribution --force-distribution "$message"
+	return 0
 }
 
 install_build_depends() {
-    local package="$1"
+	local package="$1"
 
-    cd_to_git_dir_package
-    cd $package
+	cd_to_git_dir_package
+	cd $package
 	dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
-    return 0
+	return 0
 }
 
 build_package() {
-    local package="$1"
+	local package="$1"
 
-    install_build_depends $package
-    cd_to_git_dir_package
-    cd $package
-    dpkg-buildpackage
-    return 0
+	install_build_depends $package
+	cd_to_git_dir_package
+	cd $package
+	dpkg-buildpackage
+	return 0
 }
 
 clean_package() {
@@ -232,7 +232,7 @@ build_dput_conf() {
 	local content="$(sed "s/{{ distribution }}/${distribution}/g" ${DPUT_TPL_FILE})"
 
 	echo "$content" >> dput.cf
-    return 0
+	return 0
 }
 
 upload_to_mirror() {
@@ -244,13 +244,13 @@ upload_to_mirror() {
 	cd_to_git_dir_package $package
 	build_dput_conf
 	dput -c dput.cf $distribution $changes_file
-    return 0
+	return 0
 }
 
 process_packages() {
-    for xivo_package in $XIVO_PACKAGES; do
-        process_package $xivo_package
-    done
+	for xivo_package in $XIVO_PACKAGES; do
+		process_package $xivo_package
+	done
 }
 
 sync_debian_into_repo() {
@@ -295,62 +295,62 @@ extract_branch_infos() {
 }
 
 process_package() {
-    local package="$1"
+	local package="$1"
 
-    echo "Processing $package"
+	echo "Processing $package"
 
-    if [ ! -d "$PACKAGES_DIR/$package" ]; then
-        echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
-        return 1
-    fi
+	if [ ! -d "$PACKAGES_DIR/$package" ]; then
+		echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
+		return 1
+	fi
 
-    if ! extract_branch_infos $package; then
-        return 1
-    fi
+	if ! extract_branch_infos $package; then
+		return 1
+	fi
 
-    init_package $package
+	init_package $package
 
-    if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
-        echo
-        return 0
-    fi
+	if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
+		echo
+		return 0
+	fi
 
-    if [ $sync_package -eq 1 ]; then
-        sync_debian_into_repo $package
-    fi
+	if [ $sync_package -eq 1 ]; then
+		sync_debian_into_repo $package
+	fi
 
-    local source_version=$(get_source_version $package) || return 1
-    local debian_version=$(get_debian_version $package $source_version) || return 1
-    if [ -z "$debian_version" ]; then
-        exit 1
-    fi
+	local source_version=$(get_source_version $package) || return 1
+	local debian_version=$(get_debian_version $package $source_version) || return 1
+	if [ -z "$debian_version" ]; then
+		exit 1
+	fi
 
-    genreate_changelog $package $debian_version
-    build_package $package
-    clean_package $package
-    [ $? == 0 ] && upload_to_mirror $package $debian_version
-    return 0
+	genreate_changelog $package $debian_version
+	build_package $package
+	clean_package $package
+	[ $? == 0 ] && upload_to_mirror $package $debian_version
+	return 0
 }
 
 if [ -z "$1" ]; then
-    usage
+	usage
 fi
 
 while getopts :d:p:v:b:afiush opt
 do
   case $opt in
-    d) distribution=$OPTARG;;
-    p) force_package=$OPTARG;;
-    v) XIVO_VERSION=$OPTARG;;
-    b) branch_name=$OPTARG;;
-    a) all=1;;
-    f) force_rebuild=1;;
-    s) sync_package=1;;
-    i) init=1;;
-    h) usage;;
-    '?')  echo "$0 : option $OPTARG is not valid" >&2
-          usage
-    ;;
+	d) distribution=$OPTARG;;
+	p) force_package=$OPTARG;;
+	v) XIVO_VERSION=$OPTARG;;
+	b) branch_name=$OPTARG;;
+	a) all=1;;
+	f) force_rebuild=1;;
+	s) sync_package=1;;
+	i) init=1;;
+	h) usage;;
+	'?')  echo "$0 : option $OPTARG is not valid" >&2
+		  usage
+	;;
   esac
 done
 
@@ -364,11 +364,11 @@ branch_name="${branch_name:-"master"}"
 validate_repo_name $distribution
 
 if [ $init == 1 ]; then
-    init_packages
+	init_packages
 else
-    if [ $all -eq 1 ]; then
-        process_packages
-    elif [ ! -z "$force_package" ]; then
-        process_package $force_package
-    fi
+	if [ $all -eq 1 ]; then
+		process_packages
+	elif [ ! -z "$force_package" ]; then
+		process_package $force_package
+	fi
 fi
