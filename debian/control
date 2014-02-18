@@ -16,6 +16,7 @@ Depends: ${misc:Depends},
          lintian,
          libdistro-info-perl,
          libparse-debcontrol-perl,
-         fakeroot
+         fakeroot,
+         dh-python
 Description: XIVO Build Tools
  build packages

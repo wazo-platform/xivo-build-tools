@@ -9,6 +9,8 @@ Update sources files for APT
 
  $ echo 'deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
 
+ $ echo 'deb http://ftp.ca.debian.org/debian/ wheezy-backports main' >/etc/apt/sources.list.d/wheezy-backports.list
+ 
  $ apt-get update
 
  $ apt-get install xivo-build-tools
