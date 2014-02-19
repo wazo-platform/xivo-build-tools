@@ -26,7 +26,7 @@ You have to provide some informations to allow building:
 			to refresh the packages and put them all to date.
 		-d: distribution (default: master)
 		-b: branch (default: master)
-		-g: Specified distribution for dput existing in $DPUT_DEFAULT_FILE
+		-g: Force distribution for dput
 		-m: Specified mirror to upload package (default: $MIRROR_DEFAULT)
 		-a: Processing all packages
 		-p: Processing only one specified package
