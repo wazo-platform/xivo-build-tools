@@ -1,8 +1,0 @@
-[DEFAULT]
-xivo-dev-tools
-
-[xivo-dev-tools]
-method = rsync
-fqdn = mirror.lan-quebec.avencall.com
-login = root
-incoming = /srv/reprepro/incoming/xivo-dev-tools

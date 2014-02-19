@@ -2,8 +2,10 @@
 set -e
 CONF_DIR="/etc/xivo-build-tools"
 TPL_DIR="${CONF_DIR}/templates"
+MIRROR_DIR="${CONF_DIR}/mirror"
 CONF_FILE="${CONF_DIR}/config"
 DPUT_TPL_FILE="${TPL_DIR}/conf-dput.tpl"
+MIRROR_DEFAULT="xivo-official"
 ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
 . /usr/share/xivo-dev-config/functions
@@ -24,6 +26,8 @@ You have to provide some informations to allow building:
 			to refresh the packages and put them all to date.
 		-d: distribution (default: master)
 		-b: branch (default: master)
+		-g: Specified distribution for dput existing in $DPUT_DEFAULT_FILE
+		-m: Specified mirror to upload package (default: $MIRROR_DEFAULT)
 		-a: Processing all packages
 		-p: Processing only one specified package
 		-f: Force rebuild without check repository is up-to-date
@@ -55,6 +59,7 @@ init_package() {
 	fi
 	cd $package
 	git clean -fxd
+	git reset --hard
 	return 0
 }
 
@@ -107,7 +112,6 @@ package_is_up_to_date() {
 
 get_mirror_package_version() {
 	local package="$1"
-	local mirror_url="http://mirror.lan-quebec.avencall.com"
 	local mirror_uri="dists/${distribution}/main/binary-${ARCH}/Packages"
 
 	case $package in
@@ -116,7 +120,7 @@ get_mirror_package_version() {
 		"xivo-dird") local package="xivo-libdird";;
 	esac
 
-	wget -qO- ${mirror_url}/${mirror_uri} | grep -A 2 "^Package: $package" | grep '^Version:' | head -n1 | awk '{print $2}'
+	wget -qO- ${MIRROR_URL}/${mirror_uri} | grep -A 2 "^Package: $package" | grep '^Version:' | head -n1 | awk '{print $2}'
 	return 0
 }
 
@@ -153,12 +157,11 @@ get_debian_version() {
 			echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
 			return 1
 		fi
-	fi
-
-	# sanity check on the package name
-	if ! [[ "$changelog" =~ ^$package ]] ; then
-		echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
-		return 2
+		# sanity check on the package name
+		if ! [[ "$changelog" =~ ^$package ]] ; then
+			echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
+			return 2
+		fi
 	fi
 
 	# extract the epoch, if any
@@ -181,7 +184,7 @@ get_debian_version() {
 	local version=${epoch}${source_version}${debian}
 
 	if ! dpkg --compare-versions $existing_version le $version ; then
-		echo "The first line of $dir/changelog is '$changelog' and contains a version ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
+		echo "Existing version of XiVO is ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
 		return 4
 	fi
 
@@ -231,9 +234,11 @@ clean_package() {
 }
 
 build_dput_conf() {
-	local content="$(sed "s/{{ distribution }}/${distribution}/g" ${DPUT_TPL_FILE})"
-
-	echo "$content" >> dput.cf
+	local distribution="$1"
+	cp ${DPUT_TPL_FILE} dput.cf
+	sed -i "s|{{ distribution }}|${distribution}|g" dput.cf
+	sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" dput.cf
+	sed -i "s|{{ incoming }}|${MIRROR_INCOMING}|g" dput.cf
 	return 0
 }
 
@@ -244,8 +249,13 @@ upload_to_mirror() {
 	local changes_file="${package}_${version}_${ARCH}.changes"
 
 	cd_to_git_dir_package $package
-	build_dput_conf
-	dput -c dput.cf $distribution $changes_file
+	if [ -z "$dput_distribution" ]; then
+		build_dput_conf $distribution
+		dput -c dput.cf $distribution $changes_file
+	else
+		build_dput_conf $dput_distribution
+		dput -c dput.cf $dput_distribution $changes_file
+	fi
 	return 0
 }
 
@@ -348,17 +358,19 @@ if [ $EUID == 0 ]; then
 	exit 1
 fi
 
-while getopts :d:p:v:b:afish opt
+while getopts :d:p:v:b:g:m:afish opt
 do
 	case $opt in
 		d) distribution=$OPTARG;;
 		p) force_package=$OPTARG;;
 		v) XIVO_VERSION=$OPTARG;;
 		b) branch_name=$OPTARG;;
+		g) dput_distribution=$OPTARG;;
+		m) default_mirror=$OPTARG;;
 		a) all=1;;
 		f) force_rebuild=1;;
-		s) sync_package=1;;
 		i) init=1;;
+		s) sync_package=1;;
 		h) usage;;
 		'?') echo "$0 : option $OPTARG is not valid" >&2
 			usage
@@ -372,8 +384,12 @@ all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 sync_package="${sync_package:-"0"}"
 branch_name="${branch_name:-"master"}"
+dput_distribution="${dput_distribution:-""}"
+default_mirror="${default_mirror:-"${MIRROR_DEFAULT}"}"
 
 validate_repo_name $distribution
+
+. ${MIRROR_DIR}/$default_mirror
 
 if [ $init == 1 ]; then
 	init_packages

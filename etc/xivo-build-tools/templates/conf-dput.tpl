@@ -2,7 +2,7 @@
 ; START {{ distribution }}
 [{{ distribution }}]
 method = rsync
-fqdn = mirror.lan-quebec.avencall.com
+fqdn = {{ fqdn }}
 login = root
-incoming = /srv/reprepro/incoming/{{ distribution }}
+incoming = {{ incoming }}/{{ distribution }}
 ; END {{ distribution }}
