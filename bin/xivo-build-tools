@@ -149,13 +149,13 @@ get_debian_version() {
 	local source_version="$2"
 
 	cd_to_git_dir_package $package
-	local dir=$PACKAGES_DIR/$package/$package/debian
-	local changelog=$(head -1 $dir/changelog)
 
 	local existing_version=$(get_mirror_package_version $package) || return 1
 
 	if [ -z "$existing_version" ]; then
 		# look for a package version
+		local dir=$PACKAGES_DIR/$package/$package/debian
+		local changelog=$(head -1 ${dir}/changelog)
 		if [[ "$changelog" =~ \((.*)\) ]] ; then
 			existing_version=${BASH_REMATCH[1]}
 		else
@@ -395,7 +395,8 @@ if [ ! -f "$config_mirror_file" ]; then
 	exit 1
 fi
 
-. config_mirror_file
+# source mirror configuration
+. $config_mirror_file
 
 if [ $init == 1 ]; then
 	init_packages
