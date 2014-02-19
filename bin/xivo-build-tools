@@ -8,6 +8,11 @@ DPUT_TPL_FILE="${TPL_DIR}/conf-dput.tpl"
 MIRROR_DEFAULT="xivo-official"
 ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
+if [ $EUID == 0 ]; then
+	echo "This script must be not run as root" 1>&2
+	exit 1
+fi
+
 . /usr/share/xivo-dev-config/functions
 . /etc/xivo-dev-config/config
 . $CONF_FILE
@@ -353,11 +358,6 @@ if [ -z "$1" ]; then
 	usage
 fi
 
-if [ $EUID == 0 ]; then
-	echo "This script must be not run as root" 1>&2
-	exit 1
-fi
-
 while getopts :d:p:v:b:g:m:afish opt
 do
 	case $opt in
@@ -388,8 +388,14 @@ dput_distribution="${dput_distribution:-""}"
 default_mirror="${default_mirror:-"${MIRROR_DEFAULT}"}"
 
 validate_repo_name $distribution
+config_mirror_file="${MIRROR_DIR}/$default_mirror"
 
-. ${MIRROR_DIR}/$default_mirror
+if [ ! -f "$config_mirror_file" ]; then
+	echo "ERROR: Config mirror file not exist $config_mirror_file" >&2
+	exit 1
+fi
+
+. config_mirror_file
 
 if [ $init == 1 ]; then
 	init_packages
