@@ -8,7 +8,6 @@ Standards-Version: 3.9.4
 
 Package: xivo-build-tools
 Architecture: all
-Pre-Depends: xivo-dev-config
 Depends: ${misc:Depends},
          devscripts,
          cdbs,

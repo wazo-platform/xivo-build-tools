@@ -1,21 +1,21 @@
 #!/bin/bash
 set -e
+
 CONF_DIR="/etc/xivo-build-tools"
-TPL_DIR="${CONF_DIR}/templates"
-MIRROR_DIR="${CONF_DIR}/mirror"
 CONF_FILE="${CONF_DIR}/config"
-DPUT_TPL_FILE="${TPL_DIR}/conf-dput.tpl"
-MIRROR_DEFAULT="xivo-official"
-ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
 if [ $EUID == 0 ]; then
 	echo "This script must be not run as root" 1>&2
 	exit 1
 fi
 
-. /usr/share/xivo-dev-config/functions
-. /etc/xivo-dev-config/config
-. $CONF_FILE
+# source conffile
+if [ -e $CONF_FILE ]; then
+	. $CONF_FILE
+else
+	echo "$CONF_FILE not exist" >&2
+	exit 1
+fi
 
 export NAME="$DEBFULLNAME"
 export EMAIL="$DEBEMAIL"
@@ -47,8 +47,8 @@ EOF
 }
 
 init_packages() {
-	for xivo_package in $XIVO_PACKAGES; do
-		init_package $xivo_package
+	for package in $PACKAGES; do
+		init_package $package
 	done
 	return 0
 }
@@ -71,7 +71,7 @@ init_package() {
 valid_package() {
 	local package="$1"
 
-	if [[ $XIVO_PACKAGES =~ $package ]]; then
+	if [[ $PACKAGES =~ $package ]]; then
 		return 0
 	else
 		echo "Package: $package does not exist, see $CONF_FILE for more informations" >&2
@@ -265,8 +265,8 @@ upload_to_mirror() {
 }
 
 process_packages() {
-	for xivo_package in $XIVO_PACKAGES; do
-		process_package $xivo_package
+	for package in $PACKAGES; do
+		process_package $package
 	done
 }
 
@@ -352,6 +352,23 @@ process_package() {
 	clean_package $package
 	[ $? == 0 ] && upload_to_mirror $package $debian_version
 	return 0
+}
+
+validate_repo_name() {
+	local var="$1"
+	case "$var" in
+	 *\ * )
+		echo "ERROR: Invalid Repository name, space is not allowed" >&2
+		exit 1
+		;;
+	*_* )
+		echo "ERROR: Invalid Repository name, underscore is not allowed" >&2
+		exit 1
+		;;
+	*)
+		return 0
+		;;
+	esac
 }
 
 if [ -z "$1" ]; then
