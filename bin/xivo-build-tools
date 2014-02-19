@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-CONF_DIR="/etc/xivo-build-tools"
-CONF_FILE="${CONF_DIR}/config"
-
 if [ $EUID == 0 ]; then
 	echo "This script must be not run as root" 1>&2
 	exit 1
 fi
+
+CONF_DIR="/etc/xivo-build-tools"
+CONF_FILE="${CONF_DIR}/config"
 
 # source conffile
 if [ -e $CONF_FILE ]; then
