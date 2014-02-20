@@ -27,8 +27,6 @@ You have to provide some informations to allow building:
 	Usage: $(basename $0) [OPTION]
 
 	Options:
-		-i: Package initialization for the first time, can be used later 
-			to refresh the packages and put them all to date.
 		-d: distribution (default: master)
 		-b: branch (default: master)
 		-g: Force distribution for dput
@@ -46,21 +44,16 @@ EOF
 	exit 0
 }
 
-init_packages() {
-	for package in $PACKAGES; do
-		init_package $package
-	done
-	return 0
-}
-
 init_package() {
 	local package="$1"
 	
 	echo "Initializing package: $package"
 
 	cd $PACKAGES_DIR
-	if [ ! -d $package/.git ]; then
-		git clone $GIT_URL/$package
+	if [ ! -d "${package}/.git" ]; then
+		echo "Cloning repository..."
+		git clone ${GIT_URL}/$package
+		force_rebuild=1
 	fi
 	cd $package
 	git clean -fxd
@@ -321,16 +314,11 @@ process_package() {
 
 	echo "Processing $package"
 
-	if [ ! -d "$PACKAGES_DIR/$package" ]; then
-		echo "ERROR directory not exsit: $PACKAGES_DIR/$package"
-		return 1
-	fi
+	init_package $package
 
 	if ! extract_branch_infos $package; then
 		return 1
 	fi
-
-	init_package $package
 
 	if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
 		echo
@@ -375,7 +363,7 @@ if [ -z "$1" ]; then
 	usage
 fi
 
-while getopts :d:p:v:b:g:m:afish opt
+while getopts :d:p:v:b:g:m:afsh opt
 do
 	case $opt in
 		d) distribution=$OPTARG;;
@@ -386,7 +374,6 @@ do
 		m) default_mirror=$OPTARG;;
 		a) all=1;;
 		f) force_rebuild=1;;
-		i) init=1;;
 		s) sync_package=1;;
 		h) usage;;
 		'?') echo "$0 : option $OPTARG is not valid" >&2
@@ -395,7 +382,6 @@ do
 	esac
 done
 
-init="${init:-"0"}"
 distribution="${distribution:-"master"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
@@ -415,12 +401,8 @@ fi
 # source mirror configuration
 . $config_mirror_file
 
-if [ $init == 1 ]; then
-	init_packages
-else
-	if [ $all -eq 1 ]; then
-		process_packages
-	elif [ ! -z "$force_package" ]; then
-		process_package $force_package
-	fi
+if [ $all -eq 1 ]; then
+	process_packages
+elif [ -n "$force_package" ]; then
+	process_package $force_package
 fi

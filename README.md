@@ -16,29 +16,9 @@ Update sources files for APT
  $ apt-get install xivo-build-tools
 
 
-Initialisation
---------------
-
- $ su - builder
-
- $ xivo-build-tools -i
-
- $ ll ~/packages
-
-
 Examples
 ========
 
-Package initialization for the first time, can be used later 
-to refresh the package and put them all to date.
-
- $ xivo-build-tools -i
-
-
-Initialize or update only xivo-agid package
-
- $ xivo-build-tools -i -p xivo-agid
- 
 
 Build all packages
 
