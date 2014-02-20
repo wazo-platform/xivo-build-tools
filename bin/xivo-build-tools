@@ -44,23 +44,6 @@ EOF
 	exit 0
 }
 
-init_package() {
-	local package="$1"
-	
-	echo "Initializing package: $package"
-
-	cd $PACKAGES_DIR
-	if [ ! -d "${package}/.git" ]; then
-		echo "Cloning repository..."
-		git clone ${GIT_URL}/$package
-		force_rebuild=1
-	fi
-	cd $package
-	git clean -fxd
-	git reset --hard
-	return 0
-}
-
 valid_package() {
 	local package="$1"
 
@@ -82,30 +65,6 @@ git_remote_branch_exist() {
 
 	git branch -r | grep -q "origin/$remote_branch"
 	return $?
-}
-
-package_is_up_to_date() {
-	local package="$1"
-
-	echo "Checking updated package: $package"
-
-	valid_package $package
-
-	cd_to_git_dir_package $package
-	
-	git fetch origin
-	local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
-
-	if [ "$need_update" == "" ]; then
-		echo "Package $package already up-to-date."
-		return 0
-	else
-		echo "Package $package need update."
-		git reset --hard
-		git checkout $branch_name_builded
-		git pull
-		return 1
-	fi
 }
 
 get_mirror_package_version() {
@@ -291,6 +250,30 @@ sync_debian_into_repo() {
 	return 0
 }
 
+package_is_up_to_date() {
+	local package="$1"
+
+	echo "Checking updated package: $package"
+
+	valid_package $package
+
+	cd_to_git_dir_package $package
+	
+	git fetch origin
+	local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
+
+	if [ "$need_update" == "" ]; then
+		echo "Package $package already up-to-date."
+		return 0
+	else
+		echo "Package $package need update."
+		git reset --hard
+		git checkout $branch_name_builded
+		git pull
+		return 1
+	fi
+}
+
 extract_branch_infos() {
 	local package="$1"
 
@@ -309,12 +292,29 @@ extract_branch_infos() {
 	return 0
 }
 
+prepare_repository() {
+	local package="$1"
+	
+	echo "Initializing package: $package"
+
+	cd $PACKAGES_DIR
+	if [ ! -d "${package}/.git" ]; then
+		echo "Cloning repository..."
+		git clone ${GIT_URL}/$package
+		force_rebuild=1
+	fi
+	cd $package
+	git clean -fxd
+	git reset --hard
+	return 0
+}
+
 process_package() {
 	local package="$1"
 
 	echo "Processing $package"
 
-	init_package $package
+	prepare_repository $package
 
 	if ! extract_branch_infos $package; then
 		return 1
