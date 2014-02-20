@@ -29,7 +29,7 @@ You have to provide some informations to allow building:
 	Options:
 		-d: distribution (default: master)
 		-b: branch (default: master)
-		-g: Force distribution for dput
+		-g: Force mirror distribution (default: equal to -d)
 		-m: Specified mirror to upload package (default: $MIRROR_DEFAULT)
 		-a: Processing all packages
 		-p: Processing only one specified package
@@ -205,12 +205,12 @@ upload_to_mirror() {
 	local changes_file="${package}_${version}_${ARCH}.changes"
 
 	cd_to_git_dir_package $package
-	if [ -z "$dput_distribution" ]; then
+	if [ -z "$mirror_distribution" ]; then
 		build_dput_conf $distribution
 		dput -c dput.cf $distribution $changes_file
 	else
-		build_dput_conf $dput_distribution
-		dput -c dput.cf $dput_distribution $changes_file
+		build_dput_conf $mirror_distribution
+		dput -c dput.cf $mirror_distribution $changes_file
 	fi
 	return 0
 }
@@ -337,7 +337,7 @@ do
 		p) force_package=$OPTARG;;
 		v) XIVO_VERSION=$OPTARG;;
 		b) branch_name=$OPTARG;;
-		g) dput_distribution=$OPTARG;;
+		g) mirror_distribution=$OPTARG;;
 		m) default_mirror=$OPTARG;;
 		a) all=1;;
 		f) force_rebuild=1;;
@@ -352,7 +352,7 @@ distribution="${distribution:-"master"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 branch_name="${branch_name:-"master"}"
-dput_distribution="${dput_distribution:-""}"
+mirror_distribution="${mirror_distribution:-""}"
 default_mirror="${default_mirror:-"${MIRROR_DEFAULT}"}"
 
 validate_repo_name $distribution

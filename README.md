@@ -28,6 +28,11 @@ Build all packages
 Build all packages to mirror <mirror2>
 
  $ xivo-build-tools -a -m mirror2
+
+
+Build all packages to mirror <mirror2> with <unstable> distribution
+
+ $ xivo-build-tools -a -m mirror2 -g unstable
  
 
 Build all packages with force rebuild (add -f)
