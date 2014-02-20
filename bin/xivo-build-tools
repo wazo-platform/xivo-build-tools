@@ -2,7 +2,7 @@
 set -e
 
 if [ $EUID == 0 ]; then
-	echo "This script must be not run as root" 1>&2
+	echo "This script must not be run as root" 1>&2
 	exit 1
 fi
 
@@ -13,7 +13,7 @@ CONF_FILE="${CONF_DIR}/config"
 if [ -e $CONF_FILE ]; then
 	. $CONF_FILE
 else
-	echo "$CONF_FILE not exist" >&2
+	echo "$CONF_FILE: no such file" >&2
 	exit 1
 fi
 
@@ -27,13 +27,13 @@ You have to provide some informations to allow building:
 	Usage: $(basename $0) [OPTION]
 
 	Options:
-		-d: distribution (default: master)
-		-b: branch (default: master)
-		-m: Specified mirror to upload package (default: $MIRROR_DEFAULT)
-		-a: Processing all packages
-		-p: Processing only one specified package
-		-f: Force rebuild without check repository is up-to-date
-		-v: Set xivo version (Default is in $CONF_FILE)
+		-d <distribution>: Distribution where to upload package (default: master)
+		-b <branch_name>: Git branch to build from (default: master)
+		-m <mirror>: Mirror where to upload package (default: see $CONF_FILE)
+		-a: Build all packages
+		-p <package>: Build only <package>
+		-f: Force package build without checking for changes in repository
+		-v: Set xivo version (default: see $CONF_FILE)
 		-h: show this help
 
 EOF
@@ -220,7 +220,7 @@ package_is_up_to_date() {
 	valid_package $package
 
 	cd_to_git_dir_package $package
-	
+
 	git fetch origin
 	local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
 
@@ -228,7 +228,7 @@ package_is_up_to_date() {
 		echo "Package $package already up-to-date."
 		return 0
 	else
-		echo "Package $package need update."
+		echo "Package $package needs update."
 		git reset --hard
 		git checkout $branch_name_builded
 		git pull
@@ -256,7 +256,7 @@ extract_branch_infos() {
 
 prepare_repository() {
 	local package="$1"
-	
+
 	echo "Initializing package: $package"
 
 	cd $PACKAGES_DIR
@@ -304,11 +304,11 @@ validate_repo_name() {
 	local var="$1"
 	case "$var" in
 	 *\ * )
-		echo "ERROR: Invalid Repository name, space is not allowed" >&2
+		echo "ERROR: Invalid repository name, space is not allowed" >&2
 		exit 1
 		;;
 	*_* )
-		echo "ERROR: Invalid Repository name, underscore is not allowed" >&2
+		echo "ERROR: Invalid repository name, underscore is not allowed" >&2
 		exit 1
 		;;
 	*)
@@ -348,7 +348,7 @@ validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
 
 if [ ! -f "$config_mirror_file" ]; then
-	echo "ERROR: Config mirror file not exist $config_mirror_file" >&2
+	echo "ERROR: $config_mirror_file: No such mirror definition file" >&2
 	exit 1
 fi
 
