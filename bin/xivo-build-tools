@@ -222,34 +222,6 @@ process_packages() {
 	done
 }
 
-sync_debian_into_repo() {
-	local package="$1"
-	local debian_dir="$PACKAGES_DIR/$PACKAGE_DEBIAN/$package/trunk/debian"
-
-	if [ ! -d $debian_dir ] ; then
-		echo "$debian_dir is not a directory" >&2
-		return 1
-	fi
-
-	echo "Synchronizing debian dir to $package"
-
-	package_branch_name="$branch_name"
-	cd $PACKAGES_DIR/$PACKAGE_DEBIAN
-	if ! git_remote_branch_exist $branch_name ; then
-		echo "Remote branch $branch_name not exist, switch to default branch master"
-		package_branch_name="master"
-	fi
-	echo "$PACKAGE_DEBIAN fetch branch: <${package_branch_name}>"
-	git fetch -a
-	git checkout $package_branch_name
-	git pull
-
-	cd_to_git_dir_package $package
-	rsync -av --delete --update --exclude=.git --exclude=debian/$package $debian_dir $package >/dev/null
-	[ $? -ne 0 ] && echo "Error during sync debian dir" >&2 && exit 1
-	return 0
-}
-
 package_is_up_to_date() {
 	local package="$1"
 
@@ -325,10 +297,6 @@ process_package() {
 		return 0
 	fi
 
-	if [ $sync_package -eq 1 ]; then
-		sync_debian_into_repo $package
-	fi
-
 	local source_version=$(get_source_version $package) || return 1
 	local debian_version=$(get_debian_version $package $source_version) || return 1
 	if [ -z "$debian_version" ]; then
@@ -363,7 +331,7 @@ if [ -z "$1" ]; then
 	usage
 fi
 
-while getopts :d:p:v:b:g:m:afsh opt
+while getopts :d:p:v:b:g:m:afh opt
 do
 	case $opt in
 		d) distribution=$OPTARG;;
@@ -374,7 +342,6 @@ do
 		m) default_mirror=$OPTARG;;
 		a) all=1;;
 		f) force_rebuild=1;;
-		s) sync_package=1;;
 		h) usage;;
 		'?') echo "$0 : option $OPTARG is not valid" >&2
 			usage
@@ -385,7 +352,6 @@ done
 distribution="${distribution:-"master"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
-sync_package="${sync_package:-"0"}"
 branch_name="${branch_name:-"master"}"
 dput_distribution="${dput_distribution:-""}"
 default_mirror="${default_mirror:-"${MIRROR_DEFAULT}"}"
