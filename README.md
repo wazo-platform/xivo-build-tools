@@ -23,6 +23,11 @@ Examples
 Build all packages
 
  $ xivo-build-tools -a
+
+
+Build all packages to mirror <mirror2>
+
+ $ xivo-build-tools -a -m mirror2
  
 
 Build all packages with force rebuild (add -f)

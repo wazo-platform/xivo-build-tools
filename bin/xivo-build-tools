@@ -35,7 +35,6 @@ You have to provide some informations to allow building:
 		-p: Processing only one specified package
 		-f: Force rebuild without check repository is up-to-date
 		-v: Set xivo version (Default is in $CONF_FILE)
-		-s: Sync debian directory from $PACKAGE_DEBIAN package
 		-h: show this help
 
 	example : $(basename $0) -d xivo-five -p xivo-web-interface
