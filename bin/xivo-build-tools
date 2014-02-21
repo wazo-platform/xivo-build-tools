@@ -6,8 +6,7 @@ if [ $EUID == 0 ]; then
 	exit 1
 fi
 
-CONF_DIR="/etc/xivo-build-tools"
-CONF_FILE="${CONF_DIR}/config"
+CONF_FILE="/etc/xivo-build-tools/config"
 
 # source conffile
 if [ -e $CONF_FILE ]; then
@@ -27,13 +26,13 @@ You have to provide some informations to allow building:
 	Usage: $(basename $0) [OPTION]
 
 	Options:
-		-d <distribution>: Distribution where to upload package (default: master)
-		-b <branch_name>: Git branch to build from (default: master)
-		-m <mirror>: Mirror where to upload package (default: see $CONF_FILE)
+		-d <distribution>: Distribution where to upload package (default: $DISTRIBUTION_DEFAULT)
+		-b <branch_name>: Git branch to build from (default: $GIT_BRANCH_DEFAULT)
+		-m <mirror>: Mirror where to upload package (default: $MIRROR_DEFAULT)
 		-a: Build all packages
 		-p <package>: Build only <package>
 		-f: Force package build without checking for changes in repository
-		-v: Set xivo version (default: see $CONF_FILE)
+		-v: Set xivo version (default: $VERSION_DEFAULT)
 		-h: show this help
 
 EOF
@@ -88,7 +87,7 @@ get_source_version() {
 	local git_hash=$(git log -1 --pretty='%h')
 	local computed="~${timestamp}.${git_hash}"
 
-	echo ${XIVO_VERSION}${computed}
+	echo ${version}${computed}
 	return 0
 }
 
@@ -326,7 +325,7 @@ do
 	case $opt in
 		d) distribution=$OPTARG;;
 		p) force_package=$OPTARG;;
-		v) XIVO_VERSION=$OPTARG;;
+		v) force_version=$OPTARG;;
 		b) branch_name=$OPTARG;;
 		m) conf_mirror=$OPTARG;;
 		a) all=1;;
@@ -338,11 +337,13 @@ do
 	esac
 done
 
-distribution="${distribution:-"master"}"
+distribution="${distribution:-"${DISTRIBUTION_DEFAULT}"}"
+branch_name="${branch_name:-"${GIT_BRANCH_DEFAULT}"}"
+conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
+version="${force_version:-"${VERSION_DEFALUT}"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
-branch_name="${branch_name:-"master"}"
-conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
+
 
 validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
