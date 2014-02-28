@@ -51,7 +51,15 @@ valid_package() {
 }
 
 cd_to_git_dir_package() {
-	cd $PACKAGES_DIR/$package
+	local package="$1"
+	
+	loca package_dir="${PACKAGES_DIR}/${package}"
+	
+	if [ -d "${package_dir}/${package}" ]; then
+		cd "${package_dir}/${package}"
+	else
+		cd "${package_dir}"
+	fi
 	return 0
 }
 
@@ -80,6 +88,7 @@ get_source_version() {
 	local package="$1"
 
 	cd_to_git_dir_package $package
+	
 	# using date now instead of commit date
 	#local git_timestamp=$(git log -1 --pretty='%ct')
 	local now_timestamp=$(date +%s)
@@ -101,8 +110,7 @@ get_debian_version() {
 
 	if [ -z "$existing_version" ]; then
 		# look for a package version
-		local dir=$PACKAGES_DIR/$package/$package/debian
-		local changelog=$(head -1 ${dir}/changelog)
+		local changelog=$(head -1 debian/changelog)
 		if [[ "$changelog" =~ \((.*)\) ]] ; then
 			existing_version=${BASH_REMATCH[1]}
 		else
@@ -151,7 +159,7 @@ genreate_changelog() {
 	echo "Generating changelog for package $package with version $version"
 
 	cd_to_git_dir_package $package
-	cd $package
+	
 	local message="$(git log -1 HEAD --pretty=format:%s)"
 	dch -v $version --distribution $distribution --force-distribution "$message"
 	return 0
@@ -160,8 +168,8 @@ genreate_changelog() {
 install_build_depends() {
 	local package="$1"
 
-	cd_to_git_dir_package
-	cd $package
+	cd_to_git_dir_package $package
+
 	dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
 	return 0
 }
@@ -170,8 +178,8 @@ build_package() {
 	local package="$1"
 
 	install_build_depends $package
-	cd_to_git_dir_package
-	cd $package
+	cd_to_git_dir_package $package
+
 	dpkg-buildpackage
 	return 0
 }
@@ -179,17 +187,19 @@ build_package() {
 clean_package() {
 	local package="$1"
 
-	cd_to_git_dir_package
-	cd $package
+	cd_to_git_dir_package $package
+
 	dh_clean
 	return 0
 }
 
 build_dput_conf() {
-	cp ${DPUT_TPL_FILE} dput.cf
-	sed -i "s|{{ distribution }}|${distribution}|g" dput.cf
-	sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" dput.cf
-	sed -i "s|{{ incoming }}|${MIRROR_INCOMING}|g" dput.cf
+	local dput_file="$1"
+	
+	cp ${DPUT_TPL_FILE} $dput_file
+	sed -i "s|{{ distribution }}|${distribution}|g" $dput_file
+	sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" $dput_file
+	sed -i "s|{{ incoming }}|${MIRROR_INCOMING}|g" $dput_file
 	return 0
 }
 
@@ -198,10 +208,11 @@ upload_to_mirror() {
 	local version="$2"
 	local version=$(echo "$version" | awk -F ':' '{print $NF}')
 	local changes_file="${package}_${version}_${ARCH}.changes"
+	local dput_file="/tmp/dput/${package}.cf"
 
 	cd_to_git_dir_package $package
-	build_dput_conf
-	dput -c dput.cf $distribution $changes_file
+	build_dput_conf $dput_file
+	dput -c $dput_file $distribution $changes_file
 	return 0
 }
 
