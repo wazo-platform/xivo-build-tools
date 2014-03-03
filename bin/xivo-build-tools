@@ -213,7 +213,7 @@ upload_to_mirror() {
 	local package="$1"
 	local version="$2"
 	local version=$(echo "$version" | awk -F ':' '{print $NF}')
-	local changes_file="${package}_${version}_${ARCH}.changes"
+	local changes_file="../${package}_${version}_${ARCH}.changes"
 	local dput_file="${DPUT_DIR}/${package}.cf"
 	
 	if [ ! -d "$DPUT_DIR" ];then
