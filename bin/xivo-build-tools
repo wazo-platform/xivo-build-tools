@@ -6,6 +6,7 @@ if [ $EUID == 0 ]; then
 	exit 1
 fi
 
+DPUT_DIR="/tmp/dput"
 CONF_FILE="/etc/xivo-build-tools/config"
 
 # source conffile
@@ -213,7 +214,11 @@ upload_to_mirror() {
 	local version="$2"
 	local version=$(echo "$version" | awk -F ':' '{print $NF}')
 	local changes_file="${package}_${version}_${ARCH}.changes"
-	local dput_file="/tmp/dput/${package}.cf"
+	local dput_file="${DPUT_DIR}/${package}.cf"
+	
+	if [ ! -d "$DPUT_DIR" };then
+		mkdir $DPUT_DIR
+	fi
 
 	cd_to_git_dir_package $package
 	build_dput_conf $dput_file
