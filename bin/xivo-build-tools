@@ -33,6 +33,7 @@ You have to provide some informations to allow building:
 		-p <package>: Build only <package>
 		-f: Force package build without checking for changes in repository
 		-v: Set xivo version (default: $VERSION_DEFAULT)
+		-u: Use xivo version in filename (default: False)
 		-h: show this help
 
 EOF
@@ -53,7 +54,7 @@ valid_package() {
 cd_to_git_dir_package() {
 	local package="$1"
 	
-	loca package_dir="${PACKAGES_DIR}/${package}"
+	local package_dir="${PACKAGES_DIR}/${package}"
 	
 	if [ -d "${package_dir}/${package}" ]; then
 		cd "${package_dir}/${package}"
@@ -96,7 +97,11 @@ get_source_version() {
 	local git_hash=$(git log -1 --pretty='%h')
 	local computed="~${timestamp}.${git_hash}"
 
-	echo ${version}${computed}
+	if [ $use_version -eq 0 ]; then
+		echo ${version}${computed}
+	else
+		echo ${computed}
+	fi
 	return 0
 }
 
@@ -341,6 +346,7 @@ do
 		m) conf_mirror=$OPTARG;;
 		a) all=1;;
 		f) force_rebuild=1;;
+		u) use_version=1;;
 		h) usage;;
 		'?') echo "$0 : option $OPTARG is not valid" >&2
 			usage
@@ -354,6 +360,7 @@ conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
 version="${force_version:-"${VERSION_DEFALUT}"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
+use_version="${use_version:-"0"}"
 
 
 validate_repo_name $distribution
