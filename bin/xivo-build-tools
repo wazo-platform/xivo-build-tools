@@ -301,6 +301,8 @@ process_package() {
 	if ! extract_branch_infos $package; then
 		return 1
 	fi
+	
+	git checkout $branch_name_builded
 
 	if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
 		echo
