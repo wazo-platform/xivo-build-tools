@@ -99,7 +99,7 @@ get_source_version() {
 	local computed="~${timestamp}.${git_hash}"
 
 	if [ $use_version -eq 0 ]; then
-		echo ${version}${computed}
+		echo ${xivo_version}${computed}
 	else
 		echo ${computed}
 	fi
@@ -216,8 +216,7 @@ build_dput_conf() {
 
 upload_to_mirror() {
 	local package="$1"
-	local version="$2"
-	local version=$(echo "$version" | awk -F ':' '{print $NF}')
+	local version=$(echo "$2" | awk -F ':' '{print $NF}')
 	local changes_file="../${package}_${version}_${ARCH}.changes"
 	local dput_file="${DPUT_DIR}/${package}.cf"
 	
@@ -353,7 +352,7 @@ do
 	case $opt in
 		d) distribution=$OPTARG;;
 		p) force_package=$OPTARG;;
-		v) force_version=$OPTARG;;
+		v) force_xivo_version=$OPTARG;;
 		b) branch_name=$OPTARG;;
 		m) conf_mirror=$OPTARG;;
 		a) all=1;;
@@ -369,7 +368,7 @@ done
 distribution="${distribution:-"${DISTRIBUTION_DEFAULT}"}"
 branch_name="${branch_name:-"${GIT_BRANCH_DEFAULT}"}"
 conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
-version="${force_version:-"${VERSION_DEFALUT}"}"
+xivo_version="${force_xivo_version:-"${XIVO_VERSION_DEFAULT}"}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 use_version="${use_version:-"0"}"
