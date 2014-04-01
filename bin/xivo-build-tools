@@ -186,7 +186,12 @@ build_package() {
 	install_build_depends $package
 	cd_to_git_dir_package $package
 
-	dpkg-buildpackage
+	local dpkg_bp_options=""
+	if [ -n "$EXCLUDE_FILE_PATTERN_FROM_SOURCE" ]; then
+		dpkg_bp_options="--source-option=-I${EXCLUDE_FILE_PATTERN_FROM_SOURCE}"
+	fi
+
+	dpkg-buildpackage $dpkg_bp_options
 	return 0
 }
 
