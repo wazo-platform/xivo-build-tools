@@ -34,6 +34,7 @@ You have to provide some informations to allow building:
 		-p <package>: Build only <package>
 		-f: Force package build without checking for changes in repository
 		-v: Set xivo version (default: $VERSION_DEFAULT)
+		-V: Set absolute package version
 		-u: Use xivo version in filename (default: False)
 		-h: show this help
 
@@ -167,7 +168,7 @@ genreate_changelog() {
 	cd_to_git_dir_package $package
 	
 	local message="$(git log -1 HEAD --pretty=format:%s)"
-	dch -v $version --distribution $distribution --force-distribution "$message"
+	dch --no-auto-nmu -v $version --distribution $distribution --force-distribution "$message"
 	return 0
 }
 
@@ -313,8 +314,14 @@ process_package() {
 		return 0
 	fi
 
-	local source_version=$(get_source_version $package) || return 1
-	local debian_version=$(get_debian_version $package $source_version) || return 1
+	local debian_version
+	if [ -n "$package_version" ]; then
+		debian_version="$package_version"
+	else
+		local source_version=$(get_source_version $package) || return 1
+		debian_version=$(get_debian_version $package $source_version) || return 1
+	fi
+
 	if [ -z "$debian_version" ]; then
 		exit 1
 	fi
@@ -347,7 +354,7 @@ if [ -z "$1" ]; then
 	usage
 fi
 
-while getopts :d:p:v:b:m:afh opt
+while getopts :d:p:v:b:m:V:afh opt
 do
 	case $opt in
 		d) distribution=$OPTARG;;
@@ -355,6 +362,7 @@ do
 		v) force_xivo_version=$OPTARG;;
 		b) branch_name=$OPTARG;;
 		m) conf_mirror=$OPTARG;;
+		V) force_package_version=$OPTARG;;
 		a) all=1;;
 		f) force_rebuild=1;;
 		u) use_version=1;;
@@ -369,6 +377,7 @@ distribution="${distribution:-"${DISTRIBUTION_DEFAULT}"}"
 branch_name="${branch_name:-"${GIT_BRANCH_DEFAULT}"}"
 conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
 xivo_version="${force_xivo_version:-"${XIVO_VERSION_DEFAULT}"}"
+package_version="${force_package_version:-""}"
 all="${all:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 use_version="${use_version:-"0"}"
