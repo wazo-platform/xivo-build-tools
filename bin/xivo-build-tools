@@ -159,7 +159,7 @@ get_debian_version() {
 	return 0
 }
 
-genreate_changelog() {
+generate_changelog() {
 	local package="$1"
 	local version="$2"
 
@@ -257,16 +257,13 @@ package_is_up_to_date() {
 	cd_to_git_dir_package $package
 
 	git fetch origin
-	local need_update="$(git log HEAD..origin/$branch_name_builded --oneline)"
+	local need_update="$(git log $branch_name_builded..origin/$branch_name_builded --oneline)"
 
 	if [ "$need_update" == "" ]; then
 		echo "Package $package already up-to-date."
 		return 0
 	else
 		echo "Package $package needs update."
-		git reset --hard
-		git checkout $branch_name_builded
-		git pull
 		return 1
 	fi
 }
@@ -306,6 +303,12 @@ prepare_repository() {
 	return 0
 }
 
+update_git_repo() {
+	git reset --hard
+	git checkout $branch_name_builded
+	git pull
+}
+
 process_package() {
 	local package="$1"
 
@@ -316,16 +319,16 @@ process_package() {
 	if ! extract_branch_infos $package; then
 		return 1
 	fi
-	
-	git checkout $branch_name_builded
 
-	if [ $force_rebuild -eq 0 ] && package_is_up_to_date $package; then
+	if package_is_up_to_date $package && [ $force_rebuild -eq 0 ]; then
 		echo
 		return 0
 	fi
+	
+	update_git_repo
 
 	if [ -z "$package_version" -a -z "$xivo_version" ]; then
-		genreate_changelog $package
+		generate_changelog $package
 	else
 		local debian_version
 		if [ -n "$package_version" ]; then
@@ -339,7 +342,7 @@ process_package() {
 			exit 1
 		fi
 		
-		genreate_changelog $package $debian_version
+		generate_changelog $package $debian_version
 	fi
 
 	build_package $package
