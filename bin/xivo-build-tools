@@ -73,6 +73,13 @@ git_remote_branch_exist() {
 	return $?
 }
 
+git_init_local_branch() {
+	local local_branch="$1"
+
+	git show-ref --verify --quiet refs/heads/$local_branch"
+	return $?
+}
+
 get_mirror_package_version() {
 	local package="$1"
 	local mirror_uri="dists/${distribution}/main/binary-${ARCH}/Packages"
@@ -282,7 +289,9 @@ extract_branch_infos() {
 		branch_name_builded="master"
 	fi
 
+	git_init_local_branch $branch_name_builded
 	echo "$package fetch branch: <${branch_name_builded}>"
+
 	return 0
 }
 
