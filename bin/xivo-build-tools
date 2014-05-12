@@ -76,7 +76,7 @@ git_remote_branch_exist() {
 git_init_local_branch() {
 	local local_branch="$1"
 
-	git show-ref --verify --quiet refs/heads/$local_branch"
+	git show-ref --verify --quiet "refs/heads/$local_branch"
 	return $?
 }
 
