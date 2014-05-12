@@ -55,9 +55,9 @@ valid_package() {
 
 cd_to_git_dir_package() {
 	local package="$1"
-	
+
 	local package_dir="${PACKAGES_DIR}/${package}"
-	
+
 	if [ -d "${package_dir}/${package}" ]; then
 		cd "${package_dir}/${package}"
 	else
@@ -98,7 +98,7 @@ get_source_version() {
 	local package="$1"
 
 	cd_to_git_dir_package $package
-	
+
 	# using date now instead of commit date
 	#local git_timestamp=$(git log -1 --pretty='%ct')
 	local now_timestamp=$(date +%s)
@@ -224,7 +224,7 @@ clean_package() {
 
 build_dput_conf() {
 	local dput_file="$1"
-	
+
 	cp ${DPUT_TPL_FILE} $dput_file
 	sed -i "s|{{ distribution }}|${distribution}|g" $dput_file
 	sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" $dput_file
@@ -237,7 +237,7 @@ upload_to_mirror() {
 	local version=$(echo "$2" | awk -F ':' '{print $NF}')
 	local changes_file="../${package}_${version}_${ARCH}.changes"
 	local dput_file="${DPUT_DIR}/${package}.cf"
-	
+
 	if [ ! -d "$DPUT_DIR" ];then
 		mkdir $DPUT_DIR
 	fi
@@ -333,7 +333,7 @@ process_package() {
 		echo
 		return 0
 	fi
-	
+
 	update_git_repo
 
 	if [ -z "$package_version" -a -z "$xivo_version" ]; then
@@ -346,11 +346,11 @@ process_package() {
 			local source_version=$(get_source_version $package) || return 1
 			debian_version=$(get_debian_version $package $source_version) || return 1
 		fi
-	
+
 		if [ -z "$debian_version" ]; then
 			exit 1
 		fi
-		
+
 		generate_changelog $package $debian_version
 	fi
 
