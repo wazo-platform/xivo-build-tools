@@ -134,16 +134,16 @@ xivo-build-tools (0.3) xivo-dev-tools; urgency=low
 
   * Add missing depends
 
- -- XiVO Builder Team <release@xivo.fr>  Mon, 09 Dec 2013 11:12:46 -0500
+ -- XiVO Builder Team <release@xivo.io>  Mon, 09 Dec 2013 11:12:46 -0500
 
 xivo-build-tools (0.2) xivo-dev-tools; urgency=low
 
   * test rebuild
 
- -- XiVO Builder Team <release@xivo.fr>  Sun, 08 Dec 2013 18:54:21 -0500
+ -- XiVO Builder Team <release@xivo.io>  Sun, 08 Dec 2013 18:54:21 -0500
  
 xivo-build-tools (0.1) xivo-dev-tools; urgency=low
 
   * Initial release.
 
- -- XiVO Builder Team <release@xivo.fr>  Sun, 07 Dec 2013 10:58:43 -0500
+ -- XiVO Builder Team <release@xivo.io>  Sun, 07 Dec 2013 10:58:43 -0500

@@ -1,6 +1,6 @@
 
 DEBFULLNAME="XiVO Builder Team"
-DEBEMAIL="release@xivo.fr"
+DEBEMAIL="release@xivo.io"
 MIRROR_DEFAULT="xivo-official"
 DISTRIBUTION_DEFAULT="master"
 GIT_BRANCH_DEFAULT="master"

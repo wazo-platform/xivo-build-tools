@@ -1,4 +1,4 @@
 
-MIRROR_HOST="mirror.xivo.fr"
+MIRROR_HOST="mirror.xivo.io"
 MIRROR_URL="http://${MIRROR_HOST}/xivo"
 MIRROR_INCOMING="/data/reprepro/xivo/incoming"
