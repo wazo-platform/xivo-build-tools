@@ -19,6 +19,7 @@
  xivo-restapi
  xivo-stat
  xivo-sysconfd
+ xivo-tools
  xivo-upgrade
  xivo-utils
  xivo-web-interface
