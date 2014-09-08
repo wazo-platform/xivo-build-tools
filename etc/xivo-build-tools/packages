@@ -5,6 +5,7 @@
  xivo-backup
  xivo-bus
  xivo-call-logs 
+ xivo-confd
  xivo-confgen
  xivo-config
  xivo-ctid
@@ -16,7 +17,6 @@
  xivo-manage-db
  xivo-monitoring
  xivo-provisioning
- xivo-restapi
  xivo-stat
  xivo-sysconfd
  xivo-tools
