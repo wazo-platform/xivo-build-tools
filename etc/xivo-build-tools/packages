@@ -6,6 +6,7 @@
  xivo-bus
  xivo-call-logs 
  xivo-confd
+ xivo-confd-client
  xivo-confgen
  xivo-config
  xivo-ctid
@@ -14,6 +15,7 @@
  xivo-fetchfw
  xivo-lib-js
  xivo-lib-python
+ xivo-lib-rest-client
  xivo-manage-db
  xivo-monitoring
  xivo-provisioning
