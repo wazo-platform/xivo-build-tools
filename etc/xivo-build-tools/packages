@@ -4,7 +4,8 @@
  xivo-amid
  xivo-backup
  xivo-bus
- xivo-call-logs 
+ xivo-call-logs
+ xivo-ci
  xivo-confd
  xivo-confd-client
  xivo-confgen
@@ -12,6 +13,7 @@
  xivo-ctid
  xivo-dao
  xivo-dird
+ xivo-dist
  xivo-fetchfw
  xivo-lib-js
  xivo-lib-python
