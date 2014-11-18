@@ -1,4 +1,4 @@
-xivo-build-tools (0.9) stable; urgency=low
+xivo-build-tools (0.9) xivo-dev-tools; urgency=low
 
   * update packages
 
