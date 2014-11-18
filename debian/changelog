@@ -1,3 +1,9 @@
+xivo-build-tools (0.9) stable; urgency=low
+
+  * update packages
+
+ -- Cedric Abunar <cabunar@avencall.com>  Tue, 18 Nov 2014 13:44:27 -0500
+
 xivo-build-tools (0.8) stable; urgency=low
 
   * add xivo-confd-client and xivo-lib-rest-client
