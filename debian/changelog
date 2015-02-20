@@ -1,3 +1,9 @@
+xivo-build-tools (0.11) xivo-dev-tools; urgency=low
+
+  * add xivo-agentd-client
+
+ -- Etienne Lessard <elessard@avencall.com>  Fri, 20 Feb 2015 14:24:24 -0500
+
 xivo-build-tools (0.10) xivo-dev-tools; urgency=low
 
   * add xivo-dird-client

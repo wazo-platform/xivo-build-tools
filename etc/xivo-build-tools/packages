@@ -1,5 +1,6 @@
  xivo
  xivo-agent
+ xivo-agentd-client
  xivo-agid
  xivo-amid
  xivo-backup
