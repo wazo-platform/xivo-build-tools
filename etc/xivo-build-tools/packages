@@ -12,6 +12,7 @@
  xivo-confgen
  xivo-config
  xivo-ctid
+ xivo-ctid-client
  xivo-dao
  xivo-dird
  xivo-dird-client
