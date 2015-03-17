@@ -45,14 +45,14 @@ Build all xivo packages for distribution <xivo-five>
  $ xivo-build-tools -a -d xivo-five
  
 
-Build <xivo-agentd> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
+Build <xivo-agent> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
 
- $ xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p xivo-agentd
+ $ xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p xivo-agent
  
 
 Same command with force rebuild (add -f)
 
- $ xivo-build-tools -d my-distribution-to-test -b wheezy -p xivo-agentd -f
+ $ xivo-build-tools -d my-distribution-to-test -b wheezy -p xivo-agent -f
 
 
 Build xivo-web-interface package for xivo-five distribution
@@ -60,9 +60,9 @@ Build xivo-web-interface package for xivo-five distribution
  $ xivo-build-tools -d xivo-five -p xivo-web-interface
 
 
-Build xivo-agentd package for test distribution, force rebuild and force xivo-version
+Build xivo-agent package for test distribution, force rebuild and force xivo-version
 
- $ xivo-build-tools -d test -f -v 13.11 -p xivo-agentd
+ $ xivo-build-tools -d test -f -v 13.11 -p xivo-agent
 
 
 Build all packages for test distribution, force rebuild and force xivo-version
