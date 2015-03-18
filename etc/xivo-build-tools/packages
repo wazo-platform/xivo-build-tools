@@ -30,7 +30,7 @@ xivo-lib-rest-client
 xivo-manage-db
 xivo-monitoring
 xivo-provd-client
-xivo-provd-pycli
+xivo-provd-cli
 xivo-provisioning
 xivo-stat
 xivo-sysconfd
