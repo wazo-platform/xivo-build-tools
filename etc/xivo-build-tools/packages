@@ -29,8 +29,8 @@ xivo-lib-python
 xivo-lib-rest-client
 xivo-manage-db
 xivo-monitoring
-xivo-provd-client
 xivo-provd-cli
+xivo-provd-client
 xivo-provisioning
 xivo-stat
 xivo-sysconfd
