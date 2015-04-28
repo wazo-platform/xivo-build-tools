@@ -1,3 +1,9 @@
+xivo-build-tools (0.14) xivo-dev-tools; urgency=medium
+
+  * add xivo-consul-template-packaging
+
+ -- Pascal Cadotte Michaud <pcadottemichaud@avencall.com>  Tue, 28 Apr 2015 15:03:42 -0400
+
 xivo-build-tools (0.13) xivo-dev-tools; urgency=medium
 
   * add xivo-consul-packaging
