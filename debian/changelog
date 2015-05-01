@@ -1,3 +1,9 @@
+xivo-build-tools (0.15) xivo-dev-tools; urgency=medium
+
+  * add xivo-python-consul-packaging
+
+ -- Pascal Cadotte Michaud <pcadottemichaud@avencall.com>  Fri, 01 May 2015 12:55:30 -0400
+
 xivo-build-tools (0.14) xivo-dev-tools; urgency=medium
 
   * add xivo-consul-template-packaging

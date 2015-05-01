@@ -34,6 +34,7 @@ xivo-monitoring
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
+xivo-python-consul-packaging
 xivo-stat
 xivo-sysconfd
 xivo-tools
