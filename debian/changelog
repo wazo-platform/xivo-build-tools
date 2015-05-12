@@ -1,3 +1,9 @@
+xivo-build-tools (0.15ubuntu1) xivo-dev-tools; urgency=medium
+
+  * add xivo-python-billiard-packaging
+
+ -- Pascal Cadotte Michaud <pcadottemichaud@avencall.com>  Tue, 12 May 2015 15:36:00 -0400
+
 xivo-build-tools (0.15) xivo-dev-tools; urgency=medium
 
   * add xivo-python-consul-packaging
