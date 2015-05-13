@@ -101,8 +101,7 @@ get_source_version() {
 
 	# using date now instead of commit date
 	#local git_timestamp=$(git log -1 --pretty='%ct')
-	local now_timestamp=$(date +%s)
-	local timestamp=$(perl -MPOSIX -e 'print strftime("%Y%m%d.%H%M%S", gmtime('${now_timestamp}'))')
+	local timestamp=$(date -u +%Y%m%d.%H%M%S)
 	local git_hash=$(git log -1 --pretty='%h')
 	local computed="~${timestamp}.${git_hash}"
 
