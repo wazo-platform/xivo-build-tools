@@ -35,6 +35,7 @@ xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
 xivo-python-billiard-packaging
+xivo-python-celery-packaging
 xivo-python-consul-packaging
 xivo-stat
 xivo-sysconfd
