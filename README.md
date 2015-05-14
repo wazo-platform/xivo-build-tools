@@ -5,9 +5,9 @@ Installation
 Update sources files for APT
 ----------------------------
 
- $ wget http://mirror.lan-quebec.avencall.com/key.asc -O - | apt-key add -
+ $ wget http://mirror.xivo.io/xivo_current.key -O - | apt-key add -
 
- $ echo 'deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
+ $ echo 'deb http://mirror.xivo.io/debian/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
 
  $ echo 'deb http://ftp.ca.debian.org/debian/ wheezy-backports main' >/etc/apt/sources.list.d/wheezy-backports.list
  

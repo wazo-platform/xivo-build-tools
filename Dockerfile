@@ -1,9 +1,26 @@
 from debian:wheezy
 
+MAINTAINER Sylvain Boily "sboily@avencall.com"
 
-ADD http://mirror.lan-quebec.avencall.com/key.asc /tmp/
-RUN apt-key add /tmp/key.asc
-RUN echo 'deb http://mirror.lan-quebec.avencall.com/ xivo-dev-tools main' > /etc/apt/sources.list.d/xivo-dev-tools.list
+ENV DEBIAN_FRONTEND noninteractive
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+RUN groupadd builder
+RUN useradd -r -g builder builder
+RUN mkdir -p /home/builder/
+RUN chown builder.builder /home/builder/
+ADD etc/xivo-build-tools/ /etc/
+ADD bin/xivo-build-tools /usr/bin/
+
 RUN echo 'deb http://ftp.ca.debian.org/debian/ wheezy-backports main' > /etc/apt/sources.list.d/wheezy-backports.list
-RUN apt-get -y update
-RUN apt-get -y install xivo-build-tools
+RUN apt-get -yqq update
+RUN apt-get -yqq install devscripts \
+                    cdbs \
+                    dput \
+                    lintian \
+                    libdistro-info-perl \
+                    libparse-debcontrol-perl \
+                    fakeroot \
+                    dh-python \
+                    sudo
