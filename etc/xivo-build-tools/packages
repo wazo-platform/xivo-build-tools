@@ -39,6 +39,7 @@ xivo-python-celery-packaging
 xivo-python-consul-packaging
 xivo-stat
 xivo-sysconfd
+xivo-swagger-doc
 xivo-tools
 xivo-upgrade
 xivo-utils
