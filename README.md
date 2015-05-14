@@ -21,7 +21,6 @@ Docker
 To run with docker.
 
     docker build -t xivo-build-tools .
-    docker run --user builder -v /conf/builder/ssh:/home/builder/.ssh -it xivo-build-tools bash
     docker run --user builder \
             -v YOUR_SSH_DIR/.ssh/:/home/builder/.ssh \
             -v YOUR_CONFIG_DIR/mirror:/etc/xivo-build-tools/mirror \
