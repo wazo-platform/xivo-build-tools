@@ -23,6 +23,9 @@ To run with docker.
     docker build -t xivo-build-tools .
     docker run --user builder -v /conf/builder/ssh:/home/builder/.ssh -it xivo-build-tools bash
 
+By default the uid of the builder user is 1000. Check the right on your machine
+for the ssh key.
+
 
 Examples
 ========

@@ -3,9 +3,10 @@ from debian:wheezy
 MAINTAINER Sylvain Boily "sboily@avencall.com"
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV HOME /home/builder
 
 RUN groupadd builder
-RUN useradd -r -g builder builder -s /bin/bash
+RUN useradd -r -g builder builder -s /bin/bash -u 1000
 RUN mkdir -p /home/builder/packages
 RUN chown builder.builder /home/builder/
 ADD etc/xivo-build-tools/ /etc/xivo-build-tools/
