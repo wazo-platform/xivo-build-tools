@@ -15,6 +15,8 @@ RUN apt-get -yqq install devscripts \
                     libparse-debcontrol-perl \
                     fakeroot \
                     dh-python \
+                    python-setuptools \
+                    python-all \
                     sudo
 
 RUN groupadd builder
