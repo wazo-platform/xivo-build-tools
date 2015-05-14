@@ -22,6 +22,12 @@ To run with docker.
 
     docker build -t xivo-build-tools .
     docker run --user builder -v /conf/builder/ssh:/home/builder/.ssh -it xivo-build-tools bash
+    docker run --user builder \
+            -v YOUR_SSH_DIR/.ssh/:/home/builder/.ssh \
+            -v YOUR_CONFIG_DIR/mirror:/etc/xivo-build-tools/mirror \
+            -v XIVO_GPG_DIR/xivo-keys/gpg/builder/:/tmp/gpg \
+            -v $(readlink -f $SSH_AUTH_SOCK):/ssh-agent \
+            -e SSH_AUTH_SOCK=/ssh-agent -it quintana/builder
 
 By default the uid of the builder user is 1000. Check the right on your machine
 for the ssh key.
