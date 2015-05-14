@@ -28,3 +28,6 @@ ADD bin/xivo-build-tools /usr/bin/
 RUN echo 'builder ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/builder
 RUN chmod 440 /etc/sudoers.d/builder
 
+ADD entrypoint.sh /
+
+CMD bash -C '/entrypoint.sh';'bash'
