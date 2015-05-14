@@ -10,7 +10,7 @@ RUN groupadd builder
 RUN useradd -r -g builder builder
 RUN mkdir -p /home/builder/
 RUN chown builder.builder /home/builder/
-ADD etc/xivo-build-tools/ /etc/
+ADD etc/xivo-build-tools/ /etc/xivo-build-tools/
 ADD bin/xivo-build-tools /usr/bin/
 
 RUN echo 'deb http://ftp.ca.debian.org/debian/ wheezy-backports main' > /etc/apt/sources.list.d/wheezy-backports.list
