@@ -15,6 +15,14 @@ Update sources files for APT
 
  $ apt-get install xivo-build-tools
 
+Docker
+======
+
+To run with docker.
+
+    docker build -t xivo-build-tools .
+    docker run --user builder -it xivo-build-tools bash
+
 
 Examples
 ========
