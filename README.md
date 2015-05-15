@@ -5,15 +5,11 @@ Installation
 Update sources files for APT
 ----------------------------
 
- $ wget http://mirror.xivo.io/xivo_current.key -O - | apt-key add -
-
- $ echo 'deb http://mirror.xivo.io/debian/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
-
- $ echo 'deb http://ftp.ca.debian.org/debian/ wheezy-backports main' >/etc/apt/sources.list.d/wheezy-backports.list
- 
- $ apt-get update
-
- $ apt-get install xivo-build-tools
+    wget http://mirror.xivo.io/xivo_current.key -O - | apt-key add -
+    echo 'deb http://mirror.xivo.io/debian/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
+    echo 'deb http://ftp.ca.debian.org/debian/ wheezy-backports main' >/etc/apt/sources.list.d/wheezy-backports.list
+    apt-get update
+    apt-get install xivo-build-tools
 
 Docker
 ======
