@@ -4,6 +4,7 @@ xivo-agentd-cli
 xivo-agentd-client
 xivo-agid
 xivo-amid
+xivo-auth
 xivo-backup
 xivo-build-tools
 xivo-bus
