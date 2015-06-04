@@ -27,16 +27,17 @@ You have to provide some informations to allow building:
 	Usage: $(basename $0) [OPTION]
 
 	Options:
-		-d <distribution>: Distribution where to upload package (default: $DISTRIBUTION_DEFAULT)
-		-b <branch_name>: Git branch to build from (default: $GIT_BRANCH_DEFAULT)
-		-m <mirror>: Mirror where to upload package (default: $MIRROR_DEFAULT)
-		-a: Build all packages
-		-p <package>: Build only <package>
-		-f: Force package build without checking for changes in repository
-		-v: Set xivo version
-		-V: Set absolute package version
-		-u: Use xivo version in filename (default: False)
-		-h: show this help
+        -d <distribution>: Distribution where to upload package (default: $DISTRIBUTION_DEFAULT)
+        -b <branch_name>: Git branch to build from (default: $GIT_BRANCH_DEFAULT)
+        -m <mirror>: Mirror where to upload package (default: $MIRROR_DEFAULT)
+        -a: Build all packages
+        -s: Build only sources packages
+        -p <package>: Build only <package>
+        -f: Force package build without checking for changes in repository
+        -v: Set xivo version
+        -V: Set absolute package version
+        -u: Use xivo version in filename (default: False)
+        -h: show this help
 
 EOF
 	exit 0
@@ -193,7 +194,10 @@ install_build_depends() {
 
 	cd_to_git_dir_package $package
 
-	dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
+    if [ -z $build_only_source ]
+    then
+	    dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
+    fi
 	return 0
 }
 
@@ -207,6 +211,11 @@ build_package() {
 	if [ -n "$EXCLUDE_FILE_PATTERN_FROM_SOURCE" ]; then
 		dpkg_bp_options="--source-option=-I${EXCLUDE_FILE_PATTERN_FROM_SOURCE}"
 	fi
+
+    if [ ! -z $build_only_source ]
+    then
+        dpkg_bp_options="-S "$dpkg_bp_options
+    fi
 
 	dpkg-buildpackage $dpkg_bp_options
 	return 0
@@ -234,7 +243,12 @@ build_dput_conf() {
 upload_to_mirror() {
 	local package="$1"
 	local version=$(echo "$2" | awk -F ':' '{print $NF}')
-	local changes_file="../${package}_${version}_${ARCH}.changes"
+    if [ -z $build_only_source ]
+    then
+	    local changes_file="../${package}_${version}_${ARCH}.changes"
+    else
+	    local changes_file="../${package}_${version}_source.changes"
+    fi
 	local dput_file="${DPUT_DIR}/${package}.cf"
 
 	if [ ! -d "$DPUT_DIR" ];then
@@ -380,13 +394,14 @@ if [ -z "$1" ]; then
 	usage
 fi
 
-while getopts :d:p:v:b:m:V:afh opt
+while getopts :d:p:v:b:m:V:afhs opt
 do
 	case $opt in
 		d) distribution=$OPTARG;;
 		p) force_package=$OPTARG;;
 		v) force_xivo_version=$OPTARG;;
 		b) branch_name=$OPTARG;;
+		s) build_only_source=1;;
 		m) conf_mirror=$OPTARG;;
 		V) force_package_version=$OPTARG;;
 		a) all=1;;
@@ -405,6 +420,7 @@ conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
 xivo_version="${force_xivo_version:-""}"
 package_version="${force_package_version:-""}"
 all="${all:-"0"}"
+build_only_source="${build_only_source:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 use_version="${use_version:-"0"}"
 
