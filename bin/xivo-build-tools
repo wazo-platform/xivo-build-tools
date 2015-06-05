@@ -283,7 +283,10 @@ upload_to_mirror() {
         mkdir $DPUT_DIR
     fi
 
-    cd_to_git_dir_package $package
+    if [ $build_package_from_source -eq 0 ]
+    then
+        cd_to_git_dir_package $package
+    fi
     build_dput_conf $dput_file
     dput -c $dput_file $distribution $changes_file
     return 0
