@@ -2,8 +2,8 @@
 set -e
 
 if [ $EUID == 0 ]; then
-	echo "This script must not be run as root" 1>&2
-	exit 1
+    echo "This script must not be run as root" 1>&2
+    exit 1
 fi
 
 DPUT_DIR="/tmp/dput"
@@ -11,27 +11,28 @@ CONF_FILE="/etc/xivo-build-tools/config"
 
 # source conffile
 if [ -e $CONF_FILE ]; then
-	. $CONF_FILE
+    . $CONF_FILE
 else
-	echo "$CONF_FILE: no such file" >&2
-	exit 1
+    echo "$CONF_FILE: no such file" >&2
+    exit 1
 fi
 
 export NAME="$DEBFULLNAME"
 export EMAIL="$DEBEMAIL"
 
 usage() {
-	cat << EOF
+    cat << EOF
 You have to provide some informations to allow building:
 
-	Usage: $(basename $0) [OPTION]
+    Usage: $(basename $0) [OPTION]
 
-	Options:
+    Options:
         -d <distribution>: Distribution where to upload package (default: $DISTRIBUTION_DEFAULT)
         -b <branch_name>: Git branch to build from (default: $GIT_BRANCH_DEFAULT)
         -m <mirror>: Mirror where to upload package (default: $MIRROR_DEFAULT)
         -a: Build all packages
         -s: Build only sources packages
+        -S: Build packages from sources
         -p <package>: Build only <package>
         -f: Force package build without checking for changes in repository
         -v: Set xivo version
@@ -40,378 +41,395 @@ You have to provide some informations to allow building:
         -h: show this help
 
 EOF
-	exit 0
+    exit 0
 }
 
 valid_package() {
-	local package="$1"
+    local package="$1"
 
-	if [[ $PACKAGES =~ $package ]]; then
-		return 0
-	else
-		echo "Package: $package does not exist, see $CONF_FILE for more informations" >&2
-		exit -1
-	fi
+    if [[ $PACKAGES =~ $package ]]; then
+        return 0
+    else
+        echo "Package: $package does not exist, see $CONF_FILE for more informations" >&2
+        exit -1
+    fi
 }
 
 cd_to_git_dir_package() {
-	local package="$1"
+    local package="$1"
 
-	local package_dir="${PACKAGES_DIR}/${package}"
+    local package_dir="${PACKAGES_DIR}/${package}"
 
-	if [ -d "${package_dir}/${package}" ]; then
-		cd "${package_dir}/${package}"
-	else
-		cd "${package_dir}"
-	fi
-	return 0
+    if [ -d "${package_dir}/${package}" ]; then
+        cd "${package_dir}/${package}"
+    else
+        cd "${package_dir}"
+    fi
+    return 0
 }
 
 git_remote_branch_exist() {
-	local remote_branch="$1"
+    local remote_branch="$1"
 
-	git branch -r | grep -q "origin/$remote_branch"
-	return $?
+    git branch -r | grep -q "origin/$remote_branch"
+    return $?
 }
 
 git_init_local_branch() {
-	local local_branch="$1"
+    local local_branch="$1"
 
-	git show-ref --verify --quiet "refs/heads/$local_branch"
-	return $?
+    git show-ref --verify --quiet "refs/heads/$local_branch"
+    return $?
 }
 
 get_mirror_package_version() {
-	local package="$1"
-	local mirror_uri="dists/${distribution}/main/binary-${ARCH}/Packages"
+    local package="$1"
+    local mirror_uri="dists/${distribution}/main/binary-${ARCH}/Packages"
 
-	case $package in
-		"xivo-provisioning") local package="xivo-provd";;
-		"xivo-dao") local package="xivo-libdao";;
-		"xivo-dird") local package="xivo-libdird";;
-	esac
+    case $package in
+        "xivo-provisioning") local package="xivo-provd";;
+        "xivo-dao") local package="xivo-libdao";;
+        "xivo-dird") local package="xivo-libdird";;
+    esac
 
-	wget -qO- ${MIRROR_URL}/${mirror_uri} | grep -A 2 "^Package: $package" | grep '^Version:' | head -n1 | awk '{print $2}'
-	return 0
+    wget -qO- ${MIRROR_URL}/${mirror_uri} | grep -A 2 "^Package: $package" | grep '^Version:' | head -n1 | awk '{print $2}'
+    return 0
 }
 
 get_source_version() {
-	local package="$1"
+    local package="$1"
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-	# using date now instead of commit date
-	#local git_timestamp=$(git log -1 --pretty='%ct')
-	local timestamp=$(date -u +%Y%m%d.%H%M%S)
-	local git_hash=$(git log -1 --pretty='%h')
-	local computed="~${timestamp}.${git_hash}"
+    # using date now instead of commit date
+    #local git_timestamp=$(git log -1 --pretty='%ct')
+    local timestamp=$(date -u +%Y%m%d.%H%M%S)
+    local git_hash=$(git log -1 --pretty='%h')
+    local computed="~${timestamp}.${git_hash}"
 
-	if [ $use_version -eq 0 ]; then
-		echo ${xivo_version}${computed}
-	else
-		echo ${computed}
-	fi
-	return 0
+    if [ $use_version -eq 0 ]; then
+        echo ${xivo_version}${computed}
+    else
+        echo ${computed}
+    fi
+    return 0
 }
 
 get_debian_version() {
-	local package="$1"
-	local source_version="$2"
+    local package="$1"
+    local source_version="$2"
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-	local existing_version=$(get_mirror_package_version $package) || return 1
+    local existing_version=$(get_mirror_package_version $package) || return 1
 
-	if [ -z "$existing_version" ]; then
-		# look for a package version
-		local changelog=$(head -1 debian/changelog)
-		if [[ "$changelog" =~ \((.*)\) ]] ; then
-			existing_version=${BASH_REMATCH[1]}
-		else
-			echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
-			return 1
-		fi
-		# sanity check on the package name
-		if ! [[ "$changelog" =~ ^$package ]] ; then
-			echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
-			return 2
-		fi
-	fi
+    if [ -z "$existing_version" ]; then
+        # look for a package version
+        local changelog=$(head -1 debian/changelog)
+        if [[ "$changelog" =~ \((.*)\) ]] ; then
+            existing_version=${BASH_REMATCH[1]}
+        else
+            echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
+            return 1
+        fi
+        # sanity check on the package name
+        if ! [[ "$changelog" =~ ^$package ]] ; then
+            echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
+            return 2
+        fi
+    fi
 
-	# extract the epoch, if any
-	local epoch
-	if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
-		epoch=${BASH_REMATCH[1]}
-	fi
+    # extract the epoch, if any
+    local epoch
+    if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
+        epoch=${BASH_REMATCH[1]}
+    fi
 
-	local debian
-	if echo "$existing_version" | grep -q $source_version ; then
-		if [[ "$existing_version" =~ .*-(.*) ]] ; then
-			debian="-$(expr ${BASH_REMATCH[1]} + 1)"
-		else
-			debian=-1
-		fi
-	else
-		debian=-1
-	fi
+    local debian
+    if echo "$existing_version" | grep -q $source_version ; then
+        if [[ "$existing_version" =~ .*-(.*) ]] ; then
+            debian="-$(expr ${BASH_REMATCH[1]} + 1)"
+        else
+            debian=-1
+        fi
+    else
+        debian=-1
+    fi
 
-	local version=${epoch}${source_version}${debian}
+    local version=${epoch}${source_version}${debian}
 
-	if ! dpkg --compare-versions $existing_version le $version ; then
-		echo "Existing version of XiVO is ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
-		return 4
-	fi
+    if ! dpkg --compare-versions $existing_version le $version ; then
+        echo "Existing version of XiVO is ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
+        return 4
+    fi
 
-	echo $version
-	return 0
+    echo $version
+    return 0
 }
 
 generate_changelog() {
-	local package="$1"
-	local version="$2"
+    local package="$1"
+    local version="$2"
 
-	echo "Generating changelog for package $package"
+    echo "Generating changelog for package $package"
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-	local message="$(git log -1 HEAD --pretty=format:%s)"
-	if [ -n "$version" ]; then
-		dch -v $version --distribution $distribution --force-distribution "$message"
-	else
-		dch -i --no-auto-nmu --distribution $distribution --force-distribution "$message"
-	fi
+    local message="$(git log -1 HEAD --pretty=format:%s)"
+    if [ -n "$version" ]; then
+        dch -v $version --distribution $distribution --force-distribution "$message"
+    else
+        dch -i --no-auto-nmu --distribution $distribution --force-distribution "$message"
+    fi
 
-	local changelog=$(head -1 debian/changelog)
-	if [[ "$changelog" =~ \((.*)\) ]] ; then
-		current_version=${BASH_REMATCH[1]}
-	fi
+    local changelog=$(head -1 debian/changelog)
+    if [[ "$changelog" =~ \((.*)\) ]] ; then
+        current_version=${BASH_REMATCH[1]}
+    fi
 
-	return 0
+    return 0
 }
 
 install_build_depends() {
-	local package="$1"
+    local package="$1"
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-    if [ -z $build_only_source ]
+    if [ ! $build_only_source -eq 0 ]
     then
-	    dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
+        dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
     fi
-	return 0
+    return 0
+}
+
+
+build_package_from_source() {
+    local package="$1"
+    local changes_file="../${package}_${version}_${ARCH}.changes"
+
+    cd_to_git_dir_package $package
+    apt-get --build source $package
+    debsign $changes_file
+    return 0
 }
 
 build_package() {
-	local package="$1"
+    local package="$1"
 
-	install_build_depends $package
-	cd_to_git_dir_package $package
+    install_build_depends $package
+    cd_to_git_dir_package $package
 
-	local dpkg_bp_options=""
-	if [ -n "$EXCLUDE_FILE_PATTERN_FROM_SOURCE" ]; then
-		dpkg_bp_options="--source-option=-I${EXCLUDE_FILE_PATTERN_FROM_SOURCE}"
-	fi
+    local dpkg_bp_options=""
+    if [ -n "$EXCLUDE_FILE_PATTERN_FROM_SOURCE" ]; then
+        dpkg_bp_options="--source-option=-I${EXCLUDE_FILE_PATTERN_FROM_SOURCE}"
+    fi
 
-    if [ ! -z $build_only_source ]
+    if [ ! $build_only_source -eq 0 ]
     then
         dpkg_bp_options="-S "$dpkg_bp_options
     fi
 
-	dpkg-buildpackage $dpkg_bp_options
-	return 0
+    dpkg-buildpackage $dpkg_bp_options
+    return 0
 }
 
 clean_package() {
-	local package="$1"
+    local package="$1"
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-	dh_clean
-	return 0
+    dh_clean
+    return 0
 }
 
 build_dput_conf() {
-	local dput_file="$1"
+    local dput_file="$1"
 
-	cp ${DPUT_TPL_FILE} $dput_file
-	sed -i "s|{{ distribution }}|${distribution}|g" $dput_file
-	sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" $dput_file
-	sed -i "s|{{ incoming }}|${MIRROR_INCOMING}|g" $dput_file
-	return 0
+    cp ${DPUT_TPL_FILE} $dput_file
+    sed -i "s|{{ distribution }}|${distribution}|g" $dput_file
+    sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" $dput_file
+    sed -i "s|{{ incoming }}|${MIRROR_INCOMING}|g" $dput_file
+    return 0
 }
 
 upload_to_mirror() {
-	local package="$1"
-	local version=$(echo "$2" | awk -F ':' '{print $NF}')
-    if [ -z $build_only_source ]
+    local package="$1"
+    local version=$(echo "$2" | awk -F ':' '{print $NF}')
+    if [ $build_only_source -eq 0 ]
     then
-	    local changes_file="../${package}_${version}_${ARCH}.changes"
+        local changes_file="../${package}_${version}_${ARCH}.changes"
     else
-	    local changes_file="../${package}_${version}_source.changes"
+        local changes_file="../${package}_${version}_source.changes"
     fi
-	local dput_file="${DPUT_DIR}/${package}.cf"
+    local dput_file="${DPUT_DIR}/${package}.cf"
 
-	if [ ! -d "$DPUT_DIR" ];then
-		mkdir $DPUT_DIR
-	fi
+    if [ ! -d "$DPUT_DIR" ];then
+        mkdir $DPUT_DIR
+    fi
 
-	cd_to_git_dir_package $package
-	build_dput_conf $dput_file
-	dput -c $dput_file $distribution $changes_file
-	return 0
+    cd_to_git_dir_package $package
+    build_dput_conf $dput_file
+    dput -c $dput_file $distribution $changes_file
+    return 0
 }
 
 process_packages() {
-	for package in $PACKAGES; do
-		process_package $package
-	done
+    for package in $PACKAGES; do
+        process_package $package
+    done
 }
 
 package_is_up_to_date() {
-	local package="$1"
+    local package="$1"
 
-	echo "Checking updated package: $package"
+    echo "Checking updated package: $package"
 
-	valid_package $package
+    valid_package $package
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-	git fetch origin
-	local need_update="$(git log $branch_name_builded..origin/$branch_name_builded --oneline)"
+    git fetch origin
+    local need_update="$(git log $branch_name_builded..origin/$branch_name_builded --oneline)"
 
-	if [ "$need_update" == "" ]; then
-		echo "Package $package already up-to-date."
-		return 0
-	else
-		echo "Package $package needs update."
-		return 1
-	fi
+    if [ "$need_update" == "" ]; then
+        echo "Package $package already up-to-date."
+        return 0
+    else
+        echo "Package $package needs update."
+        return 1
+    fi
 }
 
 extract_branch_infos() {
-	local package="$1"
+    local package="$1"
 
-	echo "Extracting branch infos for package: $package"
+    echo "Extracting branch infos for package: $package"
 
-	branch_name_builded="$branch_name"
+    branch_name_builded="$branch_name"
 
-	cd_to_git_dir_package $package
+    cd_to_git_dir_package $package
 
-	if ! git_remote_branch_exist $branch_name ; then
-		echo "Remote branch $branch_name not exist, switch to default branch master"
-		branch_name_builded="master"
-	fi
+    if ! git_remote_branch_exist $branch_name ; then
+        echo "Remote branch $branch_name not exist, switch to default branch master"
+        branch_name_builded="master"
+    fi
 
-	git_init_local_branch $branch_name_builded
-	echo "$package fetch branch: <${branch_name_builded}>"
+    git_init_local_branch $branch_name_builded
+    echo "$package fetch branch: <${branch_name_builded}>"
 
-	return 0
+    return 0
 }
 
 prepare_repository() {
-	local package="$1"
+    local package="$1"
 
-	echo "Initializing package: $package"
+    echo "Initializing package: $package"
 
-	cd $PACKAGES_DIR
-	if [ ! -d "${package}/.git" ]; then
-		echo "Cloning repository..."
-		git clone ${GIT_URL}/$package
-		force_rebuild=1
-	fi
-	cd $package
-	git clean -fxd
-	git reset --hard
-	return 0
+    cd $PACKAGES_DIR
+    if [ ! -d "${package}/.git" ]; then
+        echo "Cloning repository..."
+        git clone ${GIT_URL}/$package
+        force_rebuild=1
+    fi
+    cd $package
+    git clean -fxd
+    git reset --hard
+    return 0
 }
 
 update_git_repo() {
-	git reset --hard
-	git checkout $branch_name_builded
-	git pull
+    git reset --hard
+    git checkout $branch_name_builded
+    git pull
 }
 
 process_package() {
-	local package="$1"
+    local package="$1"
 
-	echo "Processing $package"
+    echo "Processing $package"
 
-	prepare_repository $package
+    prepare_repository $package
 
-	if ! extract_branch_infos $package; then
-		return 1
-	fi
+    if ! extract_branch_infos $package; then
+        return 1
+    fi
 
-	if package_is_up_to_date $package && [ $force_rebuild -eq 0 ]; then
-		echo
-		return 0
-	fi
+    if package_is_up_to_date $package && [ $force_rebuild -eq 0 ]; then
+        echo
+        return 0
+    fi
 
-	update_git_repo
+    update_git_repo
 
-	if [ -z "$package_version" -a -z "$xivo_version" ]; then
-		generate_changelog $package
-	else
-		local debian_version
-		if [ -n "$package_version" ]; then
-			debian_version="$package_version"
-		else
-			local source_version=$(get_source_version $package) || return 1
-			debian_version=$(get_debian_version $package $source_version) || return 1
-		fi
+    if [ -z "$package_version" -a -z "$xivo_version" ]; then
+        generate_changelog $package
+    else
+        local debian_version
+        if [ -n "$package_version" ]; then
+            debian_version="$package_version"
+        else
+            local source_version=$(get_source_version $package) || return 1
+            debian_version=$(get_debian_version $package $source_version) || return 1
+        fi
 
-		if [ -z "$debian_version" ]; then
-			exit 1
-		fi
+        if [ -z "$debian_version" ]; then
+            exit 1
+        fi
 
-		generate_changelog $package $debian_version
-	fi
+        generate_changelog $package $debian_version
+    fi
 
-	build_package $package
-	clean_package $package
-	[ $? == 0 ] && upload_to_mirror $package $current_version
-	return 0
+    if [ ! $build_package_from_source -eq 0 ]
+    then
+        build_package $package
+    else
+        build_package_from_source $package
+    fi
+    clean_package $package
+    [ $? == 0 ] && upload_to_mirror $package $current_version
+    return 0
 }
 
 validate_repo_name() {
-	local var="$1"
-	case "$var" in
-	 *\ * )
-		echo "ERROR: Invalid repository name, space is not allowed" >&2
-		exit 1
-		;;
-	*_* )
-		echo "ERROR: Invalid repository name, underscore is not allowed" >&2
-		exit 1
-		;;
-	*)
-		return 0
-		;;
-	esac
+    local var="$1"
+    case "$var" in
+     *\ * )
+        echo "ERROR: Invalid repository name, space is not allowed" >&2
+        exit 1
+        ;;
+    *_* )
+        echo "ERROR: Invalid repository name, underscore is not allowed" >&2
+        exit 1
+        ;;
+    *)
+        return 0
+        ;;
+    esac
 }
 
 if [ -z "$1" ]; then
-	usage
+    usage
 fi
 
-while getopts :d:p:v:b:m:V:afhs opt
+while getopts :d:p:v:b:m:V:afhsS opt
 do
-	case $opt in
-		d) distribution=$OPTARG;;
-		p) force_package=$OPTARG;;
-		v) force_xivo_version=$OPTARG;;
-		b) branch_name=$OPTARG;;
-		s) build_only_source=1;;
-		m) conf_mirror=$OPTARG;;
-		V) force_package_version=$OPTARG;;
-		a) all=1;;
-		f) force_rebuild=1;;
-		u) use_version=1;;
-		h) usage;;
-		'?') echo "$0 : option $OPTARG is not valid" >&2
-			usage
-		;;
-	esac
+    case $opt in
+        d) distribution=$OPTARG;;
+        p) force_package=$OPTARG;;
+        v) force_xivo_version=$OPTARG;;
+        b) branch_name=$OPTARG;;
+        s) build_only_source=1;;
+        S) build_package_from_source=1;;
+        m) conf_mirror=$OPTARG;;
+        V) force_package_version=$OPTARG;;
+        a) all=1;;
+        f) force_rebuild=1;;
+        u) use_version=1;;
+        h) usage;;
+        '?') echo "$0 : option $OPTARG is not valid" >&2
+            usage
+        ;;
+    esac
 done
 
 distribution="${distribution:-"${DISTRIBUTION_DEFAULT}"}"
@@ -421,6 +439,7 @@ xivo_version="${force_xivo_version:-""}"
 package_version="${force_package_version:-""}"
 all="${all:-"0"}"
 build_only_source="${build_only_source:-"0"}"
+build_package_from_source="${build_package_from_source:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 use_version="${use_version:-"0"}"
 
@@ -429,15 +448,15 @@ validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
 
 if [ ! -f "$config_mirror_file" ]; then
-	echo "ERROR: $config_mirror_file: No such mirror definition file" >&2
-	exit 1
+    echo "ERROR: $config_mirror_file: No such mirror definition file" >&2
+    exit 1
 fi
 
 # source mirror configuration
 . $config_mirror_file
 
 if [ $all -eq 1 ]; then
-	process_packages
+    process_packages
 elif [ -n "$force_package" ]; then
-	process_package $force_package
+    process_package $force_package
 fi
