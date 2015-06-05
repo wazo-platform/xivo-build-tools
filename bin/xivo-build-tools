@@ -208,7 +208,7 @@ build_package_from_source() {
     ARCH=$(dpkg-architecture -qDEB_HOST_ARCH_CPU)
     local changes_file="../${package}_${version}_${ARCH}.changes"
 
-    apt-get update -yqq
+    sudo apt-get update -yqq
     apt-get --build source $package
     debsign $changes_file
     return 0
