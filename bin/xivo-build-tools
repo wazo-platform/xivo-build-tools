@@ -205,6 +205,7 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
+    ARCH=$(dpkg-architecture -qDEB_HOST_ARCH_CPU)
     local changes_file="../${package}_${version}_${ARCH}.changes"
 
     apt-get --build source $package
