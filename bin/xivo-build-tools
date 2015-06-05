@@ -205,7 +205,7 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
-    local version=$(echo "$2" | awk -F ':' '{print $NF}')
+    local version=$package_version
     local arch=$(dpkg-architecture -qDEB_HOST_ARCH_CPU)
     local build_dir="$build_package_from_source_directory/$package"
     local changes_file="${package}_${version}_${arch}.changes"
@@ -462,6 +462,7 @@ use_version="${use_version:-"0"}"
 
 validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
+build_package_from_source_directory="$HOME/build_from_sources/"
 
 if [ ! -f "$config_mirror_file" ]; then
     echo "ERROR: $config_mirror_file: No such mirror definition file" >&2
