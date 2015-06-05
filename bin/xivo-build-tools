@@ -379,7 +379,7 @@ process_package() {
         generate_changelog $package $debian_version
     fi
 
-    if [ ! $build_package_from_source -eq 0 ]
+    if [ $build_package_from_source -eq 0 ]
     then
         build_package $package
     else
