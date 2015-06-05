@@ -207,7 +207,6 @@ build_package_from_source() {
     local package="$1"
     local changes_file="../${package}_${version}_${ARCH}.changes"
 
-    cd_to_git_dir_package $package
     apt-get --build source $package
     debsign $changes_file
     return 0
