@@ -206,7 +206,8 @@ install_build_depends() {
 build_package_from_source() {
     local package="$1"
     ARCH=$(dpkg-architecture -qDEB_HOST_ARCH_CPU)
-    local changes_file="../${package}_${version}_${ARCH}.changes"
+    version=$force_package_version
+    local changes_file="${package}_${version}_${ARCH}.changes"
 
     sudo apt-get update -yqq
     apt-get --build source $package
@@ -258,7 +259,12 @@ upload_to_mirror() {
     local version=$(echo "$2" | awk -F ':' '{print $NF}')
     if [ $build_only_source -eq 0 ]
     then
-        local changes_file="../${package}_${version}_${ARCH}.changes"
+        if [ $build_package_from_source -eq 0 ]
+        then
+          local changes_file="../${package}_${version}_${ARCH}.changes"
+        else
+          local changes_file="${package}_${version}_${ARCH}.changes"
+        fi
     else
         local changes_file="../${package}_${version}_source.changes"
     fi
