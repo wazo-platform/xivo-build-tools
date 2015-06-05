@@ -462,7 +462,7 @@ use_version="${use_version:-"0"}"
 
 validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
-build_package_from_source_directory="$HOME/build_from_sources/"
+build_package_from_source_directory="$HOME/build_from_sources"
 
 if [ ! -f "$config_mirror_file" ]; then
     echo "ERROR: $config_mirror_file: No such mirror definition file" >&2
