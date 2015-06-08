@@ -195,9 +195,9 @@ install_build_depends() {
 
     cd_to_git_dir_package $package
 
-    if [ ! $build_only_source -eq 0 ]
+    if [ $build_only_source -eq 0 ]
     then
-        dpkg-checkbuilddeps |& awk -F: '{print $3}' | xargs sudo apt-get install -y
+        sudo apt-get -y build-dep $package
     fi
     return 0
 }
@@ -216,6 +216,7 @@ build_package_from_source() {
     cd $build_dir
 
     sudo apt-get update -yqq
+    install_build_depends $package
     apt-get --build source $package
 
     local changes_file=$(ls *.changes)
@@ -272,7 +273,7 @@ upload_to_mirror() {
         then
           local changes_file="../${package}_${version}_${ARCH}.changes"
         else
-          local changes_file=$(ls *.changes)
+          local changes_file="${package}_${version}_${ARCH}.changes"
         fi
     else
         local changes_file="../${package}_${version}_source.changes"
