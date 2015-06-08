@@ -193,8 +193,6 @@ generate_changelog() {
 install_build_depends() {
     local package="$1"
 
-    cd_to_git_dir_package $package
-
     if [ $build_only_source -eq 0 ]
     then
         sudo apt-get -y build-dep $package
