@@ -220,7 +220,7 @@ build_package_from_source() {
     apt-get --build source $package
 
     local changes_file=$(ls *.changes)
-    debsign $changes_file
+    debsign -k0AD54798 $changes_file
 
     return 0
 }
@@ -273,7 +273,7 @@ upload_to_mirror() {
         then
           local changes_file="../${package}_${version}_${ARCH}.changes"
         else
-          local changes_file="${package}_${version}_${ARCH}.changes"
+          local changes_file=$(ls *.changes)
         fi
     else
         local changes_file="../${package}_${version}_source.changes"
