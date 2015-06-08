@@ -265,13 +265,13 @@ build_dput_conf() {
 }
 
 upload_to_mirror() {
-    local package="$1"
+    local package=$(grep  '^Source:' debian/control| awk -F ': ' '{print $NF}'
     local version=$(echo "$2" | awk -F ':' '{print $NF}')
     if [ $build_only_source -eq 0 ]
     then
         local changes_file=$(ls *.changes)
     else
-        local changes_file=$(ls ../*.changes)
+        local changes_file="../${package}_${version}_source.changes"
     fi
     local dput_file="${DPUT_DIR}/${package}.cf"
 
