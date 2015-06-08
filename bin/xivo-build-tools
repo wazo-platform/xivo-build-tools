@@ -192,11 +192,7 @@ generate_changelog() {
 
 install_build_depends() {
     local package="$1"
-
-    if [ $build_only_source -eq 0 ]
-    then
-        sudo apt-get -y build-dep $package
-    fi
+    sudo apt-get -y build-dep $package
     return 0
 }
 
@@ -223,23 +219,16 @@ build_package_from_source() {
     return 0
 }
 
-build_package() {
+build_source_package() {
     local package="$1"
-
-    install_build_depends $package
-    cd_to_git_dir_package $package
 
     local dpkg_bp_options=""
     if [ -n "$EXCLUDE_FILE_PATTERN_FROM_SOURCE" ]; then
         dpkg_bp_options="--source-option=-I${EXCLUDE_FILE_PATTERN_FROM_SOURCE}"
     fi
 
-    if [ ! $build_only_source -eq 0 ]
-    then
-        dpkg_bp_options="-S "$dpkg_bp_options
-    fi
-
-    dpkg-buildpackage $dpkg_bp_options
+    cd_to_git_dir_package $package
+    dpkg-buildpackage -S $dpkg_bp_options
     return 0
 }
 
@@ -390,7 +379,7 @@ process_package() {
 
     if [ $build_package_from_source -eq 0 ]
     then
-        build_package $package
+        build_source_package $package
         clean_package $package
     else
         build_package_from_source $package
