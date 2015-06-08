@@ -267,7 +267,12 @@ build_dput_conf() {
 upload_to_mirror() {
     local package="$1"
     local version=$(echo "$2" | awk -F ':' '{print $NF}')
-    local changes_file=$(ls *.changes)
+    if [ $build_only_source -eq 0 ]
+    then
+        local changes_file=$(ls *.changes)
+    else
+        local changes_file=$(ls ../*.changes)
+    fi
     local dput_file="${DPUT_DIR}/${package}.cf"
 
     if [ ! -d "$DPUT_DIR" ];then
