@@ -34,6 +34,7 @@ xivo-lib-python
 xivo-lib-rest-client
 xivo-manage-db
 xivo-monitoring
+xivo-purge-db
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
