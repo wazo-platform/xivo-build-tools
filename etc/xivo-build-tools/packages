@@ -1,3 +1,9 @@
+asterisk
+bntools
+dahdi-linux
+dahdi-linux-modules
+dahdi-tools
+libpri
 xivo
 xivo-agentd
 xivo-agentd-cli
@@ -32,6 +38,7 @@ xivo-fetchfw
 xivo-lib-js
 xivo-lib-python
 xivo-lib-rest-client
+xivo-libsccp
 xivo-manage-db
 xivo-monitoring
 xivo-purge-db
@@ -41,6 +48,7 @@ xivo-provisioning
 xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-consul-packaging
+xivo-res-freeze-check
 xivo-stat
 xivo-sysconfd
 xivo-swagger-doc
