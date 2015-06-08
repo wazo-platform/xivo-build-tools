@@ -205,10 +205,7 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
-    local version=$package_version
-    local arch=$(dpkg-architecture -qDEB_HOST_ARCH_CPU)
     local build_dir="$build_package_from_source_directory/$package"
-    local changes_file="${package}_${version}_${arch}.changes"
 
     if [ -d $build_dir ]
     then
@@ -220,7 +217,10 @@ build_package_from_source() {
 
     sudo apt-get update -yqq
     apt-get --build source $package
+
+    local changes_file=$(ls *.changes)
     debsign $changes_file
+
     return 0
 }
 
