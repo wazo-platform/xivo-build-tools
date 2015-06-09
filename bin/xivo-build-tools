@@ -218,6 +218,7 @@ build_package_from_source() {
     fi
 
     debuild $options -k0AD54798
+    cd $build_dir
 
     return 0
 }
