@@ -194,6 +194,8 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
+    local options=""
+
     local build_dir="$build_package_from_source_directory/$package"
 
     if [ -d $build_dir ]
@@ -206,10 +208,16 @@ build_package_from_source() {
 
     sudo apt-get update -yqq
     install_build_depends $package
-    apt-get --build source $package
+    apt-get source $package
 
-    local changes_file=$(ls *.changes)
-    debsign -k0AD54798 $changes_file
+    local directory_source=$(find  -maxdepth 1 -type d | grep ./)
+    cd $directory_source
+    if [ ${ARCH} = "amd64" ]
+    then
+        options="-B"
+    fi
+
+    debuild $options -k0AD54798
 
     return 0
 }
