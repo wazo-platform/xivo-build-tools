@@ -195,7 +195,7 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
-    local options="--no-tgz-check --no-lintian -k$GPG_KEY"
+    local options="-k$GPG_KEY"
 
     local build_dir="$build_package_from_source_directory/$package"
 
@@ -216,9 +216,11 @@ build_package_from_source() {
     if [ ${ARCH} = "amd64" ]
     then
         options="-B "$options
+    else
+        options="-b "$options
     fi
 
-    debuild $options
+    debuild --no-tgz-check --no-lintian $options
     cd $build_dir
     return 0
 }
