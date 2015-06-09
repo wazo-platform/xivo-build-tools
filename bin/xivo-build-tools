@@ -195,7 +195,7 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
-    local options="--no-tgz-check --no-lintian -k$GPGKEY"
+    local options="--no-tgz-check --no-lintian -k$GPG_KEY"
 
     local build_dir="$build_package_from_source_directory/$package"
 
@@ -225,7 +225,7 @@ build_package_from_source() {
 
 build_source_package() {
     local package="$1"
-    local options="-d -k$GPGKEY"
+    local options="-d -k$GPG_KEY"
 
     cd_to_git_dir_package $package
     if debian/rules get-orig-source 2> /dev/null
