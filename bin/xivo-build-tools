@@ -56,15 +56,10 @@ valid_package() {
 }
 
 cd_to_git_dir_package() {
-    local package="$1"
+local package="$1"
 
     local package_dir="${PACKAGES_DIR}/${package}"
-
-    if [ -d "${package_dir}/${package}" ]; then
-        cd "${package_dir}/${package}"
-    else
-        cd "${package_dir}"
-    fi
+    cd "${package_dir}"
     return 0
 }
 
