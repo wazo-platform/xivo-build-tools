@@ -223,7 +223,9 @@ build_source_package() {
     fi
 
     cd_to_git_dir_package $package
-    dpkg-buildpackage -S $dpkg_bp_options
+    debian/rules get-orig-source
+    debuild -S -sa $dpkg_bp_options
+    exit
     return 0
 }
 
