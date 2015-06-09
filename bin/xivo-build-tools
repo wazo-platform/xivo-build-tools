@@ -225,7 +225,7 @@ build_package_from_source() {
 
 build_source_package() {
     local package="$1"
-    local options="-d --no-tgz-check -k$GPGKEY"
+    local options="-d -k$GPGKEY"
 
     cd_to_git_dir_package $package
     if debian/rules get-orig-source 2> /dev/null
@@ -234,7 +234,7 @@ build_source_package() {
         options="-sa "$options
     fi
 
-    debuild -S $options
+    debuild --no-tgz-check -S $options
     return 0
 }
 
