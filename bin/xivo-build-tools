@@ -8,6 +8,7 @@ fi
 
 DPUT_DIR="/tmp/dput"
 CONF_FILE="/etc/xivo-build-tools/config"
+GPG_KEY="0AD54798"
 
 # source conffile
 if [ -e $CONF_FILE ]; then
@@ -194,7 +195,7 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
-    local options=""
+    local options="--no-tgz-check --no-lintian -k$GPGKEY"
 
     local build_dir="$build_package_from_source_directory/$package"
 
@@ -214,30 +215,26 @@ build_package_from_source() {
     cd $directory_source
     if [ ${ARCH} = "amd64" ]
     then
-        options="-B"
+        options="-B "$options
     fi
 
-    debuild $options -k0AD54798
+    debuild $options
     cd $build_dir
-
     return 0
 }
 
 build_source_package() {
     local package="$1"
-
-    local dpkg_bp_options=""
-    if [ -n "$EXCLUDE_FILE_PATTERN_FROM_SOURCE" ]; then
-        dpkg_bp_options="--source-option=-I${EXCLUDE_FILE_PATTERN_FROM_SOURCE}"
-    fi
+    local options="-d --no-tgz-check -k$GPGKEY"
 
     cd_to_git_dir_package $package
     if debian/rules get-orig-source 2> /dev/null
     then
         echo "We have a get-orig-source"
-        dpkg_bp_options="-sa "$dpkg_bp_options
+        options="-sa "$options
     fi
-    dpkg-buildpackage -S $dpkg_bp_options
+
+    debuild -S $options
     return 0
 }
 
