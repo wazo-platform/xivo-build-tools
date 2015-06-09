@@ -223,9 +223,11 @@ build_source_package() {
     fi
 
     cd_to_git_dir_package $package
-    debian/rules get-orig-source
+    if ! debian/rules get-orig-source 2> /dev/null
+    then
+        echo "No get-orig-source"
+    fi
     debuild -S -sa $dpkg_bp_options
-    exit
     return 0
 }
 
