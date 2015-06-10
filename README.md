@@ -27,10 +27,16 @@ To run with docker.
 By default the uid of the builder user is 1000. Check the right on your machine
 for the ssh key.
 
-
 Examples
 ========
 
+Build source packages
+
+    xivo-build-tools -p xivo-agentd -s
+
+Build package from sources
+
+    xivo-build-tools -p xivo-agentd -S
 
 Build all packages
 
