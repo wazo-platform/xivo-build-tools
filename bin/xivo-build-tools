@@ -255,8 +255,10 @@ build_module_kernel() {
     sudo apt-get update -yqq
     sudo apt-get purge -y ${package_source}
     sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
-    m-a prepare --non-inter --text-mode -u ${build_package_dahdi_module_directory} ${package_module}
-    SIGNCHANGES=1 m-a auto-build --non-inter --text-mode -u ${build_package_dahdi_module_directory} ${package_module}
+
+    KVERS=$(echo $(for v in $(ls /boot/vmlinuz-*) ; do echo $(basename $v | sed -e 's|vmlinuz-||'); done) | sed 's/ /,/g')
+    m-a prepare -i -t -l ${KVERS} -u ${build_package_dahdi_module_directory} ${package_module}
+    SIGNCHANGES=1 m-a auto-build -i -t -l ${KVERS} -u ${build_package_dahdi_module_directory} ${package_module}
 
     debsign -k0AD54798 $(ls *.changes)
     upload_to_mirror ${package_build}
