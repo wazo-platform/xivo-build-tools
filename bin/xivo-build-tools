@@ -252,6 +252,7 @@ build_module_kernel() {
     mkdir -p ${build_package_dahdi_module_directory}
     cd ${build_package_dahdi_module_directory}
 
+    sudo apt-get update -yqq
     sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
     m-a prepare --non-inter --text-mode -u ${build_package_dahdi_module_directory} ${package_module}
     SIGNCHANGES=1 m-a auto-build --non-inter --text-mode -u ${build_package_dahdi_module_directory} ${package_module}
