@@ -240,6 +240,26 @@ build_source_package() {
     return 0
 }
 
+build_module_kernel() {
+    local package_source=dahdi-source
+    local package_module=dahdi-linux
+    local package_build=${package_module}-module
+    local build_package_dahdi_module_directory=${build_package_from_source_directory}/${package_build}
+
+    if [ -d ${build_package_dahdi_module_directory} ]; then
+        rm -rf ${build_package_dahdi_module_directory}
+    fi
+    mkdir -p ${build_package_dahdi_module_directory}
+    cd ${build_package_dahdi_module_directory}
+
+    sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
+    m-a prepare --non-inter --text-mode -u ${build_package_dahdi_module_directory} ${package_module}
+    SIGNCHANGES=1 m-a auto-build --non-inter --text-mode -u ${build_package_dahdi_module_directory} ${package_module}
+
+    debsign -k0AD54798 $(ls *.changes)
+    upload_to_mirror ${package_build}
+}
+
 clean_package() {
     local package="$1"
 
@@ -260,14 +280,19 @@ build_dput_conf() {
 }
 
 upload_to_mirror() {
-    local package=$(grep  '^Source:' debian/control| awk -F ': ' '{print $NF}')
-    local version=$(echo "$2" | awk -F ':' '{print $NF}')
-    if [ $build_only_source -eq 0 ]
-    then
+    if [ -z $1 ]; then
+        local package=$(dpkg-parsechangelog | grep Source | awk -F ': ' '{print $NF}')
+    else
+        local package=$1
+    fi
+
+    if [ $build_only_source -eq 0 ]; then
         local changes_file=$(ls *.changes)
     else
+        local version=$(echo "$2" | awk -F ':' '{print $NF}')
         local changes_file="../${package}_${version}_source.changes"
     fi
+
     local dput_file="${DPUT_DIR}/${package}.cf"
 
     if [ ! -d "$DPUT_DIR" ];then
@@ -392,7 +417,7 @@ process_package() {
     else
         build_package_from_source $package
     fi
-    [ $? == 0 ] && upload_to_mirror $package $current_version
+    [ $? == 0 ] && upload_to_mirror $package $debian_version
     return 0
 }
 
@@ -417,7 +442,7 @@ if [ -z "$1" ]; then
     usage
 fi
 
-while getopts :d:p:v:b:m:V:afhsS opt
+while getopts :d:p:v:b:m:V:afhsSk opt
 do
     case $opt in
         d) distribution=$OPTARG;;
@@ -428,6 +453,7 @@ do
         S) build_package_from_source=1;;
         m) conf_mirror=$OPTARG;;
         V) force_package_version=$OPTARG;;
+        k) build_module_kernel=1;;
         a) all=1;;
         f) force_rebuild=1;;
         u) use_version=1;;
@@ -446,13 +472,14 @@ package_version="${force_package_version:-""}"
 all="${all:-"0"}"
 build_only_source="${build_only_source:-"0"}"
 build_package_from_source="${build_package_from_source:-"0"}"
+build_module_kernel="${build_module_kernel:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 use_version="${use_version:-"0"}"
 
 
 validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
-build_package_from_source_directory="$HOME/build_from_sources"
+build_package_from_source_directory="${HOME}/build_from_sources"
 
 if [ ! -f "$config_mirror_file" ]; then
     echo "ERROR: $config_mirror_file: No such mirror definition file" >&2
@@ -461,6 +488,11 @@ fi
 
 # source mirror configuration
 . $config_mirror_file
+
+if [ $build_module_kernel -eq 1 ]; then
+    build_module_kernel
+    exit 0
+fi
 
 if [ $all -eq 1 ]; then
     process_packages
