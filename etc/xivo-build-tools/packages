@@ -5,6 +5,7 @@ dahdi-linux-modules
 dahdi-tools
 libpri
 xivo
+xivo-acceptance-server
 xivo-agentd
 xivo-agentd-cli
 xivo-agentd-client
