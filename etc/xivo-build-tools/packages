@@ -51,6 +51,7 @@ xivo-python-celery-packaging
 xivo-python-consul-packaging
 xivo-res-freeze-check
 xivo-stat
+xivo-sync
 xivo-sysconfd
 xivo-swagger-doc
 xivo-tools
