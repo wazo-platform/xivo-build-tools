@@ -50,6 +50,7 @@ xivo-provisioning
 xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-consul-packaging
+xivo-python-threadpool-packaging
 xivo-requests-unixsocket-packaging
 xivo-res-freeze-check
 xivo-stat
