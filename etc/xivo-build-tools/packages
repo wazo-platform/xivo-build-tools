@@ -48,6 +48,7 @@ xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
 xivo-python-asterisk-ari-packaging
+xivo-python-backports-ssl-match-hostname-packaging
 xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-consul-packaging
