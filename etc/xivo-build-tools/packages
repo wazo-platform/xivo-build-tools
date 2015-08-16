@@ -47,6 +47,7 @@ xivo-purge-db
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
+xivo-python-asterisk-ari-packaging
 xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-consul-packaging
