@@ -33,6 +33,7 @@ xivo-dao
 xivo-dev-ssh-pubkeys
 xivo-dird
 xivo-dird-client
+xivo-dird-phoned
 xivo-dist
 xivo-dxtora
 xivo-dxtorc
