@@ -24,7 +24,7 @@ xivo-confgend
 xivo-confgend-client
 xivo-config
 xivo-consul-packaging
-xivo-consulate-packaging
+xivo-consul-cli-packaging
 xivo-consul-template-packaging
 xivo-consul-replicate-packaging
 xivo-ctid
