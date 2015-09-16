@@ -1,3 +1,9 @@
+xivo-build-tools (0.17) xivo-dev-tools; urgency=medium
+
+  * add xivo-python-werkzeug-packaging
+
+ -- Pascal Cadotte Michaud <pcadottemichaud@avencall.com>  Wed, 16 Sep 2015 13:50:43 -0400
+
 xivo-build-tools (0.16) xivo-dev-tools; urgency=medium
 
   * add xivo-python-celery-packaging
