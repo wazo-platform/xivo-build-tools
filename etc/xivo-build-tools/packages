@@ -54,6 +54,7 @@ xivo-python-backports-ssl-match-hostname-packaging
 xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-consul-packaging
+xivo-python-flask-restful-packaging
 xivo-python-swaggerpy-packaging
 xivo-python-threadpool-packaging
 xivo-python-websocket-client-packaging

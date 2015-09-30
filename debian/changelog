@@ -1,3 +1,9 @@
+xivo-build-tools (0.18) xivo-dev-tools; urgency=medium
+
+  * add xivo-python-flask-restful-packaging
+
+ -- Gregory Eric Sanderson <gsanderson@avencall.com>  Wed, 30 Sep 2015 10:00:00 -0400
+
 xivo-build-tools (0.17) xivo-dev-tools; urgency=medium
 
   * add xivo-python-werkzeug-packaging
