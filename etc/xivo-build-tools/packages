@@ -61,6 +61,7 @@ xivo-python-websocket-client-packaging
 xivo-python-werkzeug-packaging
 xivo-requests-unixsocket-packaging
 xivo-res-freeze-check
+xivo-sounds
 xivo-stat
 xivo-sync
 xivo-sysconfd
