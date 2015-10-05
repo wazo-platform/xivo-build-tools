@@ -1,3 +1,9 @@
+xivo-build-tools (0.19) xivo-dev-tools; urgency=medium
+
+  * add xivo-python-babel-packaging
+
+ -- Francois Blackburn <fblackburn@avencall.com>  Mon, 05 Oct 2015 14:10:22 -0400
+
 xivo-build-tools (0.18) xivo-dev-tools; urgency=medium
 
   * add xivo-python-flask-restful-packaging
