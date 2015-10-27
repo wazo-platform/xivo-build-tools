@@ -220,7 +220,7 @@ build_package_from_source() {
         options="-b "$options
     fi
 
-    debuild --no-tgz-check --no-lintian $options
+    debuild --no-tgz-check --no-lintian --preserve-envvar=PATH $options
     cd $build_dir
     return 0
 }
