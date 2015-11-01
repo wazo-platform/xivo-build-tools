@@ -30,6 +30,7 @@ xivo-consul-template-packaging
 xivo-consul-replicate-packaging
 xivo-ctid
 xivo-ctid-client
+xivo-ctid-ng
 xivo-dao
 xivo-dev-ssh-pubkeys
 xivo-dird
