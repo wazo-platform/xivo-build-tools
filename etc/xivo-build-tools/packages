@@ -46,6 +46,7 @@ xivo-lib-python
 xivo-lib-rest-client
 xivo-libsccp
 xivo-manage-db
+xivo-manage-tokens
 xivo-monitoring
 xivo-purge-db
 xivo-provd-cli
