@@ -141,18 +141,7 @@ get_debian_version() {
         epoch=${BASH_REMATCH[1]}
     fi
 
-    local debian
-    if echo "$existing_version" | grep -q $source_version ; then
-        if [[ "$existing_version" =~ .*-(.*) ]] ; then
-            debian="-$(expr ${BASH_REMATCH[1]} + 1)"
-        else
-            debian=-1
-        fi
-    else
-        debian=-1
-    fi
-
-    local version=${epoch}${source_version}${debian}
+    local version=${epoch}${source_version}
 
     if ! dpkg --compare-versions $existing_version le $version ; then
         echo "Existing version of XiVO is ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
