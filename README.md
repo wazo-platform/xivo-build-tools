@@ -69,7 +69,7 @@ Build <xivo-agentd> for distribution <my-distribution-to-test> with branch <my-b
 
 Same command with force rebuild (add -f)
 
-    xivo-build-tools -d my-distribution-to-test -b wheezy -p xivo-agentd -f
+    xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p xivo-agentd -f
 
 
 Build xivo-web-interface package for xivo-five distribution
