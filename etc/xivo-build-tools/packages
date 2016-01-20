@@ -4,7 +4,6 @@ dahdi-linux
 dahdi-linux-modules
 dahdi-tools
 libpri
-pjproject
 xivo
 xivo-acceptance-server
 xivo-agentd
@@ -48,6 +47,7 @@ xivo-lib-rest-client
 xivo-libsccp
 xivo-manage-db
 xivo-monitoring
+xivo-pjproject-packaging
 xivo-purge-db
 xivo-provd-cli
 xivo-provd-client
