@@ -5,7 +5,7 @@ MIRROR_DEFAULT="xivo-official"
 DISTRIBUTION_DEFAULT="master"
 GIT_BRANCH_DEFAULT="master"
 PACKAGES_DIR="/home/builder/packages"
-GIT_URL="git@github.com:xivo-pbx"
+GIT_URL="https://github.com/xivo-pbx"
 
 CONF_DIR="/etc/xivo-build-tools"
 TPL_DIR="${CONF_DIR}/templates"

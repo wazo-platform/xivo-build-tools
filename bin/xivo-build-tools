@@ -352,7 +352,7 @@ prepare_repository() {
     cd $PACKAGES_DIR
     if [ ! -d "${package}/.git" ]; then
         echo "Cloning repository..."
-        git clone ${GIT_URL}/$package
+        git clone ${GIT_URL}/${package}.git
         force_rebuild=1
     fi
     cd $package
