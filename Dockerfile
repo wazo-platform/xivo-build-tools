@@ -1,7 +1,5 @@
 from debian:jessie
 
-MAINTAINER Sylvain Boily "sboily@avencall.com"
-
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
 
