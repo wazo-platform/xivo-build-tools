@@ -62,6 +62,7 @@ xivo-python-flask-classy-packaging
 xivo-python-flask-menu-packaging
 xivo-python-flask-restful-packaging
 xivo-python-flask-wtf-packaging
+xivo-python-marshmallow-packaging
 xivo-python-swaggerpy-packaging
 xivo-python-threadpool-packaging
 xivo-python-websocket-client-packaging
