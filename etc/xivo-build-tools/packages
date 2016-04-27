@@ -52,6 +52,7 @@ xivo-purge-db
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
+xivo-python-amqp-packaging
 xivo-python-asterisk-ari-packaging
 xivo-python-asynqp-packaging
 xivo-python-billiard-packaging
@@ -62,6 +63,7 @@ xivo-python-flask-classy-packaging
 xivo-python-flask-menu-packaging
 xivo-python-flask-restful-packaging
 xivo-python-flask-wtf-packaging
+xivo-python-kombu-packaging
 xivo-python-marshmallow-packaging
 xivo-python-swaggerpy-packaging
 xivo-python-threadpool-packaging
