@@ -52,6 +52,7 @@ xivo-purge-db
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
+xivo-psqlodbc-packaging
 xivo-python-amqp-packaging
 xivo-python-asterisk-ari-packaging
 xivo-python-asynqp-packaging
@@ -80,6 +81,7 @@ xivo-sync
 xivo-sysconfd
 xivo-swagger-doc
 xivo-tools
+xivo-unixodbc-packaging
 xivo-upgrade
 xivo-utils
 xivo-web-interface
