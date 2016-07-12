@@ -46,6 +46,7 @@ xivo-fetchfw
 xivo-lib-python
 xivo-lib-rest-client
 xivo-libsccp
+xivo-libss7-packaging
 xivo-manage-db
 xivo-monitoring
 xivo-pjproject-packaging
