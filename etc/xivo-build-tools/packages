@@ -73,6 +73,7 @@ xivo-python-threadpool-packaging
 xivo-python-websocket-client-packaging
 xivo-python-websockets-packaging
 xivo-python-werkzeug-packaging
+xivo-python-wsaccel-packaging
 xivo-python-wtforms-packaging
 xivo-requests-unixsocket-packaging
 xivo-res-freeze-check
