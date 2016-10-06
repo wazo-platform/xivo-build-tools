@@ -57,7 +57,7 @@ valid_package() {
 }
 
 cd_to_git_dir_package() {
-local package="$1"
+    local package="$1"
 
     local package_dir="${PACKAGES_DIR}/${package}"
     cd "${package_dir}"
@@ -334,8 +334,8 @@ extract_branch_infos() {
     cd_to_git_dir_package $package
 
     if ! git_remote_branch_exist $branch_name ; then
-        echo "Remote branch $branch_name not exist, switch to default branch master"
-        branch_name_builded="master"
+        echo "Remote branch $branch_name does not exist" >&2
+        return 1
     fi
 
     git_init_local_branch $branch_name_builded
@@ -354,6 +354,8 @@ prepare_repository() {
         echo "Cloning repository..."
         git clone ${GIT_URL}/${package}.git
         force_rebuild=1
+    else
+        git fetch
     fi
     cd $package
     git clean -fxd
