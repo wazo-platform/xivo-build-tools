@@ -354,10 +354,9 @@ prepare_repository() {
         echo "Cloning repository..."
         git clone ${GIT_URL}/${package}.git
         force_rebuild=1
-    else
-        git fetch
     fi
     cd $package
+    git fetch
     git clean -fxd
     git reset --hard
     return 0
