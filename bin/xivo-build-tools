@@ -177,7 +177,7 @@ generate_changelog() {
 
 install_build_depends() {
     local package="$1"
-    sudo apt-get -y build-dep $package/$distribution
+    sudo apt-get build-dep -y --only-source $package/$distribution
     return 0
 }
 
@@ -198,7 +198,7 @@ build_package_from_source() {
 
     sudo apt-get update -yq
     install_build_depends $package
-    apt-get source $package/$distribution
+    apt-get source --only-source $package/$distribution
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
