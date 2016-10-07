@@ -177,7 +177,7 @@ generate_changelog() {
 
 install_build_depends() {
     local package="$1"
-    sudo apt-get -y build-dep $package
+    sudo apt-get -y build-dep $package/$distribution
     return 0
 }
 
@@ -196,7 +196,7 @@ build_package_from_source() {
     mkdir -p $build_dir
     cd $build_dir
 
-    sudo apt-get update -yqq
+    sudo apt-get update -yq
     install_build_depends $package
     apt-get source $package/$distribution
 
@@ -241,7 +241,7 @@ build_module_kernel() {
     mkdir -p ${build_package_dahdi_module_directory}
     cd ${build_package_dahdi_module_directory}
 
-    sudo apt-get update -yqq
+    sudo apt-get update -yq
     sudo apt-get purge -y ${package_source}
     sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
 
