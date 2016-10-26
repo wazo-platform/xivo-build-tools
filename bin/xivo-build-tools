@@ -162,7 +162,7 @@ generate_changelog() {
 
     local message="$(git log -1 HEAD --pretty=format:%s)"
     if [ -n "$version" ]; then
-        dch -v $version --distribution $distribution --force-distribution "$message"
+        dch -b -v $version --distribution $distribution --force-distribution "$message"
     else
         dch -i --no-auto-nmu --distribution $distribution --force-distribution "$message"
     fi
