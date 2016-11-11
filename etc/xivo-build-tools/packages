@@ -51,7 +51,6 @@ xivo-libss7-packaging
 xivo-manage-db
 xivo-monitoring
 xivo-nginx
-xivo-pjproject-packaging
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
