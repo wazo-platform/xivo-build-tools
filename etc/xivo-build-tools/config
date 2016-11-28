@@ -1,4 +1,3 @@
-
 DEBFULLNAME="Wazo Builder Team"
 DEBEMAIL="release@xivo.io"
 MIRROR_DEFAULT="xivo-official"
