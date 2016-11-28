@@ -1,5 +1,5 @@
 
-DEBFULLNAME="XiVO Builder Team"
+DEBFULLNAME="Wazo Builder Team"
 DEBEMAIL="release@xivo.io"
 MIRROR_DEFAULT="xivo-official"
 DISTRIBUTION_DEFAULT="master"
