@@ -3,7 +3,7 @@ from debian:jessie
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
 
-RUN echo 'deb-src http://mirror.xivo.io/debian/ xivo-dev main' > /etc/apt/sources.list.d/xivo.list
+RUN echo 'deb-src http://mirror.wazo.community/debian/ xivo-dev main' > /etc/apt/sources.list.d/xivo.list
 RUN apt-get -yqq update
 RUN apt-get -yqq install devscripts \
                     cdbs \
