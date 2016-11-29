@@ -1,4 +1,0 @@
-
-MIRROR_HOST="mirror.lan.proformatique.com"
-MIRROR_URL="http://${MIRROR_HOST}"
-MIRROR_INCOMING="/srv/reprepro/incoming"

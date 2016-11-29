@@ -1,6 +1,6 @@
 DEBFULLNAME="Wazo Builder Team"
 DEBEMAIL="dev.wazo@gmail.com"
-MIRROR_DEFAULT="xivo-official"
+MIRROR_DEFAULT="wazo-official"
 DISTRIBUTION_DEFAULT="master"
 GIT_BRANCH_DEFAULT="master"
 PACKAGES_DIR="/home/builder/packages"
