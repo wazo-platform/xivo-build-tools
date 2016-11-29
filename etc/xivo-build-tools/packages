@@ -65,7 +65,6 @@ xivo-python-cherrypy3-packaging
 xivo-python-consul-packaging
 xivo-python-flask-classy-packaging
 xivo-python-flask-menu-packaging
-xivo-python-flask-restful-packaging
 xivo-python-flask-wtf-packaging
 xivo-python-kombu-packaging
 xivo-python-marshmallow-packaging
