@@ -1,4 +1,4 @@
-DEBFULLNAME="Wazo Builder Team"
+DEBFULLNAME="Wazo Maintainers"
 DEBEMAIL="dev.wazo@gmail.com"
 MIRROR_DEFAULT="wazo-official"
 DISTRIBUTION_DEFAULT="master"
