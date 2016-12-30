@@ -5,7 +5,7 @@ Installation
 Update sources files for APT
 ----------------------------
 
-    wget http://mirror.wazo.community/xivo_current.key -O - | apt-key add -
+    wget http://mirror.wazo.community/wazo_current.key -O - | apt-key add -
     echo 'deb http://mirror.wazo.community/debian/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
     apt-get update
     apt-get install xivo-build-tools

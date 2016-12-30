@@ -1,10 +1,9 @@
 Source: xivo-build-tools
 Section: admin
 Priority: extra
-Maintainer: XiVO DEV Team <dev+pkg@proformatique.com>
-Uploaders: XiVO Builder Team <release@xivo.io>
+Maintainer: Wazo Maintainers <dev.wazo@gmail.com>
 Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.4
+Standards-Version: 3.9.6
 
 Package: xivo-build-tools
 Architecture: all
@@ -18,5 +17,5 @@ Depends: ${misc:Depends},
          fakeroot,
          sudo,
          dh-python
-Description: XIVO Build Tools
+Description: Wazo Build Tools
  build packages
