@@ -5,6 +5,8 @@ dahdi-linux-modules
 dahdi-tools
 libpri
 wazo-libtestlink
+wazo-python-flask-classful-packaging
+wazo-python-flask-login-packaging
 xivo
 xivo-acceptance-server
 xivo-agentd
