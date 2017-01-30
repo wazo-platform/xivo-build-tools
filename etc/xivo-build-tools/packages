@@ -4,6 +4,7 @@ dahdi-linux
 dahdi-linux-modules
 dahdi-tools
 libpri
+wazo-admin-ui
 wazo-libtestlink
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
