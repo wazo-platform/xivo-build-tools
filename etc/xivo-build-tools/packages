@@ -52,7 +52,6 @@ xivo-dist
 xivo-dxtora
 xivo-dxtorc
 xivo-fetchfw
-xivo-flask-cors-packaging
 xivo-keyring
 xivo-lib-python
 xivo-lib-rest-client
@@ -73,6 +72,7 @@ xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-cherrypy3-packaging
 xivo-python-consul-packaging
+xivo-python-flask-cors-packaging
 xivo-python-flask-menu-packaging
 xivo-python-flask-wtf-packaging
 xivo-python-kombu-packaging
