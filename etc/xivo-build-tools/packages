@@ -72,6 +72,7 @@ xivo-python-billiard-packaging
 xivo-python-celery-packaging
 xivo-python-cherrypy3-packaging
 xivo-python-consul-packaging
+xivo-python-flask-cors-packaging
 xivo-python-flask-menu-packaging
 xivo-python-flask-wtf-packaging
 xivo-python-kombu-packaging
