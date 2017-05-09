@@ -5,6 +5,7 @@ dahdi-linux-modules
 dahdi-tools
 libpri
 wazo-admin-ui
+wazo-admin-ui-market
 wazo-libtestlink
 wazo-plugind
 wazo-plugind-client
