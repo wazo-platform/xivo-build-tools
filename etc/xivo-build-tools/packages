@@ -13,6 +13,7 @@ wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
 wazo-uuid
+wazo-webhookd
 xivo
 xivo-acceptance-server
 xivo-agentd
