@@ -10,6 +10,7 @@ wazo-libtestlink
 wazo-plugind
 wazo-plugind-cli
 wazo-plugind-client
+wazo-python-cheroot-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
