@@ -14,6 +14,7 @@ wazo-python-cheroot-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
+wazo-python-portend-packaging
 wazo-python-tempora-packaging
 wazo-uuid
 wazo-webhookd
