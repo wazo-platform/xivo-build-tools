@@ -16,6 +16,7 @@ wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
 wazo-python-portend-packaging
 wazo-python-tempora-packaging
+wazo-service
 wazo-uuid
 wazo-webhookd
 wazo-webhookd-client
@@ -94,7 +95,6 @@ xivo-python-wsaccel-packaging
 xivo-python-wtforms-packaging
 xivo-requests-unixsocket-packaging
 xivo-res-freeze-check
-xivo-service
 xivo-sounds
 xivo-stat
 xivo-swagger-doc
