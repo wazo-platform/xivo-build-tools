@@ -6,8 +6,8 @@ dahdi-tools
 libpri
 wazo-admin-ui
 wazo-admin-ui-market
-wazo-call-logs
-wazo-call-logs-client
+wazo-call-logd
+wazo-call-logd-client
 wazo-libtestlink
 wazo-plugind
 wazo-plugind-cli
