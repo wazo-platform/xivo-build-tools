@@ -9,6 +9,7 @@ wazo-admin-ui-market
 wazo-call-logd
 wazo-call-logd-client
 wazo-libtestlink
+wazo-mongooseim-packaging
 wazo-plugind
 wazo-plugind-cli
 wazo-plugind-client
