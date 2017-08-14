@@ -8,14 +8,14 @@ Standards-Version: 3.9.6
 Package: xivo-build-tools
 Architecture: all
 Depends: ${misc:Depends},
-         devscripts,
          cdbs,
          dput,
-         lintian,
+         devscripts,
+         dh-python,
+         fakeroot,
          libdistro-info-perl,
          libparse-debcontrol-perl,
-         fakeroot,
-         sudo,
-         dh-python
+         lintian,
+         sudo
 Description: Wazo Build Tools
  build packages

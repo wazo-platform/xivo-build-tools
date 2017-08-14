@@ -5,17 +5,18 @@ ENV HOME /home/builder
 
 RUN echo 'deb-src http://mirror.wazo.community/debian/ wazo-dev main' > /etc/apt/sources.list.d/wazo.list
 RUN apt-get -yqq update
-RUN apt-get -yqq install devscripts \
-                    cdbs \
-                    dput \
-                    lintian \
-                    libdistro-info-perl \
-                    libparse-debcontrol-perl \
-                    fakeroot \
-                    dh-python \
-                    python-setuptools \
-                    python-all \
-                    sudo
+RUN apt-get -yqq install \
+        cdbs \
+        devscripts \
+        dh-python \
+        dput \
+        fakeroot \
+        libdistro-info-perl \
+        libparse-debcontrol-perl \
+        lintian \
+        python-all \
+        python-setuptools \
+        sudo
 
 RUN groupadd builder
 RUN useradd -r -g builder -G sudo -s /bin/bash -u 1000 builder
