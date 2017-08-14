@@ -1,4 +1,3 @@
 
 MIRROR_HOST="mirror.wazo.community"
-MIRROR_URL="http://${MIRROR_HOST}/debian"
 MIRROR_INCOMING="/data/reprepro/xivo/incoming"

@@ -80,7 +80,6 @@ git_init_local_branch() {
 
 get_mirror_package_version() {
     local package="$1"
-    local mirror_uri="dists/${distribution}/main/binary-${ARCH}/Packages"
 
     case $package in
         "xivo-provisioning") local package="xivo-provd";;
@@ -88,7 +87,8 @@ get_mirror_package_version() {
         "xivo-dird") local package="xivo-libdird";;
     esac
 
-    wget -qO- ${MIRROR_URL}/${mirror_uri} | grep -A 2 "^Package: $package" | grep '^Version:' | head -n1 | awk '{print $2}'
+    sudo apt-get update -yq
+    apt-cache show ${package}/${distribution} | grep '^Version:' | head -n1 | awk '{print $2}'
     return 0
 }
 
