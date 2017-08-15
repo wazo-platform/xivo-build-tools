@@ -87,7 +87,7 @@ get_mirror_package_version() {
         "xivo-dird") local package="xivo-libdird";;
     esac
 
-    sudo apt-get update -yq
+    sudo apt-get update -yqq
     apt-cache show ${package}/${distribution} | grep '^Version:' | head -n1 | awk '{print $2}'
     return 0
 }
