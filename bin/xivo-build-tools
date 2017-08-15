@@ -7,7 +7,7 @@ if [ $EUID == 0 ]; then
 fi
 
 DPUT_DIR="/tmp/dput"
-CONF_FILE="/etc/xivo-build-tools/config"
+CONF_FILE="${CONF_FILE:-"/etc/xivo-build-tools/config"}"
 GPG_KEY="84202FDB"
 
 # source conffile
