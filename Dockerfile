@@ -11,6 +11,7 @@ RUN apt-get -yqq install \
         dh-python \
         dput \
         fakeroot \
+        git \
         libdistro-info-perl \
         libparse-debcontrol-perl \
         lintian \
