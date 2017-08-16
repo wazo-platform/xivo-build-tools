@@ -214,11 +214,16 @@ build_package_from_source() {
     return 0
 }
 
+install_source_build_depends() {
+    sudo mk-build-deps --install --remove
+}
+
 build_source_package() {
     local package="$1"
     local options="-d -k$GPG_KEY"
 
     cd_to_git_dir_package $package
+    install_source_build_depends
     if debian/rules get-orig-source 2> /dev/null
     then
         echo "We have a get-orig-source"
