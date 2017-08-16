@@ -202,12 +202,7 @@ build_package_from_source() {
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
-    if [ ${ARCH} = "amd64" ]
-    then
-        options="-B "$options
-    else
-        options="-b "$options
-    fi
+    options="-b "$options
 
     debuild --no-tgz-check --no-lintian --preserve-envvar=PATH $options
     cd $build_dir
