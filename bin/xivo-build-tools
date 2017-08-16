@@ -207,7 +207,7 @@ build_package_from_source() {
 }
 
 install_source_build_depends() {
-    sudo mk-build-deps --install --remove
+    sudo mk-build-deps --install --remove --tool 'apt-get --no-install-recommends --assume-yes'
 }
 
 build_source_package() {
