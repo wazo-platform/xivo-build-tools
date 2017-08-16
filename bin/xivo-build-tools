@@ -184,7 +184,6 @@ install_build_depends() {
 
 build_package_from_source() {
     local package="$1"
-    local options="-k$GPG_KEY"
 
     local build_dir="$build_package_from_source_directory/$package"
 
@@ -202,9 +201,7 @@ build_package_from_source() {
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
-    options="-b "$options
-
-    debuild --no-tgz-check --no-lintian --preserve-envvar=PATH $options
+    debuild --no-tgz-check --no-lintian --preserve-envvar=PATH -b -k$GPG_KEY
     cd $build_dir
     return 0
 }
