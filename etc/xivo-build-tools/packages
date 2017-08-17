@@ -10,6 +10,7 @@ wazo-call-logd
 wazo-call-logd-client
 wazo-libtestlink
 wazo-mongooseim-packaging
+wazo-market-client
 wazo-plugind
 wazo-plugind-cli
 wazo-plugind-client
