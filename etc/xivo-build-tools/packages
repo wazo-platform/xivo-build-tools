@@ -89,7 +89,6 @@ xivo-python-flask-wtf-packaging
 xivo-python-kombu-packaging
 xivo-python-marshmallow-packaging
 xivo-python-swaggerpy-packaging
-xivo-python-threadpool-packaging
 xivo-python-websocket-client-packaging
 xivo-python-websockets-packaging
 xivo-python-werkzeug-packaging
