@@ -32,8 +32,10 @@ You have to provide some informations to allow building:
         -b <branch_name>: Git branch to build from (default: $GIT_BRANCH_DEFAULT)
         -m <mirror>: Mirror where to upload package (default: $MIRROR_DEFAULT)
         -a: Build all packages
-        -s: Build only sources packages
-        -S: Build packages from sources
+        -s: Build only source packages
+        -S: Build all binary packages from sources
+        -c: Build arch-dependent binary packages from sources
+        -C: Build arch-independent binary packages from sources
         -p <package>: Build only <package>
         -f: Force package build without checking for changes in repository
         -v: Set xivo version
@@ -201,7 +203,12 @@ build_package_from_source() {
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
-    debuild --no-tgz-check --no-lintian --preserve-envvar=PATH -b -k$GPG_KEY
+    case "$build_package_from_source" in
+        arch-dependent) build_options="-B";;
+        arch-independent) build_options="-A";;
+        *) build_options="-b";;
+    fi
+    debuild --no-tgz-check --no-lintian --preserve-envvar=PATH $build_options -k$GPG_KEY
     cd $build_dir
     return 0
 }
@@ -401,7 +408,7 @@ process_package() {
         generate_changelog $package $debian_version
     fi
 
-    if [ $build_package_from_source -eq 0 ]
+    if [ "$build_package_from_source" == "no" ]
     then
         build_source_package $package
         clean_package $package
@@ -433,7 +440,7 @@ if [ -z "$1" ]; then
     usage
 fi
 
-while getopts :d:p:v:b:m:V:afhsSk opt
+while getopts :d:p:v:b:m:V:afhsSkcC opt
 do
     case $opt in
         d) distribution=$OPTARG;;
@@ -441,13 +448,15 @@ do
         v) force_xivo_version=$OPTARG;;
         b) branch_name=$OPTARG;;
         s) build_only_source=1;;
-        S) build_package_from_source=1;;
+        S) build_package_from_source='all';;
         m) conf_mirror=$OPTARG;;
         V) force_package_version=$OPTARG;;
         k) build_module_kernel=1;;
         a) all=1;;
         f) force_rebuild=1;;
         u) use_version=1;;
+        c) build_package_from_source='arch-dependent';;
+        C) build_package_from_source='arch-independent';;
         h) usage;;
         '?') echo "$0 : option $OPTARG is not valid" >&2
             usage
@@ -462,7 +471,7 @@ xivo_version="${force_xivo_version:-""}"
 package_version="${force_package_version:-""}"
 all="${all:-"0"}"
 build_only_source="${build_only_source:-"0"}"
-build_package_from_source="${build_package_from_source:-"0"}"
+build_package_from_source="${build_package_from_source:-"no"}"
 build_module_kernel="${build_module_kernel:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
 use_version="${use_version:-"0"}"
