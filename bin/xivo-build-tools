@@ -207,7 +207,7 @@ build_package_from_source() {
         arch-dependent) build_options="-B";;
         arch-independent) build_options="-A";;
         *) build_options="-b";;
-    fi
+    esac
     debuild --no-tgz-check --no-lintian --preserve-envvar=PATH $build_options -k$GPG_KEY
     cd $build_dir
     return 0
