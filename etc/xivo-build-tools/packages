@@ -21,6 +21,7 @@ wazo-python-flask-session-packaging
 wazo-python-portend-packaging
 wazo-python-tempora-packaging
 wazo-res-amqp
+wazo-res-stasis-amqp
 wazo-service
 wazo-uuid
 wazo-webhookd
