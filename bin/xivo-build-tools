@@ -179,8 +179,7 @@ generate_changelog() {
 
 install_build_depends() {
     local package="$1"
-    local version=$(get_mirror_package_version "${package}")
-    sudo apt-get build-dep -y --only-source "${package}=${version}"
+    sudo apt-get build-dep -y --only-source $package/$distribution
     return 0
 }
 
@@ -200,8 +199,7 @@ build_package_from_source() {
 
     sudo apt-get update -yq
     install_build_depends $package
-    local version=$(get_mirror_package_version "${package}")
-    apt-get source --only-source "${package}=${version}"
+    apt-get source --only-source $package/$distribution
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
