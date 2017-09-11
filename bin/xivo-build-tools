@@ -94,6 +94,11 @@ get_mirror_package_version() {
     return 0
 }
 
+get_mirror_source_version() {
+    local package="$1"
+    wget -q -O - "http://mirror.wazo.community/debian/dists/${distribution}/main/source/Sources.gz" | gunzip | grep -A 4 "^Package: ${package}$" | grep '^Version:' | awk '{ print $2 }'
+}
+
 get_source_version() {
     local package="$1"
 
@@ -179,7 +184,8 @@ generate_changelog() {
 
 install_build_depends() {
     local package="$1"
-    sudo apt-get build-dep -y --only-source $package/$distribution
+    local version=$(get_mirror_source_version "${package}")
+    sudo apt-get build-dep -y --only-source "${package}=${version}"
     return 0
 }
 
@@ -199,7 +205,8 @@ build_package_from_source() {
 
     sudo apt-get update -yq
     install_build_depends $package
-    apt-get source --only-source $package/$distribution
+    local version=$(get_mirror_source_version "${package}")
+    apt-get source --only-source "${package}=${version}"
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
