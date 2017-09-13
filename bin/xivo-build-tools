@@ -280,6 +280,7 @@ build_dput_conf() {
     sed -i "s|{{ distribution }}|${distribution}|g" $dput_file
     sed -i "s|{{ fqdn }}|${MIRROR_HOST}|g" $dput_file
     sed -i "s|{{ incoming }}|${MIRROR_INCOMING}|g" $dput_file
+    sed -i "s|{{ login }}|${MIRROR_LOGIN}|g" $dput_file
     return 0
 }
 

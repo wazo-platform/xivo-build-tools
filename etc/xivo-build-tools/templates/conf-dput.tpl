@@ -3,6 +3,6 @@
 [{{ distribution }}]
 method = rsync
 fqdn = {{ fqdn }}
-login = root
+login = {{ login }}
 incoming = {{ incoming }}/{{ distribution }}
 ; END {{ distribution }}
