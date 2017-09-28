@@ -6,6 +6,7 @@ dahdi-tools
 libpri
 wazo-admin-ui
 wazo-admin-ui-market
+wazo-auth
 wazo-call-logd
 wazo-call-logd-client
 wazo-libtestlink
@@ -34,7 +35,6 @@ xivo-agentd-client
 xivo-agid
 xivo-amid
 xivo-amid-client
-xivo-auth
 xivo-auth-client
 xivo-auth-keys
 xivo-backup
