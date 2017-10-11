@@ -86,7 +86,6 @@ get_mirror_package_version() {
     case $package in
         "xivo-provisioning") local package="xivo-provd";;
         "xivo-dao") local package="xivo-libdao";;
-        "xivo-dird") local package="xivo-libdird";;
     esac
 
     sudo apt-get update -yqq
