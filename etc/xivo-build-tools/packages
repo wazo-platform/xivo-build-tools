@@ -20,6 +20,7 @@ wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
 wazo-python-portend-packaging
+wazo-python-slixmpp-packaging
 wazo-python-tempora-packaging
 wazo-res-amqp
 wazo-res-stasis-amqp
