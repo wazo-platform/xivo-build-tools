@@ -38,9 +38,7 @@ You have to provide some informations to allow building:
         -C: Build arch-independent binary packages from sources
         -p <package>: Build only <package>
         -f: Force package build without checking for changes in repository
-        -v: Set xivo version
         -V: Set absolute package version
-        -u: Use xivo version in filename (default: False)
         -h: show this help
 
 EOF
@@ -80,84 +78,6 @@ git_init_local_branch() {
     return $?
 }
 
-get_mirror_package_version() {
-    local package="$1"
-
-    case $package in
-        "xivo-provisioning") local package="xivo-provd";;
-        "xivo-dao") local package="xivo-libdao";;
-    esac
-
-    sudo apt-get update -yqq
-    apt-cache show ${package}/${distribution} | grep '^Version:' | head -n1 | awk '{print $2}'
-    return 0
-}
-
-get_mirror_source_version() {
-    local package="$1"
-    wget -q -O - "http://mirror.wazo.community/debian/dists/${distribution}/main/source/Sources.gz" | gunzip | grep -A 4 "^Package: ${package}$" | grep '^Version:' | awk '{ print $2 }'
-}
-
-get_source_version() {
-    local package="$1"
-
-    cd_to_git_dir_package $package
-
-    # using date now instead of commit date
-    #local git_timestamp=$(git log -1 --pretty='%ct')
-    local timestamp=$(date -u +%Y%m%d.%H%M%S)
-    local git_hash=$(git log -1 --pretty='%h')
-    local computed="~${timestamp}.${git_hash}"
-
-    if [ $use_version -eq 0 ]; then
-        echo ${xivo_version}${computed}
-    else
-        echo ${computed}
-    fi
-    return 0
-}
-
-get_debian_version() {
-    local package="$1"
-    local source_version="$2"
-
-    cd_to_git_dir_package $package
-
-    local existing_version=$(get_mirror_package_version $package) || return 1
-
-    if [ -z "$existing_version" ]; then
-        # look for a package version
-        local changelog=$(head -1 debian/changelog)
-        if [[ "$changelog" =~ \((.*)\) ]] ; then
-            existing_version=${BASH_REMATCH[1]}
-        else
-            echo "The first line of $dir/changelog is '$changelog' and does not match \\(.*\\)" >&2
-            return 1
-        fi
-        # sanity check on the package name
-        if ! [[ "$changelog" =~ ^$package ]] ; then
-            echo "The first line of $dir/changelog is '$changelog' and does not start with $package" >&2
-            return 2
-        fi
-    fi
-
-    # extract the epoch, if any
-    local epoch
-    if [[ "$existing_version" =~ ([0-9]+:) ]] ; then
-        epoch=${BASH_REMATCH[1]}
-    fi
-
-    local version=${epoch}${source_version}
-
-    if ! dpkg --compare-versions $existing_version le $version ; then
-        echo "Existing version of XiVO is ($existing_version) that is greater or equal (according to dpkg --compare-versions) than the version computed ($version)" >&2
-        return 4
-    fi
-
-    echo $version
-    return 0
-}
-
 generate_changelog() {
     local package="$1"
     local version="$2"
@@ -167,24 +87,14 @@ generate_changelog() {
     cd_to_git_dir_package $package
 
     local message="$(git log -1 HEAD --pretty=format:%s)"
-    if [ -n "$version" ]; then
-        dch -b -v $version --distribution $distribution --force-distribution "$message"
-    else
-        dch -i --no-auto-nmu --distribution $distribution --force-distribution "$message"
-    fi
-
-    local changelog=$(head -1 debian/changelog)
-    if [[ "$changelog" =~ \((.*)\) ]] ; then
-        current_version=${BASH_REMATCH[1]}
-    fi
+    dch -b -v $version --distribution $distribution --force-distribution "$message"
 
     return 0
 }
 
 install_build_depends() {
     local package="$1"
-    local version=$(get_mirror_source_version "${package}")
-    sudo apt-get build-dep -y --only-source "${package}=${version}"
+    sudo apt-get build-dep -y --only-source "${package}=${package_version}"
     return 0
 }
 
@@ -204,8 +114,7 @@ build_package_from_source() {
 
     sudo apt-get update -yq
     install_build_depends $package
-    local version=$(get_mirror_source_version "${package}")
-    apt-get source --only-source "${package}=${version}"
+    apt-get source --only-source "${package}=${package_version}"
 
     local directory_source=$(find  -maxdepth 1 -type d | grep ./)
     cd $directory_source
@@ -397,23 +306,7 @@ process_package() {
 
     update_git_repo
 
-    if [ -z "$package_version" -a -z "$xivo_version" ]; then
-        generate_changelog $package
-    else
-        local debian_version
-        if [ -n "$package_version" ]; then
-            debian_version="$package_version"
-        else
-            local source_version=$(get_source_version $package) || return 1
-            debian_version=$(get_debian_version $package $source_version) || return 1
-        fi
-
-        if [ -z "$debian_version" ]; then
-            exit 1
-        fi
-
-        generate_changelog $package $debian_version
-    fi
+    generate_changelog $package $package_version
 
     if [ "$build_package_from_source" == "no" ]
     then
@@ -422,7 +315,7 @@ process_package() {
     else
         build_package_from_source $package
     fi
-    [ $? == 0 ] && upload_to_mirror $package $debian_version
+    [ $? == 0 ] && upload_to_mirror $package $package_version
     return 0
 }
 
@@ -452,7 +345,6 @@ do
     case $opt in
         d) distribution=$OPTARG;;
         p) force_package=$OPTARG;;
-        v) force_xivo_version=$OPTARG;;
         b) branch_name=$OPTARG;;
         s) build_only_source=1;;
         S) build_package_from_source='all';;
@@ -461,7 +353,6 @@ do
         k) build_module_kernel=1;;
         a) all=1;;
         f) force_rebuild=1;;
-        u) use_version=1;;
         c) build_package_from_source='arch-dependent';;
         C) build_package_from_source='arch-independent';;
         h) usage;;
@@ -474,14 +365,12 @@ done
 distribution="${distribution:-"${DISTRIBUTION_DEFAULT}"}"
 branch_name="${branch_name:-"${GIT_BRANCH_DEFAULT}"}"
 conf_mirror="${conf_mirror:-"${MIRROR_DEFAULT}"}"
-xivo_version="${force_xivo_version:-""}"
 package_version="${force_package_version:-""}"
 all="${all:-"0"}"
 build_only_source="${build_only_source:-"0"}"
 build_package_from_source="${build_package_from_source:-"no"}"
 build_module_kernel="${build_module_kernel:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
-use_version="${use_version:-"0"}"
 
 
 validate_repo_name $distribution
