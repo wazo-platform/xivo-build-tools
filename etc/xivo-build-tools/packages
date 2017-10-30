@@ -9,7 +9,7 @@ wazo-admin-ui-market
 wazo-auth
 wazo-call-logd
 wazo-call-logd-client
-wazo-dummy-packge
+wazo-dummy-package
 wazo-libtestlink
 wazo-mongooseim-packaging
 wazo-market-client
