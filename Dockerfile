@@ -19,16 +19,15 @@ RUN apt-get -yqq install \
         sudo \
         wget
 
-RUN echo 'deb http://mirror.wazo.community/debian/ wazo-dev main' >> /etc/apt/sources.list.d/wazo.list
-RUN echo 'deb-src http://mirror.wazo.community/debian/ wazo-dev main' >> /etc/apt/sources.list.d/wazo.list
-RUN wget -q http://mirror.wazo.community/wazo_current.key -O - | apt-key add -
-
-RUN groupadd builder
-RUN useradd -r -g builder -G sudo -s /bin/bash -u 1000 builder
-RUN mkdir -p /home/builder/packages
-RUN chown -R builder.builder /home/builder/
-RUN echo 'builder ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/builder
-RUN chmod 440 /etc/sudoers.d/builder
+RUN true && \
+    echo 'deb http://mirror.wazo.community/debian/ wazo-dev main' >> /etc/apt/sources.list.d/wazo.list && \
+    echo 'deb-src http://mirror.wazo.community/debian/ wazo-dev main' >> /etc/apt/sources.list.d/wazo.list && \
+    wget -q http://mirror.wazo.community/wazo_current.key -O - | apt-key add - && \
+    useradd --groups sudo --shell /bin/bash --uid 1000 --create-home builder && \
+    install --directory --owner builder /home/builder/packages && \
+    echo 'builder ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/builder && \
+    chmod 440 /etc/sudoers.d/builder && \
+    true
 
 ADD etc/xivo-build-tools/ /etc/xivo-build-tools/
 ADD bin/xivo-build-tools /usr/bin/
