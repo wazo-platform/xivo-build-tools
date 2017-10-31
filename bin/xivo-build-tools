@@ -149,6 +149,7 @@ build_source_package() {
 }
 
 build_module_kernel() {
+    local arch=$1
     local package_source=dahdi-source
     local package_module=dahdi-linux
     local package_build=${package_module}-module
@@ -164,7 +165,11 @@ build_module_kernel() {
     sudo apt-get purge -y ${package_source}
     sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
 
-    KVERS=$(echo $(for v in $(ls /boot/vmlinuz-*) ; do echo $(basename $v | sed -e 's|vmlinuz-||'); done) | sed 's/ /,/g')
+    case $arch in
+        i386) KVERS="3.16.0-4-586,3.16.0-4-686-pae";;
+        amd64) KVERS="3.16.0-4-amd64";;
+        *) echo "ERROR: unknown arch '$arch'"; exit 1;;
+    esac
     m-a prepare -i -t -l ${KVERS} -u ${build_package_dahdi_module_directory} ${package_module}
     SIGNCHANGES=1 m-a auto-build -i -t -l ${KVERS} -u ${build_package_dahdi_module_directory} ${package_module}
 
@@ -340,7 +345,7 @@ if [ -z "$1" ]; then
     usage
 fi
 
-while getopts :d:p:v:b:m:V:afhsSkcC opt
+while getopts :d:p:v:b:m:V:k:afhsScC opt
 do
     case $opt in
         d) distribution=$OPTARG;;
@@ -350,7 +355,7 @@ do
         S) build_package_from_source='all';;
         m) conf_mirror=$OPTARG;;
         V) force_package_version=$OPTARG;;
-        k) build_module_kernel=1;;
+        k) kernel_module_arch=$OPTARG;;
         a) all=1;;
         f) force_rebuild=1;;
         c) build_package_from_source='arch-dependent';;
@@ -385,8 +390,8 @@ fi
 # source mirror configuration
 . $config_mirror_file
 
-if [ $build_module_kernel -eq 1 ]; then
-    build_module_kernel
+if [ -n "$kernel_module_arch" ]; then
+    build_module_kernel $kernel_module_arch
     exit 0
 fi
 
