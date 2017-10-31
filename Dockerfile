@@ -3,7 +3,6 @@ from debian:jessie
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
 
-RUN echo 'deb-src http://mirror.wazo.community/debian/ wazo-dev main' > /etc/apt/sources.list.d/wazo.list
 RUN apt-get -yqq update
 RUN apt-get -yqq install \
         cdbs \
@@ -17,7 +16,12 @@ RUN apt-get -yqq install \
         lintian \
         python-all \
         python-setuptools \
-        sudo
+        sudo \
+        wget
+
+RUN echo 'deb http://mirror.wazo.community/debian/ wazo-dev main' >> /etc/apt/sources.list.d/wazo.list
+RUN echo 'deb-src http://mirror.wazo.community/debian/ wazo-dev main' >> /etc/apt/sources.list.d/wazo.list
+RUN wget -q http://mirror.wazo.community/wazo_current.key -O - | apt-key add -
 
 RUN groupadd builder
 RUN useradd -r -g builder -G sudo -s /bin/bash -u 1000 builder
