@@ -130,7 +130,7 @@ build_package_from_source() {
 
 install_source_build_depends() {
     sudo apt-get update
-    sudo mk-build-deps --install --remove --tool 'apt-get --no-install-recommends --assume-yes'
+    mk-build-deps --install --remove --tool 'apt-get --no-install-recommends --assume-yes' --root-cmd sudo
 }
 
 build_source_package() {
