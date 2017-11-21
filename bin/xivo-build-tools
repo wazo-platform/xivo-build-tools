@@ -94,7 +94,7 @@ generate_changelog() {
 
 install_build_depends() {
     local package="$1"
-    sudo apt-get build-dep -y --only-source "${package}=${package_version}"
+    sudo DEBIAN_FRONTEND=noninteractive apt-get build-dep -y --only-source "${package}=${package_version}"
     return 0
 }
 
