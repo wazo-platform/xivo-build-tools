@@ -167,8 +167,8 @@ build_module_kernel() {
     sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
 
     case $arch in
-        i386) KVERS="3.16.0-4-586,3.16.0-4-686-pae";;
-        amd64) KVERS="3.16.0-4-amd64";;
+        i386) KVERS="4.9.0-4-586,4.9.0-4-686-pae";;
+        amd64) KVERS="4.9.0-4-amd64";;
         *) echo "ERROR: unknown arch '$arch'"; exit 1;;
     esac
     m-a prepare -i -t -l ${KVERS} -u ${build_package_dahdi_module_directory} ${package_module}
