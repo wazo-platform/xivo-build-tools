@@ -164,7 +164,7 @@ build_module_kernel() {
 
     sudo apt-get update -yq
     sudo apt-get purge -y ${package_source}
-    sudo apt-get install -y --force-yes module-assistant module-init-tools ${package_source}
+    sudo apt-get install -y --force-yes module-assistant kmod ${package_source}
 
     case $arch in
         i386) KVERS="4.9.0-4-586,4.9.0-4-686-pae";;
