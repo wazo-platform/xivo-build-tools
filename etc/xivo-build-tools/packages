@@ -109,7 +109,6 @@ xivo-sysconfd
 xivo-tools
 xivo-upgrade
 xivo-utils
-xivo-webi
 xivo-web-interface
 xivo-websocketd
 xgong
