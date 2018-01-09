@@ -88,7 +88,6 @@ xivo-python-amqp-packaging
 xivo-python-asterisk-ari-packaging
 xivo-python-asynqp-packaging
 xivo-python-billiard-packaging
-xivo-python-celery-packaging
 xivo-python-cherrypy3-packaging
 xivo-python-consul-packaging
 xivo-python-flask-cors-packaging
