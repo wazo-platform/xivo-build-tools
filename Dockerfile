@@ -1,4 +1,4 @@
-from debian:jessie
+from debian:stretch
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
