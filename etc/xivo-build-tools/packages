@@ -82,7 +82,6 @@ xivo-nginx
 xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
-xivo-psqlodbc-packaging
 xivo-purge-db
 xivo-python-amqp-packaging
 xivo-python-asterisk-ari-packaging
