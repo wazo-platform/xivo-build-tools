@@ -158,8 +158,8 @@ build_module_kernel() {
     sudo apt-get install -y --force-yes module-assistant kmod ${package_source}
 
     case $arch in
-        i386) local kernels="3.16.0-5-586 3.16.0-5-686-pae 4.9.0-4-686 4.9.0-4-686-pae 4.9.0-5-686 4.9.0-5-686-pae";;
-        amd64) local kernels="3.16.0-5-amd64 4.9.0-4-amd64 4.9.0-5-amd64";;
+        i386) local kernels="4.9.0-4-686 4.9.0-4-686-pae 4.9.0-5-686 4.9.0-5-686-pae";;
+        amd64) local kernels="4.9.0-4-amd64 4.9.0-5-amd64";;
         *) echo "ERROR: unknown arch '$arch'"; exit 1;;
     esac
 
