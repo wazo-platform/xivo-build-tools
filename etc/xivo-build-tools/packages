@@ -90,7 +90,6 @@ xivo-python-flask-menu-packaging
 xivo-python-flask-wtf-packaging
 xivo-python-marshmallow-packaging
 xivo-python-swaggerpy-packaging
-xivo-python-websocket-client-packaging
 xivo-python-websockets-packaging
 xivo-python-wsaccel-packaging
 xivo-res-freeze-check
