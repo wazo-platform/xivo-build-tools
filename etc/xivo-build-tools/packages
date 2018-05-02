@@ -13,6 +13,7 @@ wazo-auth-cli
 wazo-call-logd
 wazo-call-logd-client
 wazo-debug
+wazo-dird
 wazo-dummy-package
 wazo-libtestlink
 wazo-mongooseim-packaging
@@ -64,7 +65,6 @@ xivo-ctid-ng-client
 xivo-dao
 xivo-dbms
 xivo-dev-ssh-pubkeys
-xivo-dird
 xivo-dird-client
 xivo-dird-phoned
 xivo-dist
