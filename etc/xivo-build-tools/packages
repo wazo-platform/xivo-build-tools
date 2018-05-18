@@ -22,6 +22,7 @@ wazo-market-client
 wazo-plugind
 wazo-plugind-cli
 wazo-plugind-client
+wazo-provd-client
 wazo-python-anytree-packaging
 wazo-python-cheroot-packaging
 wazo-python-flask-classful-packaging
