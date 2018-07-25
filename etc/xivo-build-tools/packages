@@ -28,6 +28,7 @@ wazo-python-cheroot-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
+wazo-python-marshmallow-packaging
 wazo-python-portend-packaging
 wazo-python-tempora-packaging
 wazo-res-amqp
@@ -90,7 +91,6 @@ xivo-python-consul-packaging
 xivo-python-flask-cors-packaging
 xivo-python-flask-menu-packaging
 xivo-python-flask-wtf-packaging
-xivo-python-marshmallow-packaging
 xivo-python-swaggerpy-packaging
 xivo-python-websockets-packaging
 xivo-python-wsaccel-packaging
