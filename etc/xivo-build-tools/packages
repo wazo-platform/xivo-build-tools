@@ -24,7 +24,6 @@ wazo-plugind-cli
 wazo-plugind-client
 wazo-provd-client
 wazo-python-anytree-packaging
-wazo-python-backports.functools-lru-cache-packaging
 wazo-python-cheroot-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
