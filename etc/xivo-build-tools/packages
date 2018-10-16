@@ -25,6 +25,7 @@ wazo-plugind-client
 wazo-provd-client
 wazo-python-anytree-packaging
 wazo-python-cheroot-packaging
+wazo-python-cherrypy3-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
@@ -87,7 +88,6 @@ xivo-provisioning
 xivo-purge-db
 xivo-python-asterisk-ari-packaging
 xivo-python-asynqp-packaging
-xivo-python-cherrypy3-packaging
 xivo-python-consul-packaging
 xivo-python-flask-cors-packaging
 xivo-python-flask-menu-packaging
