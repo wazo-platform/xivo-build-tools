@@ -123,7 +123,7 @@ build_package_from_source() {
         arch-independent) build_options="-A";;
         *) build_options="-b";;
     esac
-    debuild --no-tgz-check --no-lintian --preserve-envvar=PATH $build_options -k$GPG_KEY
+    debuild --no-tgz-check --no-lintian --preserve-envvar=MAKEFLAGS --preserve-envvar=PATH $build_options -k$GPG_KEY
     cd $build_dir
     return 0
 }
