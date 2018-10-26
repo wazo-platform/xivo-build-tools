@@ -34,6 +34,7 @@ wazo-python-jaraco.functools-packaging
 wazo-python-marshmallow-packaging
 wazo-python-portend-packaging
 wazo-python-tempora-packaging
+wazo-python-werkzeug-packaging
 wazo-res-amqp
 wazo-res-stasis-amqp
 wazo-service
