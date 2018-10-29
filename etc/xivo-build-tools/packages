@@ -17,6 +17,7 @@ wazo-debug
 wazo-dird
 wazo-dird-client
 wazo-dummy-package
+wazo-libsccp
 wazo-libtestlink
 wazo-mongooseim-packaging
 wazo-market-client
@@ -80,7 +81,6 @@ xivo-fetchfw
 xivo-keyring
 xivo-lib-python
 xivo-lib-rest-client
-xivo-libsccp
 xivo-manage-db
 xivo-monitoring
 xivo-nginx
