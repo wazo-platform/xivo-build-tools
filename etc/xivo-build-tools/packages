@@ -39,6 +39,7 @@ wazo-python-portend-packaging
 wazo-python-pyfcm-packaging
 wazo-python-tempora-packaging
 wazo-python-werkzeug-packaging
+wazo-python-wsaccel-packaging
 wazo-res-amqp
 wazo-res-stasis-amqp
 wazo-service
