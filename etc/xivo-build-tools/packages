@@ -18,6 +18,7 @@ wazo-dird
 wazo-dird-client
 wazo-dummy-package
 wazo-setupd
+wazo-setupd-client
 wazo-libsccp
 wazo-libtestlink
 wazo-mongooseim-packaging
