@@ -102,7 +102,6 @@ xivo-python-flask-menu-packaging
 xivo-python-flask-wtf-packaging
 xivo-python-swaggerpy-packaging
 xivo-python-websockets-packaging
-xivo-python-wsaccel-packaging
 xivo-res-freeze-check
 xivo-sounds
 xivo-stat
