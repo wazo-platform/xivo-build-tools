@@ -29,6 +29,7 @@ wazo-plugind-cli
 wazo-plugind-client
 wazo-provd-client
 wazo-python-anytree-packaging
+wazo-python-asterisk-ari-packaging
 wazo-python-cheroot-packaging
 wazo-python-cherrypy3-packaging
 wazo-python-flask-classful-packaging
@@ -39,6 +40,7 @@ wazo-python-ldap-packaging
 wazo-python-marshmallow-packaging
 wazo-python-portend-packaging
 wazo-python-pyfcm-packaging
+wazo-python-swaggerpy-packaging
 wazo-python-tempora-packaging
 wazo-python-werkzeug-packaging
 wazo-python-wsaccel-packaging
@@ -94,13 +96,11 @@ xivo-provd-cli
 xivo-provd-client
 xivo-provisioning
 xivo-purge-db
-xivo-python-asterisk-ari-packaging
 xivo-python-asynqp-packaging
 xivo-python-consul-packaging
 xivo-python-flask-cors-packaging
 xivo-python-flask-menu-packaging
 xivo-python-flask-wtf-packaging
-xivo-python-swaggerpy-packaging
 xivo-python-websockets-packaging
 xivo-res-freeze-check
 xivo-sounds
