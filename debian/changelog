@@ -1,3 +1,9 @@
+xivo-build-tools (0.20) xivo-build-tools; urgency=medium
+
+  * add wazo-libsrtp-packaging
+
+ -- Wazo Maintainers <dev+pkg@wazo.community>  Sun, 11 Nov 2018 10:00:01 -0500
+
 xivo-build-tools (0.19) xivo-dev-tools; urgency=medium
 
   * add xivo-python-babel-packaging

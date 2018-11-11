@@ -21,6 +21,7 @@ wazo-dummy-package
 wazo-setupd
 wazo-setupd-client
 wazo-libsccp
+wazo-libsrtp-packaging
 wazo-libtestlink
 wazo-mongooseim-packaging
 wazo-market-client
