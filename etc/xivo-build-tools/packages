@@ -42,6 +42,7 @@ wazo-python-marshmallow-packaging
 wazo-python-portend-packaging
 wazo-python-pyapns2-packaging
 wazo-python-pyfcm-packaging
+wazo-python-sqlalchemy-continuum-packaging
 wazo-python-swaggerpy-packaging
 wazo-python-tempora-packaging
 wazo-python-werkzeug-packaging
