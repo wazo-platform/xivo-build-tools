@@ -77,8 +77,6 @@ xivo-consul-cli-packaging
 xivo-consul-packaging
 xivo-consul-replicate-packaging
 xivo-consul-template-packaging
-xivo-ctid
-xivo-ctid-client
 xivo-ctid-ng
 xivo-ctid-ng-client
 xivo-dao
