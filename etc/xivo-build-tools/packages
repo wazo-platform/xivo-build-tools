@@ -22,7 +22,6 @@ wazo-setupd
 wazo-setupd-client
 wazo-libsccp
 wazo-libsrtp-packaging
-wazo-mongooseim-packaging
 wazo-market-client
 wazo-plugind
 wazo-plugind-cli
@@ -109,6 +108,5 @@ xivo-sync
 xivo-sysconfd
 xivo-upgrade
 xivo-utils
-xivo-web-interface
 xivo-websocketd
 xgong
