@@ -22,6 +22,8 @@ wazo-setupd
 wazo-setupd-client
 wazo-libsccp
 wazo-libsrtp-packaging
+wazo-libtestlink
+wazo-mongooseim-packaging
 wazo-market-client
 wazo-plugind
 wazo-plugind-cli
