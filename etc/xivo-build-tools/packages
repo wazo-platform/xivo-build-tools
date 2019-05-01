@@ -77,8 +77,8 @@ xivo-consul-cli-packaging
 xivo-consul-packaging
 xivo-consul-replicate-packaging
 xivo-consul-template-packaging
-xivo-ctid-ng
-xivo-ctid-ng-client
+wazo-calld
+wazo-calld-client
 xivo-dao
 xivo-dbms
 xivo-dev-ssh-pubkeys
