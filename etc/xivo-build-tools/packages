@@ -55,6 +55,7 @@ wazo-service
 wazo-uuid
 wazo-webhookd
 wazo-webhookd-client
+wazo-websocketd
 wazo-websocketd-client
 xivo
 xivo-acceptance-server
@@ -110,5 +111,4 @@ xivo-sync
 xivo-sysconfd
 xivo-upgrade
 xivo-utils
-xivo-websocketd
 xgong
