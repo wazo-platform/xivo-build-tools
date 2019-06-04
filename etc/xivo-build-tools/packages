@@ -13,6 +13,7 @@ wazo-auth-client
 wazo-auth-keys
 wazo-call-logd
 wazo-call-logd-client
+wazo-confd-client
 wazo-chatd
 wazo-chatd-client
 wazo-debug
@@ -71,7 +72,6 @@ xivo-bus
 xivo-certs
 xivo-ci
 xivo-confd
-xivo-confd-client
 xivo-confgend
 xivo-confgend-client
 xivo-config
