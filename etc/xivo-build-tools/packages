@@ -6,6 +6,7 @@ dahdi-linux
 dahdi-linux-modules
 dahdi-tools
 libpri
+wazo-agentd
 wazo-asterisk-config
 wazo-auth
 wazo-auth-cli
@@ -65,7 +66,6 @@ wazo-websocketd
 wazo-websocketd-client
 xgong
 xivo-acceptance-server
-xivo-agentd
 xivo-agentd-cli
 xivo-agentd-client
 xivo-agid
