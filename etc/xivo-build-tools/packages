@@ -7,6 +7,8 @@ dahdi-linux-modules
 dahdi-tools
 libpri
 wazo-agentd
+wazo-agentd-cli
+wazo-agentd-client
 wazo-asterisk-config
 wazo-auth
 wazo-auth-cli
