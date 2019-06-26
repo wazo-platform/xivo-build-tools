@@ -31,11 +31,11 @@ Examples
 
 Build source packages
 
-    xivo-build-tools -p xivo-agentd -s
+    xivo-build-tools -p wazo-agentd -s
 
 Build package from sources
 
-    xivo-build-tools -p xivo-agentd -S
+    xivo-build-tools -p wazo-agentd -S
 
 Build all packages
 
@@ -62,14 +62,14 @@ Build all xivo packages for distribution <pelican-stretch>
     xivo-build-tools -a -d pelican-stretch
 
 
-Build <xivo-agentd> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
+Build <wazo-agentd> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
 
-    xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p xivo-agentd
+    xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p wazo-agentd
 
 
 Same command with force rebuild (add -f)
 
-    xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p xivo-agentd -f
+    xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p wazo-agentd -f
 
 
 Build wazo-auth package for pelican-stretch distribution
@@ -77,9 +77,9 @@ Build wazo-auth package for pelican-stretch distribution
     xivo-build-tools -d pelican-stretch -p wazo-auth
 
 
-Build xivo-agentd package for test distribution, force rebuild and force xivo-version
+Build wazo-agentd package for test distribution, force rebuild and force xivo-version
 
-    xivo-build-tools -d test -f -v 13.11 -p xivo-agentd
+    xivo-build-tools -d test -f -v 13.11 -p wazo-agentd
 
 
 Build all packages for test distribution, force rebuild and force xivo-version

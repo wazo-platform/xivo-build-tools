@@ -68,8 +68,6 @@ wazo-websocketd
 wazo-websocketd-client
 xgong
 xivo-acceptance-server
-xivo-agentd-cli
-xivo-agentd-client
 xivo-agid
 xivo-amid
 xivo-amid-client
