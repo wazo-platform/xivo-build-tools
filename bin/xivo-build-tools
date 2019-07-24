@@ -8,7 +8,7 @@ fi
 
 DPUT_DIR="/tmp/dput"
 CONF_FILE="${CONF_FILE:-"/etc/xivo-build-tools/config"}"
-GPG_KEY="84202FDB"
+GPG_KEY="C55F4D4109AB2F7014DB4351DD31413E84202FDB"
 
 # source conffile
 if [ -e $CONF_FILE ]; then
