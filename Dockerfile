@@ -3,8 +3,9 @@ from debian:stretch
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
 
-RUN apt-get -yqq update
-RUN apt-get -yqq install \
+RUN true &&
+    apt-get -yqq update && \
+    apt-get -yqq install \
         cdbs \
         devscripts \
         dh-python \
