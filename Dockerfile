@@ -3,7 +3,7 @@ from debian:stretch
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
 
-RUN true &&
+RUN true && \
     apt-get -yqq update && \
     apt-get -yqq install \
         cdbs \
