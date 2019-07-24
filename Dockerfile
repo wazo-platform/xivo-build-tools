@@ -16,6 +16,7 @@ RUN apt-get -yqq install \
         lintian \
         python-all \
         python-setuptools \
+        rsync \
         sudo \
         wget
 
