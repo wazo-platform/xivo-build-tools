@@ -1,4 +1,4 @@
-from debian:stretch
+from debian:buster
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder

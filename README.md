@@ -57,9 +57,9 @@ Build all packages with force rebuild (add -f)
     xivo-build-tools -a -f
 
 
-Build all xivo packages for distribution <pelican-stretch>
+Build all xivo packages for distribution <pelican-buster>
 
-    xivo-build-tools -a -d pelican-stretch
+    xivo-build-tools -a -d pelican-buster
 
 
 Build <wazo-agentd> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
@@ -72,9 +72,9 @@ Same command with force rebuild (add -f)
     xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p wazo-agentd -f
 
 
-Build wazo-auth package for pelican-stretch distribution
+Build wazo-auth package for pelican-buster distribution
 
-    xivo-build-tools -d pelican-stretch -p wazo-auth
+    xivo-build-tools -d pelican-buster -p wazo-auth
 
 
 Build wazo-agentd package for test distribution, force rebuild and force xivo-version
