@@ -9,6 +9,7 @@ libpri
 wazo-agentd
 wazo-agentd-cli
 wazo-agentd-client
+wazo-agid
 wazo-asterisk-config
 wazo-auth
 wazo-auth-cli
@@ -72,7 +73,6 @@ wazo-websocketd
 wazo-websocketd-client
 xgong
 xivo-acceptance-server
-xivo-agid
 xivo-amid
 xivo-amid-client
 xivo-backup
