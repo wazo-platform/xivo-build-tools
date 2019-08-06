@@ -32,6 +32,7 @@ wazo-libsrtp-packaging
 wazo-libtestlink
 wazo-market-client
 wazo-mongooseim-packaging
+wazo-nginx
 wazo-platform
 wazo-plugind
 wazo-plugind-cli
@@ -97,7 +98,6 @@ xivo-lib-python
 xivo-lib-rest-client
 xivo-manage-db
 xivo-monitoring
-xivo-nginx
 xivo-provd-cli
 xivo-provisioning
 xivo-python-consul-packaging
