@@ -26,7 +26,6 @@ wazo-confd-client
 wazo-debug
 wazo-dird
 wazo-dird-client
-wazo-dird-phoned
 wazo-dummy-package
 wazo-libsccp
 wazo-libsrtp-packaging
@@ -34,6 +33,7 @@ wazo-libtestlink
 wazo-market-client
 wazo-mongooseim-packaging
 wazo-nginx
+wazo-phoned
 wazo-platform
 wazo-plugind
 wazo-plugind-cli
