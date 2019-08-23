@@ -23,6 +23,7 @@ wazo-chatd
 wazo-chatd-client
 wazo-confd
 wazo-confd-client
+wazo-consul-config
 wazo-debug
 wazo-dird
 wazo-dird-client
