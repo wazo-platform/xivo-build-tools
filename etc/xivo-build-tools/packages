@@ -52,13 +52,14 @@ wazo-python-cherrypy3-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
-wazo-python-hyper-packaging
+wazo-python-httpx-packaging
+wazo-python-hstspreload-packaging
 wazo-python-jaraco.functools-packaging
 wazo-python-ldap-packaging
 wazo-python-marshmallow-packaging
 wazo-python-portend-packaging
-wazo-python-pyapns2-packaging
 wazo-python-pyfcm-packaging
+wazo-python-rfc3986-packaging
 wazo-python-sqlalchemy-continuum-packaging
 wazo-python-swaggerpy-packaging
 wazo-python-tempora-packaging
