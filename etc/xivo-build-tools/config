@@ -4,7 +4,7 @@ MIRROR_DEFAULT="wazo-official"
 DISTRIBUTION_DEFAULT="master"
 GIT_BRANCH_DEFAULT="master"
 PACKAGES_DIR="/home/builder/packages"
-GIT_URL="https://github.com/wazo-pbx"
+GIT_URL="https://github.com/wazo-platform"
 
 CONF_DIR="/etc/xivo-build-tools"
 TPL_DIR="${CONF_DIR}/templates"
