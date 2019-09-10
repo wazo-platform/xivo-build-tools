@@ -10,6 +10,7 @@ wazo-agentd
 wazo-agentd-cli
 wazo-agentd-client
 wazo-agid
+wazo-amid
 wazo-asterisk-config
 wazo-auth
 wazo-auth-cli
@@ -76,7 +77,6 @@ wazo-websocketd
 wazo-websocketd-client
 xgong
 xivo-acceptance-server
-xivo-amid
 xivo-amid-client
 xivo-backup
 xivo-bus
