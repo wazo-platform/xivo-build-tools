@@ -1,6 +1,7 @@
 asterisk
 asterisk-debug
 asterisk-vanilla
+asterisk-moh-opsound
 bntools
 dahdi-linux
 dahdi-linux-modules
