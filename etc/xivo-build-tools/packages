@@ -29,6 +29,7 @@ wazo-consul-config
 wazo-debug
 wazo-dird
 wazo-dird-client
+wazo-dist-upgrade
 wazo-dummy-package
 wazo-libsccp
 wazo-libsrtp-packaging
