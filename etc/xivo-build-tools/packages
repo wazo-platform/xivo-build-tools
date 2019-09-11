@@ -115,4 +115,5 @@ xivo-stat
 xivo-swagger-doc
 xivo-sync
 xivo-sysconfd
+xivo-upgrade
 xivo-utils
