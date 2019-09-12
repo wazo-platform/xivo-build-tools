@@ -97,6 +97,7 @@ xivo-consul-template-packaging
 xivo-dao
 xivo-dbms
 xivo-dev-ssh-pubkeys
+xivo-dist
 xivo-dxtora
 xivo-dxtorc
 xivo-fetchfw
