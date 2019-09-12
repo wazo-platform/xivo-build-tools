@@ -1,7 +1,7 @@
 asterisk
 asterisk-debug
-asterisk-vanilla
 asterisk-moh-opsound
+asterisk-vanilla
 bntools
 dahdi-linux
 dahdi-linux-modules
@@ -47,15 +47,15 @@ wazo-provd-cli
 wazo-provd-client
 wazo-purge-db
 wazo-python-anytree-packaging
-wazo-python-asynqp-packaging
 wazo-python-asterisk-ari-packaging
+wazo-python-asynqp-packaging
 wazo-python-cheroot-packaging
 wazo-python-cherrypy3-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-login-packaging
 wazo-python-flask-session-packaging
-wazo-python-httpx-packaging
 wazo-python-hstspreload-packaging
+wazo-python-httpx-packaging
 wazo-python-jaraco.functools-packaging
 wazo-python-ldap-packaging
 wazo-python-marshmallow-packaging
