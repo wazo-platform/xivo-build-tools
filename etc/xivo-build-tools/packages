@@ -25,6 +25,7 @@ wazo-chatd
 wazo-chatd-client
 wazo-confd
 wazo-confd-client
+wazo-confgend
 wazo-consul-config
 wazo-debug
 wazo-dird
@@ -87,7 +88,6 @@ xivo-backup
 xivo-bus
 xivo-certs
 xivo-ci
-xivo-confgend
 xivo-confgend-client
 xivo-config
 xivo-consul-cli-packaging
