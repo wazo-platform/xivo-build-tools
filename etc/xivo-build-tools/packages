@@ -34,6 +34,7 @@ wazo-dird-client
 wazo-dist
 wazo-dist-upgrade
 wazo-dummy-package
+wazo-dxtora
 wazo-libsccp
 wazo-libsrtp-packaging
 wazo-libtestlink
@@ -97,7 +98,6 @@ xivo-consul-template-packaging
 xivo-dao
 xivo-dbms
 xivo-dev-ssh-pubkeys
-xivo-dxtora
 xivo-dxtorc
 xivo-fetchfw
 xivo-keyring
