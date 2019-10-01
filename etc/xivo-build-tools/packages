@@ -67,6 +67,7 @@ wazo-res-stasis-amqp
 wazo-service
 wazo-setupd
 wazo-setupd-client
+wazo-sounds
 wazo-ui
 wazo-upgrade
 wazo-uuid
@@ -98,7 +99,6 @@ xivo-monitoring
 xivo-python-consul-packaging
 xivo-python-flask-menu-packaging
 xivo-res-freeze-check
-xivo-sounds
 xivo-stat
 xivo-swagger-doc
 xivo-sync
