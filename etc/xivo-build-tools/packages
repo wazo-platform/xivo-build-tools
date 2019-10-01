@@ -97,7 +97,6 @@ xivo-manage-db
 xivo-monitoring
 xivo-python-consul-packaging
 xivo-python-flask-menu-packaging
-xivo-python-flask-wtf-packaging
 xivo-res-freeze-check
 xivo-sounds
 xivo-stat
