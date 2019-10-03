@@ -36,6 +36,7 @@ wazo-dist-upgrade
 wazo-dummy-package
 wazo-dxtora
 wazo-dxtorc
+wazo-kamailio-config
 wazo-libsccp
 wazo-libsrtp-packaging
 wazo-libtestlink
