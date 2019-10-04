@@ -72,6 +72,7 @@ wazo-python-rfc3986-packaging
 wazo-python-sqlalchemy-continuum-packaging
 wazo-python-starlette-packaging
 wazo-python-swaggerpy-packaging
+wazo-python-uvicorn-packaging
 wazo-res-amqp
 wazo-res-stasis-amqp
 wazo-router-call-logd
