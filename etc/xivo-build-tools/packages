@@ -37,6 +37,7 @@ wazo-dummy-package
 wazo-dxtora
 wazo-dxtorc
 wazo-kamailio-config
+wazo-lib-rest-client
 wazo-libsccp
 wazo-libsrtp-packaging
 wazo-libtestlink
@@ -106,7 +107,6 @@ xivo-dev-ssh-pubkeys
 xivo-fetchfw
 xivo-keyring
 xivo-lib-python
-xivo-lib-rest-client
 xivo-manage-db
 xivo-monitoring
 xivo-python-consul-packaging
