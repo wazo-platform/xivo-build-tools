@@ -78,6 +78,7 @@ wazo-res-amqp
 wazo-res-stasis-amqp
 wazo-router-call-logd
 wazo-router-confd
+wazo-rtpe-config
 wazo-service
 wazo-setupd
 wazo-setupd-client
