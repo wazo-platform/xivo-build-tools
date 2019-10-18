@@ -44,6 +44,7 @@ wazo-libtestlink
 wazo-market-client
 wazo-mongooseim-packaging
 wazo-nginx
+wazo-ngcp-rtpengine-packaging
 wazo-phoned
 wazo-platform
 wazo-plugind
