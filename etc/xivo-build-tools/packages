@@ -79,6 +79,7 @@ wazo-python-starlette-packaging
 wazo-python-swaggerpy-packaging
 wazo-python-tempora-packaging
 wazo-python-uvicorn-packaging
+wazo-python-werkzeug-packaging
 wazo-res-amqp
 wazo-res-stasis-amqp
 wazo-router-call-logd
