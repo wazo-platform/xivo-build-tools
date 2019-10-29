@@ -105,7 +105,6 @@ xivo-certs
 xivo-ci
 xivo-config
 xivo-consul-cli-packaging
-xivo-consul-packaging
 xivo-consul-replicate-packaging
 xivo-consul-template-packaging
 xivo-dao
