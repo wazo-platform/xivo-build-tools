@@ -18,6 +18,8 @@ wazo-auth
 wazo-auth-cli
 wazo-auth-client
 wazo-auth-keys
+wazo-c4-router
+wazo-c4-sbc
 wazo-call-logd
 wazo-call-logd-client
 wazo-calld
