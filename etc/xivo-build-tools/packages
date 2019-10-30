@@ -104,9 +104,6 @@ xivo-bus
 xivo-certs
 xivo-ci
 xivo-config
-xivo-consul-cli-packaging
-xivo-consul-replicate-packaging
-xivo-consul-template-packaging
 xivo-dao
 xivo-dbms
 xivo-dev-ssh-pubkeys
