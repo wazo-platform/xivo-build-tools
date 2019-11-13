@@ -14,6 +14,7 @@ wazo-agid
 wazo-amid
 wazo-amid-client
 wazo-asterisk-config
+wazo-asterisk-extra-modules
 wazo-auth
 wazo-auth-cli
 wazo-auth-client
