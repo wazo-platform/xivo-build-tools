@@ -6,6 +6,7 @@ bntools
 dahdi-linux
 dahdi-linux-modules
 dahdi-tools
+kamailio-packaging
 libpri
 wazo-agentd
 wazo-agentd-cli
