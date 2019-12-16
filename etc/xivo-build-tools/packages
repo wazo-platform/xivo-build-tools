@@ -6,7 +6,6 @@ bntools
 dahdi-linux
 dahdi-linux-modules
 dahdi-tools
-kamailio-packaging
 libpri
 wazo-agentd
 wazo-agentd-cli
@@ -42,6 +41,7 @@ wazo-dummy-package
 wazo-dxtora
 wazo-dxtorc
 wazo-kamailio-config
+wazo-kamailio-packaging
 wazo-lib-rest-client
 wazo-libsccp
 wazo-libsrtp-packaging
