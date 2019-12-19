@@ -162,7 +162,7 @@ build_module_kernel() {
     case ${dist}-${arch} in
         stretch-i386) local kernels="4.9.0-5-686 4.9.0-5-686-pae 4.9.0-6-686 4.9.0-6-686-pae 4.9.0-7-686 4.9.0-7-686-pae 4.9.0-8-686 4.9.0-8-686-pae 4.9.0-9-686 4.9.0-9-686-pae 4.9.0-11-686 4.9.0-11-686-pae";;
         stretch-amd64) local kernels="4.9.0-5-amd64 4.9.0-6-amd64 4.9.0-7-amd64 4.9.0-8-amd64 4.9.0-9-amd64 4.9.0-11-amd64";;
-        buster-i386) local kernels="4.19.0-5-686 4.19.0-6-686";;
+        buster-i386) local kernels="4.19.0-5-686 4.19.0-5-686-pae 4.19.0-6-686 4.19.0-6-686-pae";;
         buster-amd64) local kernels="4.19.0-5-amd64 4.19.0-6-amd64";;
         *) echo "ERROR: unknown arch '$arch'"; exit 1;;
     esac
