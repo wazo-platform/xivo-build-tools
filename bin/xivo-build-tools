@@ -157,7 +157,7 @@ build_module_kernel() {
 
     sudo apt-get update -yq
     sudo apt-get purge -y ${package_source}
-    sudo apt-get install -y --force-yes module-assistant kmod ${package_source}
+    sudo apt-get install -y module-assistant kmod ${package_source}
 
     case ${dist}-${arch} in
         stretch-i386) local kernels="4.9.0-5-686 4.9.0-5-686-pae 4.9.0-6-686 4.9.0-6-686-pae 4.9.0-7-686 4.9.0-7-686-pae 4.9.0-8-686 4.9.0-8-686-pae 4.9.0-9-686 4.9.0-9-686-pae 4.9.0-11-686 4.9.0-11-686-pae";;
