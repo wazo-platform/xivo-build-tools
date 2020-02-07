@@ -13,6 +13,7 @@ wazo-agentd-client
 wazo-agid
 wazo-amid
 wazo-amid-client
+wazo-archive-keyring
 wazo-asterisk-config
 wazo-asterisk-extra-modules
 wazo-auth
@@ -112,7 +113,6 @@ xivo-dao
 xivo-dbms
 xivo-dev-ssh-pubkeys
 xivo-fetchfw
-xivo-keyring
 xivo-lib-python
 xivo-manage-db
 xivo-monitoring
