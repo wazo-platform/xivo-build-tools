@@ -13,7 +13,6 @@ wazo-agentd-client
 wazo-agid
 wazo-amid
 wazo-amid-client
-wazo-archive-keyring
 wazo-asterisk-config
 wazo-asterisk-doc-extractor
 wazo-asterisk-extra-modules
@@ -44,6 +43,7 @@ wazo-dxtora
 wazo-dxtorc
 wazo-kamailio-config
 wazo-kamailio-packaging
+wazo-keyring
 wazo-lib-rest-client
 wazo-libsccp
 wazo-libsrtp-packaging
