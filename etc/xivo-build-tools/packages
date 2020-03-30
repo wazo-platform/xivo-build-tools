@@ -61,7 +61,6 @@ wazo-provd
 wazo-provd-cli
 wazo-provd-client
 wazo-purge-db
-wazo-python-anytree-packaging
 wazo-python-asterisk-ari-packaging
 wazo-python-asynqp-packaging
 wazo-python-cherrypy3-packaging
