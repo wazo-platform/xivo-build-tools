@@ -82,6 +82,7 @@ wazo-python-promise-packaging
 wazo-python-pydantic-packaging
 wazo-python-pyfcm-packaging
 wazo-python-rfc3986-packaging
+wazo-python-rx-packaging
 wazo-python-sqlalchemy-continuum-packaging
 wazo-python-starlette-packaging
 wazo-python-swaggerpy-packaging
