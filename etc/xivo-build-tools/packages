@@ -67,6 +67,7 @@ wazo-python-cherrypy3-packaging
 wazo-python-email-validator-packaging
 wazo-python-fastapi-packaging
 wazo-python-flask-classful-packaging
+wazo-python-flask-menu-packaging
 wazo-python-flask-session-packaging
 wazo-python-flask-graphql-packaging
 wazo-python-graphene-packaging
@@ -121,7 +122,6 @@ xivo-lib-python
 xivo-manage-db
 xivo-monitoring
 xivo-python-consul-packaging
-xivo-python-flask-menu-packaging
 xivo-res-freeze-check
 xivo-stat
 xivo-swagger-doc
