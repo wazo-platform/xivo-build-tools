@@ -100,6 +100,7 @@ wazo-service
 wazo-setupd
 wazo-setupd-client
 wazo-sounds
+wazo-stat
 wazo-ui
 wazo-upgrade
 wazo-uuid
@@ -123,7 +124,6 @@ xivo-manage-db
 xivo-monitoring
 xivo-python-consul-packaging
 xivo-res-freeze-check
-xivo-stat
 xivo-swagger-doc
 xivo-sync
 xivo-sysconfd
