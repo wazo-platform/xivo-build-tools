@@ -93,6 +93,7 @@ wazo-python-tempora-packaging
 wazo-python-uvicorn-packaging
 wazo-python-werkzeug-packaging
 wazo-res-amqp
+wazo-res-consul
 wazo-res-stasis-amqp
 wazo-router-call-logd
 wazo-router-confd
