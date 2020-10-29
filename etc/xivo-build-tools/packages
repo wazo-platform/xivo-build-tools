@@ -3,10 +3,10 @@ asterisk-debug
 asterisk-moh-opsound
 asterisk-vanilla
 bntools
-consul-c
 dahdi-linux
 dahdi-linux-modules
 dahdi-tools
+libconsul-c
 libpri
 wazo-agentd
 wazo-agentd-cli
