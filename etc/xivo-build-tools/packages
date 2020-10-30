@@ -94,6 +94,8 @@ wazo-python-uvicorn-packaging
 wazo-python-werkzeug-packaging
 wazo-res-amqp
 wazo-res-consul
+wazo-res-consul-discovery
+wazo-res-consul-stasis-app
 wazo-res-stasis-amqp
 wazo-router-call-logd
 wazo-router-confd
