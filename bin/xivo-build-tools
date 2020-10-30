@@ -160,10 +160,10 @@ build_module_kernel() {
     sudo apt-get install -y module-assistant kmod ${package_source}
 
     case ${dist}-${arch} in
-        #stretch-i386) local kernels="4.9.0-5-686 4.9.0-5-686-pae 4.9.0-6-686 4.9.0-6-686-pae 4.9.0-7-686 4.9.0-7-686-pae 4.9.0-8-686 4.9.0-8-686-pae 4.9.0-9-686 4.9.0-9-686-pae 4.9.0-11-686 4.9.0-11-686-pae 4.9.0-12-686 4.9.0-12-686-pae";;
-        #stretch-amd64) local kernels="4.9.0-5-amd64 4.9.0-6-amd64 4.9.0-7-amd64 4.9.0-8-amd64 4.9.0-9-amd64 4.9.0-11-amd64 4.9.0-12-amd64";;
-        stretch-i386) local kernels="4.9.0-13-686 4.9.0-13-686-pae";;
-        stretch-amd64) local kernels="4.9.0-13-amd64";;
+        #stretch-i386) local kernels="4.9.0-5-686 4.9.0-5-686-pae 4.9.0-6-686 4.9.0-6-686-pae 4.9.0-7-686 4.9.0-7-686-pae 4.9.0-8-686 4.9.0-8-686-pae 4.9.0-9-686 4.9.0-9-686-pae 4.9.0-11-686 4.9.0-11-686-pae 4.9.0-12-686 4.9.0-12-686-pae 4.9.0-13-686 4.9.0-13-686-pae";;
+        #stretch-amd64) local kernels="4.9.0-5-amd64 4.9.0-6-amd64 4.9.0-7-amd64 4.9.0-8-amd64 4.9.0-9-amd64 4.9.0-11-amd64 4.9.0-12-amd64 4.9.0-13-amd64";;
+        stretch-i386) local kernels="4.9.0-14-686 4.9.0-14-686-pae";;
+        stretch-amd64) local kernels="4.9.0-14-amd64";;
         #buster-i386) local kernels="4.19.0-5-686 4.19.0-5-686-pae 4.19.0-6-686 4.19.0-6-686-pae 4.19.0-8-686 4.19.0-8-686-pae 4.19.0-9-686 4.19.0-9-686-pae 4.19.0-10-686 4.19.0-10-686-pae 4.19.0-11-686 4.19.0-11-686-pae";;
         #buster-amd64) local kernels="4.19.0-5-amd64 4.19.0-6-amd64 4.19.0-8-amd64 4.19.0-9-amd64 4.19.0-10-amd64 4.19.0-11-amd64";;
         buster-i386) local kernels="4.19.0-12-686 4.19.0-12-686-pae";;
