@@ -35,6 +35,7 @@ wazo-confgend
 wazo-confgend-client
 wazo-consul-config
 wazo-debug
+wazo-dev-ssh-pubkeys
 wazo-dird
 wazo-dird-client
 wazo-dist
@@ -122,7 +123,6 @@ xivo-ci
 xivo-config
 xivo-dao
 xivo-dbms
-xivo-dev-ssh-pubkeys
 xivo-fetchfw
 xivo-lib-python
 xivo-manage-db
