@@ -83,6 +83,7 @@ wazo-python-hstspreload-packaging
 wazo-python-httpx-packaging
 wazo-python-jaraco.functools-packaging
 wazo-python-kombu-packaging
+wazo-python-marshmallow-packaging
 wazo-python-multipart-packaging
 wazo-python-portend-packaging
 wazo-python-promise-packaging
