@@ -21,6 +21,7 @@ wazo-auth
 wazo-auth-cli
 wazo-auth-client
 wazo-auth-keys
+wazo-backup
 wazo-c4-router
 wazo-c4-sbc
 wazo-call-logd
@@ -122,7 +123,6 @@ wazo-websocketd
 wazo-websocketd-client
 xgong
 xivo-acceptance-server
-xivo-backup
 xivo-bus
 xivo-certs
 xivo-ci
