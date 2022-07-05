@@ -90,6 +90,7 @@ wazo-python-portend-packaging
 wazo-python-promise-packaging
 wazo-python-pydantic-packaging
 wazo-python-pyfcm-packaging
+wazo-python-pystun3-packaging
 wazo-python-rfc3986-packaging
 wazo-python-rx-packaging
 wazo-python-sqlalchemy-continuum-packaging
