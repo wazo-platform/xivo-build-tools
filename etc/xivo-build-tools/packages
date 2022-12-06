@@ -34,7 +34,6 @@ wazo-confd
 wazo-confd-client
 wazo-confgend
 wazo-confgend-client
-wazo-consul-config
 wazo-dbms
 wazo-debug
 wazo-dev-ssh-pubkeys
