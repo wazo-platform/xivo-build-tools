@@ -187,6 +187,7 @@ build_module_kernel() {
         #buster-amd64) local kernels="4.19.0-5-amd64 4.19.0-6-amd64 4.19.0-8-amd64 4.19.0-9-amd64 4.19.0-10-amd64 4.19.0-11-amd64 4.19.0-12-amd64 4.19.0-13-amd64 4.19.0-14-amd64 4.19.0-16-amd64 4.19.0-17-amd64 4.19.0-18-amd64 4.19.0-19-amd64 4.19.0-20-amd64 4.19.0-21-amd64 4.19.0-22-amd64";;
         buster-i386) local kernels="4.19.0-23-686 4.19.0-23-686-pae";;
         buster-amd64) local kernels="4.19.0-23-amd64";;
+        # bullseye doesn't need to build anymore kernel package (dahdi is removed)
         *) echo "ERROR: unknown arch '$arch'"; exit 1;;
     esac
 
