@@ -1,8 +1,11 @@
-from debian:buster
+FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/builder
 
+# NOTE: Python 2 dependencies are kept to rebuild packaging by only changing
+#       base image (stretch, buster)
+#       Can be removed on wazo-28.01
 RUN true && \
     apt-get -yqq update && \
     apt-get -yqq install \
