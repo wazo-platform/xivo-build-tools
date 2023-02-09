@@ -1,5 +1,5 @@
 DEBFULLNAME="Wazo Maintainers"
-DEBEMAIL="dev.wazo@gmail.com"
+DEBEMAIL="dev@wazo.community"
 MIRROR_DEFAULT="wazo-official"
 DISTRIBUTION_DEFAULT="master"
 GIT_BRANCH_DEFAULT="master"
