@@ -84,6 +84,7 @@ wazo-python-kombu-packaging
 wazo-python-marshmallow-packaging
 wazo-python-multipart-packaging
 wazo-python-portend-packaging
+wazo-python-prometheus-flask-exporter-packaging
 wazo-python-promise-packaging
 wazo-python-pydantic-packaging
 wazo-python-pyfcm-packaging
