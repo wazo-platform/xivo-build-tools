@@ -64,6 +64,21 @@ cd_to_git_dir_package() {
     return 0
 }
 
+create_build_deps_dir() {
+    local package="$1"
+
+    local package_dir="${PACKAGES_DIR}/${package}"
+    cp -r "${package_dir}" "${package_dir}-build-deps"
+    return 0
+}
+
+cd_to_build_deps_dir() {
+    local package="$1"
+
+    cd_to_git_dir_package "${package}-build-deps"
+    return 0
+}
+
 git_remote_branch_exist() {
     local remote_branch="$1"
 
@@ -137,8 +152,12 @@ build_source_package() {
     local package="$1"
     local options="-d -k$GPG_KEY"
 
-    cd_to_git_dir_package $package
+    create_build_deps_dir $package
+    cd_to_build_deps_dir $package
     install_source_build_depends
+    cd -
+
+    cd_to_git_dir_package $package
     if debian/rules get-orig-source 2> /dev/null
     then
         echo "We have a get-orig-source"
