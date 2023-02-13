@@ -76,7 +76,7 @@ wazo-python-flask-session-packaging
 wazo-python-graphene-packaging
 wazo-python-graphql-core-packaging
 wazo-python-graphql-relay-packaging
-wazo-python-graphql-server-core-packaging
+wazo-python-graphql-server-packaging
 wazo-python-hstspreload-packaging
 wazo-python-httpx-packaging
 wazo-python-jaraco.functools-packaging
