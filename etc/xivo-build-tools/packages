@@ -44,8 +44,6 @@ wazo-dist-upgrade
 wazo-dummy-package
 wazo-dxtora
 wazo-dxtorc
-wazo-kamailio-config
-wazo-kamailio-packaging
 wazo-keyring
 wazo-lib-rest-client
 wazo-libsccp
@@ -53,7 +51,6 @@ wazo-libsrtp-packaging
 wazo-libtestlink
 wazo-market-client
 wazo-mongooseim-packaging
-wazo-ngcp-rtpengine-packaging
 wazo-nginx
 wazo-phoned
 wazo-platform
