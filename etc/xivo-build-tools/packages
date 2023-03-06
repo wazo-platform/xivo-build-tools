@@ -67,7 +67,6 @@ wazo-python-cherrypy3-packaging
 wazo-python-email-validator-packaging
 wazo-python-fastapi-packaging
 wazo-python-flask-classful-packaging
-wazo-python-flask-graphql-packaging
 wazo-python-flask-menu-packaging
 wazo-python-flask-session-packaging
 wazo-python-graphene-packaging
@@ -82,12 +81,10 @@ wazo-python-marshmallow-packaging
 wazo-python-multipart-packaging
 wazo-python-portend-packaging
 wazo-python-prometheus-flask-exporter-packaging
-wazo-python-promise-packaging
 wazo-python-pydantic-packaging
 wazo-python-pyfcm-packaging
 wazo-python-pystun3-packaging
 wazo-python-rfc3986-packaging
-wazo-python-rx-packaging
 wazo-python-sqlalchemy-continuum-packaging
 wazo-python-starlette-exporter-packaging
 wazo-python-starlette-packaging
