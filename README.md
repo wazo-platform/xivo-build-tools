@@ -66,10 +66,10 @@ Build all packages with force rebuild (add -f)
 xivo-build-tools -a -f
 ```
 
-Build all wazo packages for distribution <pelican-buster>
+Build all wazo packages for distribution <pelican-bullseye>
 
 ```shell
-xivo-build-tools -a -d pelican-buster
+xivo-build-tools -a -d pelican-bullseye
 ```
 
 Build <wazo-agentd> for distribution <my-distribution-to-test> with branch <my-branch-to-test>
@@ -84,10 +84,10 @@ Same command with force rebuild (add -f)
 xivo-build-tools -d my-distribution-to-test -b my-branch-to-test -p wazo-agentd -f
 ```
 
-Build wazo-auth package for pelican-buster distribution
+Build wazo-auth package for pelican-bullseye distribution
 
 ```shell
-xivo-build-tools -d pelican-buster -p wazo-auth
+xivo-build-tools -d pelican-bullseye -p wazo-auth
 ```
 
 Build wazo-agentd package for test distribution, force rebuild and force wazo-version
