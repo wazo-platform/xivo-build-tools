@@ -38,11 +38,23 @@ You have to provide some informations to allow building:
         -C: Build arch-independent binary packages from sources
         -p <package>: Build only <package>
         -f: Force package build without checking for changes in repository
+        -u: Clone <package> from this URL
         -V: Set absolute package version
         -h: show this help
 
 EOF
     exit 0
+}
+
+valid_git_url() {
+    local git_url="$1"
+
+    if [[ $VALID_GIT_URLS =~ $git_url ]]; then
+        return 0
+    else
+        echo "Git URL '$git_url' is not valid, see $CONF_FILE for more informations" >&2
+        exit -1
+    fi
 }
 
 valid_package() {
@@ -257,17 +269,17 @@ upload_to_mirror() {
 }
 
 process_packages() {
+    local git_url="$1"
     for package in $PACKAGES; do
-        process_package $package
+        process_package $git_url $package
     done
 }
 
 package_is_up_to_date() {
     local package="$1"
+    local git_url="$2"
 
     echo "Checking updated package: $package"
-
-    valid_package $package
 
     cd_to_git_dir_package $package
 
@@ -304,14 +316,18 @@ extract_branch_infos() {
 }
 
 prepare_repository() {
-    local package="$1"
+    local git_url="$1"
+    local package="$2"
+
+    valid_git_url $git_url
+    valid_package $package
 
     echo "Initializing package: $package"
 
     cd $PACKAGES_DIR
     if [ ! -d "${package}/.git" ]; then
         echo "Cloning repository..."
-        git clone ${GIT_URL}/${package}.git
+        git clone ${git_url}/${package}.git
         force_rebuild=1
     fi
     cd $package
@@ -328,11 +344,12 @@ update_git_repo() {
 }
 
 process_package() {
-    local package="$1"
+    local git_url="$1"
+    local package="$2"
 
     echo "Processing $package"
 
-    prepare_repository $package
+    prepare_repository $git_url $package
 
     if ! extract_branch_infos $package; then
         return 1
@@ -379,7 +396,7 @@ if [ -z "$1" ]; then
     usage
 fi
 
-while getopts :d:p:v:b:m:V:k:afhsScC opt
+while getopts :d:p:v:b:m:V:k:u:afhsScC opt
 do
     case $opt in
         d) distribution=$OPTARG;;
@@ -390,6 +407,7 @@ do
         m) conf_mirror=$OPTARG;;
         V) force_package_version=$OPTARG;;
         k) kernel_module_arch=$OPTARG;;
+        u) git_url=$OPTARG;;
         a) all=1;;
         f) force_rebuild=1;;
         c) build_package_from_source='arch-dependent';;
@@ -410,7 +428,7 @@ build_only_source="${build_only_source:-"0"}"
 build_package_from_source="${build_package_from_source:-"no"}"
 build_module_kernel="${build_module_kernel:-"0"}"
 force_rebuild="${force_rebuild:-"0"}"
-
+git_url=$"${git_url:-${GIT_URL}}"
 
 validate_repo_name $distribution
 config_mirror_file="${MIRROR_DIR}/$conf_mirror"
@@ -430,7 +448,7 @@ if [ -n "$kernel_module_arch" ]; then
 fi
 
 if [ $all -eq 1 ]; then
-    process_packages
+    process_packages $git_url
 elif [ -n "$force_package" ]; then
-    process_package $force_package
+    process_package $git_url $force_package
 fi

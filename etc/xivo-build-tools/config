@@ -5,6 +5,7 @@ DISTRIBUTION_DEFAULT="master"
 GIT_BRANCH_DEFAULT="master"
 PACKAGES_DIR="/home/builder/packages"
 GIT_URL="https://github.com/wazo-platform"
+VALID_GIT_URLS="$(cat ${CONF_DIR}/git_urls)"
 
 CONF_DIR="/etc/xivo-build-tools"
 TPL_DIR="${CONF_DIR}/templates"
