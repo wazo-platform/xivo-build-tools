@@ -7,6 +7,7 @@ dahdi-linux-modules
 dahdi-tools
 libconsul-c
 libpri
+wazo-acceptance-server
 wazo-agentd
 wazo-agentd-cli
 wazo-agentd-client
@@ -102,7 +103,6 @@ wazo-webhookd-client
 wazo-websocketd
 wazo-websocketd-client
 xgong
-xivo-acceptance-server
 xivo-bus
 xivo-config
 xivo-dao
