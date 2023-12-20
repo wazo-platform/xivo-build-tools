@@ -27,6 +27,7 @@ wazo-call-logd
 wazo-call-logd-client
 wazo-calld
 wazo-calld-client
+wazo-certs
 wazo-chatd
 wazo-chatd-client
 wazo-codec-opus-open-source
@@ -102,7 +103,6 @@ wazo-websocketd-client
 xgong
 xivo-acceptance-server
 xivo-bus
-xivo-certs
 xivo-ci
 xivo-config
 xivo-dao
