@@ -94,6 +94,7 @@ wazo-setupd
 wazo-setupd-client
 wazo-sounds
 wazo-stat
+wazo-sync
 wazo-sysconfd
 wazo-sysconfd-client
 wazo-ui
@@ -112,6 +113,5 @@ xivo-lib-python
 xivo-manage-db
 xivo-res-freeze-check
 xivo-swagger-doc
-xivo-sync
 xivo-upgrade
 xivo-utils
