@@ -22,6 +22,7 @@ wazo-auth-cli
 wazo-auth-client
 wazo-auth-keys
 wazo-backup
+wazo-bus
 wazo-c4-router
 wazo-c4-sbc
 wazo-call-logd
@@ -105,7 +106,6 @@ wazo-webhookd-client
 wazo-websocketd
 wazo-websocketd-client
 xgong
-xivo-bus
 xivo-config
 xivo-dao
 xivo-fetchfw
