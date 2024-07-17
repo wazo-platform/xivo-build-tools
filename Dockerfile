@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV HOME /home/builder
+ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/home/builder
 
 # NOTE: Python 2 dependencies are kept to rebuild packaging by only changing
 #       base image (stretch, buster)
