@@ -105,7 +105,14 @@ wazo-webhookd
 wazo-webhookd-client
 wazo-websocketd
 wazo-websocketd-client
+<<<<<<< Updated upstream
 xgong
+=======
+xivo-acceptance-server
+xivo-bus
+xivo-certs
+xivo-ci
+>>>>>>> Stashed changes
 xivo-config
 xivo-dao
 xivo-fetchfw
