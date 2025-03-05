@@ -79,7 +79,6 @@ wazo-python-graphql-server-packaging
 wazo-python-prometheus-flask-exporter-packaging
 wazo-python-pyfcm-packaging
 wazo-python-pystun3-packaging
-wazo-python-sqlalchemy-continuum-packaging
 wazo-python-starlette-exporter-packaging
 wazo-python-swaggerpy-packaging
 wazo-res-amqp
