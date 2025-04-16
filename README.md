@@ -6,7 +6,7 @@
 
 ```shell
 wget http://mirror.wazo.community/wazo_current.key -O - | apt-key add -
-echo 'deb http://mirror.wazo.community/debian/ xivo-dev-tools main' >/etc/apt/sources.list.d/xivo-dev-tools.list
+echo 'deb http://mirror.wazo.community/debian/ wazo-dev-tools main' >/etc/apt/sources.list.d/wazo-dev-tools.list
 apt-get update
 apt-get install xivo-build-tools
 ```
