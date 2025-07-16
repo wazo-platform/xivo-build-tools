@@ -2,11 +2,7 @@ asterisk
 asterisk-debug
 asterisk-moh-opsound
 asterisk-vanilla
-dahdi-linux
-dahdi-linux-modules
-dahdi-tools
 libconsul-c
-libpri
 wazo-acceptance-server
 wazo-agentd
 wazo-agentd-cli
