@@ -18,8 +18,6 @@ RUN true && \
         libdistro-info-perl \
         libparse-debcontrol-perl \
         lintian \
-        python-all \
-        python-setuptools \
         rsync \
         sudo \
         wget
