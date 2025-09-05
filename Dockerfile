@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV HOME=/home/builder
@@ -18,8 +18,6 @@ RUN true && \
         libdistro-info-perl \
         libparse-debcontrol-perl \
         lintian \
-        python-all \
-        python-setuptools \
         rsync \
         sudo \
         wget
