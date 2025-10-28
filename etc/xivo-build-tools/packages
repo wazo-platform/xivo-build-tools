@@ -47,10 +47,8 @@ wazo-dxtorc
 wazo-keyring
 wazo-lib-rest-client
 wazo-libsccp
-wazo-libsrtp-packaging
 wazo-libtestlink
 wazo-market-client
-wazo-mongooseim-packaging
 wazo-monitoring
 wazo-nginx
 wazo-phoned
@@ -63,7 +61,6 @@ wazo-provd-cli
 wazo-provd-client
 wazo-purge-db
 wazo-python-asterisk-ari-packaging
-wazo-python-cherrypy3-packaging
 wazo-python-consul-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-menu-packaging
