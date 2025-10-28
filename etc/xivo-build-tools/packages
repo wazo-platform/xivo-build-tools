@@ -103,5 +103,4 @@ xivo-fetchfw
 xivo-lib-python
 xivo-manage-db
 xivo-res-freeze-check
-xivo-upgrade
 xivo-utils
