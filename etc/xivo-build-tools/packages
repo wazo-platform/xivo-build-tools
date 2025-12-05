@@ -65,9 +65,6 @@ wazo-python-consul-packaging
 wazo-python-flask-classful-packaging
 wazo-python-flask-menu-packaging
 wazo-python-flask-session-packaging
-wazo-python-graphene-packaging
-wazo-python-graphql-core-packaging
-wazo-python-graphql-relay-packaging
 wazo-python-graphql-server-packaging
 wazo-python-prometheus-flask-exporter-packaging
 wazo-python-pyfcm-packaging
